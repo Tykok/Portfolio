@@ -1,0 +1,38 @@
+$white: #FFFFFF;
+
+$grid-breakpoints: (
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+);
+
+$background-color: #008080;
+
+$base-gray-3: #B8C0C1;
+$base-gray-4: #808080;
+
+@font-face {
+  // FIXME Work on fonts, this is not working currently
+  font-family: 'Windows95 Sans Serif';
+  src: local('./fonts/MS_Sans_Serif.tff'), url(https://github.com/jdan/98.css/raw/main/fonts/src/ms-sans-serif/MS%20Sans%20Serif.ttf) format('truetype');
+}
+
+@function get-breakpoint($breakpoint) {
+  @if map-has-key($grid-breakpoints, $breakpoint) {
+    @return map-get($grid-breakpoints, $breakpoint);
+  } @else {
+    @error "Le breakpoint `#{$breakpoint}` n'existe pas dans la map \$grid-breakpoints.";
+  }
+}
+
+
+* {
+  cursor: url('./images/cursor/cursor.png'), default;
+}
+
+body {
+  margin: 0;
+  background-color: $background-color;
+  font-family: 'Windows95 Sans Serif', 'MS Sans Serif';
+}

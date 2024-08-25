@@ -1,0 +1,10 @@
+@use '../../index' as *;
+
+.task-bar {
+  background-color: $base-gray-3;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 40px;
+  align-items: center;
+}
