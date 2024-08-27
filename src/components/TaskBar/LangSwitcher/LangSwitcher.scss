@@ -1,12 +1,5 @@
 @use '../../../index.scss' as *;
 
-.language-switcher {
-  position: fixed;
-  display: inline-block;
-  margin-right: 10px;
-  right: 0;
-}
-
 .language-button {
   background-color: $base-gray-3;
   color: black;
@@ -14,13 +7,9 @@
   padding: 2px 8px;
   cursor: url('../../../images/cursor/pointer.png'), pointer;
   text-shadow: 1px 1px $white;
-  display: inline-flex;
-  align-items: center;
 }
 
 .language-dropdown {
-  display: flex;
-  flex-direction: column-reverse;
   position: absolute;
   right: 0;
   background-color: $base-gray-3;

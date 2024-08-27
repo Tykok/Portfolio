@@ -1,10 +1,37 @@
 @use '../../index' as *;
 
 .task-bar {
+  display: flex;
+  justify-content: space-between;
   background-color: $base-gray-3;
   position: fixed;
   bottom: 0;
   width: 100%;
   height: 40px;
   align-items: center;
+
+
+  .start-button {
+    padding: 4px 10px;
+    height: 65%;
+    border: 3px solid $white;
+    border-right-color: $base-gray-4;
+    border-bottom-color: $base-gray-4;
+    cursor: url("../../images/cursor/pointer.png"), pointer;
+
+    @media (max-width: get-breakpoint('sm')) {
+        width: 20px;
+    }
+
+    .active {
+      border: 5px solid $base-gray-4;
+      border-right-color: $white;
+      border-bottom-color: $white;
+      cursor: url("../../images/cursor/pointer.png"), pointer;
+    }
+  }
+
+  .language-switcher {
+    margin-right: 10px;
+  }
 }

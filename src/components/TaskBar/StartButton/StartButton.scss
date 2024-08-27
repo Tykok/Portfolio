@@ -2,46 +2,19 @@
 
 $pointer-cursor: '../../../images/cursor/pointer.png';
 
-.start-button {
-  display: flex;
-  align-items: center;
-  padding: 4px 10px;
-  height: 65%;
-  border: 3px solid $white;
-  border-right-color: $base-gray-4;
-  border-bottom-color: $base-gray-4;
-  width: 100px;
-  cursor: url($pointer-cursor), pointer;
-
-  .active {
-    border: 5px solid $base-gray-4;
-    border-right-color: $white;
-    border-bottom-color: $white;
-    cursor: url($pointer-cursor), pointer;
-  }
-}
-
-
 .start-icon {
-  display: inline-block;
   width: 20px;
   height: 20px;
   cursor: url($pointer-cursor), pointer;
 }
 
 .start-text {
-  display: inline-block;
   padding-left: 8px;
-  align-items: center;
   cursor: url($pointer-cursor), pointer;
 }
 
 
 @media (max-width: get-breakpoint('sm')) {
-  .start-button {
-    width: 20px;
-    border: 3px solid $base-gray-4;
-  }
   .start-text {
     display: none;
   }
