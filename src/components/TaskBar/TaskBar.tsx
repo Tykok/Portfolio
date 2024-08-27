@@ -1,15 +1,20 @@
-import LangSwitcher from './LangSwitcher/LangSwitcher';
-import StartButton from './StartButton/StartButton';
+import Clock from './Clock/Clock'
+import LangSwitcher from './LangSwitcher/LangSwitcher'
+import StartButton from './StartButton/StartButton'
 
-import './TaskBar.scss';
+import './TaskBar.scss'
 
 const TaskBar = () => {
   return (
-    <div className='task-bar'>
+    <div className="taskbar">
       <StartButton />
-      <LangSwitcher />
+
+      <div className="taskbar__right">
+        <LangSwitcher />
+        <Clock />
+      </div>
     </div>
   )
 }
 
-export default TaskBar;
+export default TaskBar

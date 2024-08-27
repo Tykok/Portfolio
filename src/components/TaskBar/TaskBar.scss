@@ -1,6 +1,6 @@
 @use '../../index' as *;
 
-.task-bar {
+.taskbar {
   display: flex;
   justify-content: space-between;
   background-color: $base-gray-3;
@@ -11,7 +11,12 @@
   align-items: center;
 
 
-  .start-button {
+  .taskbar__right {
+    display: flex;
+    align-items: center;
+  }
+
+  .start {
     padding: 4px 10px;
     height: 65%;
     border: 3px solid $white;
@@ -31,7 +36,15 @@
     }
   }
 
-  .language-switcher {
+  .language {
     margin-right: 10px;
+  }
+
+  .clock {
+    padding-right: 10px;
+
+    @media (max-width: get-breakpoint('sm')) {
+      display: none;
+    }
   }
 }
