@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { useLang } from 'src/context/LangContext'
+import { useLang } from 'context/LangContext'
+import type { Lang } from 'types/lang'
 
 import './LangSwitcher.scss'
 
@@ -11,7 +12,7 @@ const LangSwitcher: React.FC = () => {
     setIsOpen(!isOpen)
   }
 
-  const handleChangeLang = (newLang: string) => {
+  const handleChangeLang = (newLang: Lang) => {
     setLang(newLang)
     setIsOpen(false)
   }

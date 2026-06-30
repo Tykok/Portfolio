@@ -1,0 +1,379 @@
+/* ===========================================================================
+   TicoqOS — Backend Edition · Design System tokens & components
+   Thème : bleu « Luna » raffiné. Tout est piloté par variables CSS afin que
+   les 3 directions (.t-luna / .t-frost / .t-solid) réutilisent le même balisage.
+   =========================================================================== */
+
+.tq {
+  /* ---- Typographie d'époque (web-safe) ---- */
+  --font-ui: Tahoma, Verdana, Geneva, sans-serif;
+  --font-title: "Trebuchet MS", Tahoma, sans-serif;
+  --font-mono: "Lucida Console", "Courier New", monospace;
+
+  /* ---- Palette bleue (rampe Luna) ---- */
+  --blue-100: #d6e4ff;
+  --blue-300: #8fb6ff;
+  --blue-500: #2f6ff2;
+  --blue-600: #1a52d6;
+  --blue-700: #103bb0;
+  --blue-900: #0a2a8c;
+
+  /* ---- Neutres argentés ---- */
+  --face:        #ece9d8;
+  --face-light:  #f6f4ec;
+  --face-dark:   #d6d2c2;
+  --edge-light:  #ffffff;
+  --edge-soft:   #cfcabb;
+  --edge-dark:   #8a8678;
+  --edge-darker: #58554a;
+  --ink:         #1c1c1c;
+  --ink-dim:     #5d5a4f;
+
+  /* ---- Vert « Démarrer » ---- */
+  --green-from: #57b463;
+  --green-mid:  #3a9447;
+  --green-to:   #2a7536;
+  --green-edge: #1d5a28;
+
+  /* ---- Sémantique ---- */
+  --red:    #c4352b;
+  --amber:  #e8a52b;
+  --info:   #2f6ff2;
+
+  /* ---- Géométrie / profondeur (overridé par direction) ---- */
+  --r-win: 8px;
+  --r-btn: 3px;
+  --r-ctl: 3px;
+  --shadow-win: 0 10px 28px rgba(13,30,80,.28), 0 2px 6px rgba(0,0,0,.18);
+  --tb-text: #ffffff;
+
+  /* ---- Barre de titre (dégradé Luna par défaut) ---- */
+  --tb-from: #3a7bf0;
+  --tb-mid:  #1a52d6;
+  --tb-to:   #0e3aa8;
+  --tb-gloss: rgba(255,255,255,.34);
+
+  font-family: var(--font-ui);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  font-size: 13px;
+  line-height: 1.45;
+  box-sizing: border-box;
+}
+.tq *, .tq *::before, .tq *::after { box-sizing: border-box; }
+
+/* ============================ FENÊTRE ============================ */
+.tq-win {
+  background: var(--face);
+  border: 1px solid var(--blue-700);
+  border-radius: var(--r-win) var(--r-win) 4px 4px;
+  box-shadow: var(--shadow-win);
+  overflow: hidden;
+  width: 100%;
+}
+.tq-titlebar {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 5px 0 7px;
+  color: var(--tb-text);
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 13px;
+  text-shadow: 0 1px 1px rgba(0,0,0,.45);
+  background:
+    linear-gradient(180deg, var(--tb-gloss) 0, rgba(255,255,255,0) 48%),
+    linear-gradient(180deg, var(--tb-from) 0, var(--tb-mid) 52%, var(--tb-to) 100%);
+  border-bottom: 1px solid rgba(0,0,0,.2);
+}
+.tq-titlebar .tq-tb-ico {
+  width: 16px; height: 16px; flex: 0 0 auto;
+  border-radius: 3px;
+}
+.tq-titlebar .tq-tb-title { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: .2px; }
+.tq-tb-btns { display: flex; gap: 3px; flex: 0 0 auto; }
+.tq-tb-btn {
+  width: 21px; height: 21px;
+  border-radius: var(--r-btn);
+  border: 1px solid rgba(255,255,255,.55);
+  display: flex; align-items: center; justify-content: center;
+  font: 700 11px/1 var(--font-ui);
+  color: #fff; cursor: default;
+  background: linear-gradient(180deg, rgba(255,255,255,.45), rgba(255,255,255,.05) 50%, rgba(0,0,0,.1));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.5);
+}
+.tq-tb-btn.is-close {
+  background: linear-gradient(180deg, #f4796b, #d23b2c 52%, #a52016);
+  border-color: rgba(255,255,255,.5);
+}
+.tq-tb-btn .gl { transform: translateY(-1px); }
+
+.tq-menubar {
+  display: flex; gap: 2px;
+  padding: 3px 4px;
+  background: var(--face-light);
+  border-bottom: 1px solid var(--edge-soft);
+  font-size: 12px; color: var(--ink);
+}
+.tq-menubar > span { padding: 2px 8px; border-radius: 3px; }
+.tq-menubar > span:first-child { color: var(--ink); }
+.tq-menubar .mu { text-decoration: underline; text-underline-offset: 2px; }
+
+.tq-winbody { padding: 14px; }
+
+/* Panneau encastré (inset / sunken) */
+.tq-inset {
+  background: #fff;
+  border: 1px solid var(--edge-dark);
+  border-top-color: var(--edge-darker);
+  border-left-color: var(--edge-darker);
+  box-shadow: inset 1px 1px 0 rgba(0,0,0,.06);
+  border-radius: 2px;
+  padding: 12px;
+}
+.tq-groupbox {
+  border: 1px solid var(--edge-soft);
+  border-radius: 5px;
+  padding: 14px 12px 12px;
+  position: relative;
+  background: linear-gradient(180deg, rgba(255,255,255,.5), rgba(255,255,255,0));
+}
+.tq-groupbox > legend,
+.tq-groupbox > .lg {
+  position: absolute; top: -8px; left: 10px;
+  background: var(--face);
+  padding: 0 6px; font-size: 11px; font-weight: 700; color: var(--ink-dim);
+}
+
+/* ============================ BOUTONS ============================ */
+.tq-btn {
+  font: 12px/1 var(--font-ui);
+  color: var(--ink);
+  padding: 6px 14px;
+  min-width: 72px;
+  border: 1px solid var(--edge-dark);
+  border-radius: var(--r-btn);
+  background: linear-gradient(180deg, var(--edge-light), var(--face) 46%, var(--face) 74%, var(--face-dark));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.85), inset 0 -1px 0 rgba(0,0,0,.06);
+  cursor: default; user-select: none;
+}
+.tq-btn:hover { border-color: var(--blue-500); }
+.tq-btn.is-hover { border-color: var(--blue-500); box-shadow: inset 0 0 0 1px var(--blue-300), inset 0 1px 0 rgba(255,255,255,.85); }
+.tq-btn.is-default { border-color: var(--blue-600); box-shadow: 0 0 0 1px var(--blue-300), inset 0 1px 0 rgba(255,255,255,.85); font-weight: 700; }
+.tq-btn.is-pressed,
+.tq-btn:active {
+  background: linear-gradient(180deg, var(--face-dark), var(--face) 60%);
+  box-shadow: inset 1px 1px 2px rgba(0,0,0,.22);
+  transform: translateY(.5px);
+}
+.tq-btn.is-disabled, .tq-btn:disabled {
+  color: #a5a293; text-shadow: 0 1px 0 #fff;
+  border-color: var(--edge-soft);
+  background: var(--face);
+  box-shadow: none;
+}
+
+/* ============================ CHAMPS / CASES / RADIOS ============================ */
+.tq-field { display: flex; flex-direction: column; gap: 4px; }
+.tq-label { font-size: 12px; color: var(--ink); }
+.tq-input {
+  font: 12px/1 var(--font-ui);
+  padding: 6px 8px;
+  background: #fff;
+  border: 1px solid var(--edge-dark);
+  border-top-color: var(--edge-darker);
+  border-left-color: var(--edge-darker);
+  border-radius: var(--r-ctl);
+  color: var(--ink);
+}
+.tq-input:focus { outline: none; border-color: var(--blue-500); box-shadow: 0 0 0 2px var(--blue-100); }
+.tq-input::placeholder { color: #9a9788; }
+
+.tq-check, .tq-radio { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; cursor: default; }
+.tq-box {
+  width: 15px; height: 15px; flex: 0 0 auto;
+  background: #fff;
+  border: 1px solid var(--edge-dark);
+  border-top-color: var(--edge-darker); border-left-color: var(--edge-darker);
+  border-radius: 2px;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--blue-600); font-size: 12px; font-weight: 700;
+}
+.tq-radio .tq-box { border-radius: 50%; }
+.tq-radio .tq-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--blue-600); }
+
+/* ============================ PROGRESS (segmentée) ============================ */
+.tq-progress {
+  height: 18px;
+  background: #fff;
+  border: 1px solid var(--edge-dark);
+  border-top-color: var(--edge-darker); border-left-color: var(--edge-darker);
+  border-radius: 2px; padding: 2px;
+  display: flex; gap: 2px; overflow: hidden;
+}
+.tq-progress i {
+  flex: 0 0 9px;
+  background: linear-gradient(180deg, var(--blue-500), var(--blue-700));
+  border-radius: 1px;
+}
+
+/* ============================ BARRE DES TÂCHES ============================ */
+.tq-taskbar {
+  height: 38px;
+  display: flex; align-items: center; gap: 6px;
+  padding: 0 6px 0 0;
+  border-radius: 0 0 5px 5px;
+  background:
+    linear-gradient(180deg, #66a6f2 0, #2f6fd6 7%, #2a64c8 46%, #2357b8 90%, #1c4aa0 100%);
+  border-top: 1px solid #79b6f7;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.55), inset 0 3px 4px rgba(255,255,255,.14), inset 0 -1px 0 rgba(0,0,0,.25);
+}
+.tq-start {
+  height: 38px;
+  display: flex; align-items: center; gap: 8px;
+  padding: 0 22px 2px 12px;
+  font-family: var(--font-title); font-weight: 700; font-style: italic;
+  font-size: 15px; color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,.45);
+  border: none;
+  border-radius: 0 17px 17px 0;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.5) 0, rgba(255,255,255,.08) 38%, rgba(0,0,0,.04) 58%, rgba(0,0,0,.12) 100%),
+    radial-gradient(130% 90% at 42% 16%, #93d56f 0, #5cb33d 40%, #409c2a 66%, #2d7a1c 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.65), inset -2px -2px 4px rgba(0,0,0,.28), 2px 0 5px rgba(0,0,0,.22);
+  cursor: default;
+}
+.tq-start:hover {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.55) 0, rgba(255,255,255,.1) 38%, rgba(0,0,0,.04) 58%, rgba(0,0,0,.12) 100%),
+    radial-gradient(130% 90% at 42% 16%, #a4e07f 0, #69c049 40%, #4caa31 66%, #357f1f 100%);
+}
+.tq-start .orb {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff, var(--blue-300) 45%, var(--blue-600) 100%);
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,.6), 0 1px 2px rgba(0,0,0,.3);
+  flex: 0 0 auto;
+}
+.tq-task {
+  height: 26px; min-width: 130px;
+  display: flex; align-items: center; gap: 7px;
+  padding: 0 10px;
+  color: #fff; font-size: 12px;
+  border: 1px solid rgba(0,0,0,.15);
+  border-radius: 3px;
+  background: linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,0) 50%, rgba(0,0,0,.12));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.3);
+}
+.tq-task.is-active {
+  background: linear-gradient(180deg, rgba(0,0,0,.22), rgba(0,0,0,.05) 50%, rgba(255,255,255,.12));
+  box-shadow: inset 1px 1px 3px rgba(0,0,0,.35);
+}
+.tq-task .ti { width: 14px; height: 14px; border-radius: 2px; flex: 0 0 auto; }
+.tq-tray {
+  margin-left: auto;
+  height: 26px;
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 10px;
+  color: #fff; font-size: 12px;
+  border-radius: 3px 0 0 3px;
+  background: linear-gradient(180deg, #1c8ed4 0, #1670b8 50%, #0f5394 100%);
+  box-shadow:
+    inset 1px 0 0 rgba(255,255,255,.35),
+    inset 2px 0 0 rgba(0,0,0,.18),
+    inset 0 1px 0 rgba(255,255,255,.3),
+    inset 0 -1px 2px rgba(0,0,0,.25);
+}
+.tq-tray .ti { width: 14px; height: 14px; border-radius: 2px; background: rgba(255,255,255,.85); }
+.tq-clock { font-variant-numeric: tabular-nums; }
+
+/* ============================ ICÔNES D'APPS ============================ */
+.tq-iconwrap { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 92px; }
+.tq-icon {
+  width: var(--ic, 48px); height: var(--ic, 48px); position: relative;
+  filter: drop-shadow(1px 2px 2px rgba(0,0,0,.32));
+}
+.tq-icon * { position: absolute; }
+.tq-iconlabel { font-size: 11px; color: var(--ink); text-align: center; line-height: 1.25; }
+.tq-iconlabel.on-desk { color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.8); }
+
+/* =========================================================================
+   DIRECTION B — FROST
+   ========================================================================= */
+.t-frost {
+  --face: #f2f0ea;
+  --face-light: #fbfaf6;
+  --face-dark: #e2ded2;
+  --r-win: 10px;
+  --r-btn: 5px;
+  --r-ctl: 5px;
+  --shadow-win: 0 14px 40px rgba(20,40,90,.22), 0 1px 0 rgba(255,255,255,.7) inset;
+  --tb-from: #5b95f7;
+  --tb-mid:  #3f7ae8;
+  --tb-to:   #2a5fd0;
+  --tb-gloss: rgba(255,255,255,.5);
+}
+.t-frost .tq-win {
+  border-color: rgba(120,150,210,.7);
+  backdrop-filter: blur(2px);
+}
+.t-frost .tq-titlebar {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.55) 0, rgba(255,255,255,.08) 55%),
+    linear-gradient(180deg, var(--tb-from), var(--tb-to));
+  border-bottom: 1px solid rgba(255,255,255,.35);
+}
+.t-frost .tq-btn {
+  border-color: #b9c4d6;
+  background: linear-gradient(180deg, #ffffff, #f4f6fa 70%, #e8ecf3);
+  box-shadow: inset 0 1px 0 #fff, 0 1px 1px rgba(30,50,90,.08);
+}
+.t-frost .tq-taskbar {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.35) 0, rgba(255,255,255,.05) 14%),
+    linear-gradient(180deg, var(--blue-500) 0, var(--blue-700) 100%);
+}
+.t-frost .tq-start { border-radius: 0 16px 16px 0; }
+.t-frost .tq-inset { box-shadow: none; border-color: #c9c4b6; }
+
+/* =========================================================================
+   DIRECTION C — SOLID
+   ========================================================================= */
+.t-solid {
+  --face: #e7e3d4;
+  --face-light: #f1eee2;
+  --face-dark: #cfcab8;
+  --blue-500: #1f54e0;
+  --blue-600: #1746d6;
+  --r-win: 3px;
+  --r-btn: 2px;
+  --r-ctl: 2px;
+  --shadow-win: 6px 6px 0 rgba(10,42,140,.18), 0 2px 8px rgba(0,0,0,.25);
+  --tb-from: #1f54e0;
+  --tb-mid:  #1746d6;
+  --tb-to:   #1746d6;
+  --tb-gloss: rgba(255,255,255,.16);
+}
+.t-solid .tq-win { border: 2px solid var(--blue-700); }
+.t-solid .tq-titlebar {
+  background:
+    linear-gradient(180deg, var(--tb-gloss) 0, rgba(255,255,255,0) 40%),
+    var(--blue-600);
+  border-bottom: 2px solid var(--blue-900);
+}
+.t-solid .tq-tb-btn { border-radius: 2px; background: rgba(255,255,255,.18); border-color: rgba(255,255,255,.4); }
+.t-solid .tq-tb-btn.is-close { background: var(--red); }
+.t-solid .tq-btn {
+  border: 2px solid var(--edge-darker);
+  background: linear-gradient(180deg, var(--face-light), var(--face-dark));
+  box-shadow: inset 1px 1px 0 #fff;
+}
+.t-solid .tq-btn.is-default { background: var(--blue-600); color: #fff; border-color: var(--blue-900); box-shadow: inset 1px 1px 0 rgba(255,255,255,.3); }
+.t-solid .tq-taskbar {
+  background: linear-gradient(180deg, var(--blue-600), var(--blue-700));
+  border-radius: 0;
+  border-top: 2px solid var(--blue-300);
+}
+.t-solid .tq-start { border-radius: 0; background: linear-gradient(180deg, var(--green-mid), var(--green-to)); font-style: normal; }
+.t-solid .tq-progress i { background: var(--blue-600); }
+.t-solid .tq-inset { border-width: 2px; box-shadow: none; }
