@@ -1086,19 +1086,58 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-f
 .bsod-blink { animation: bsodblink 1.1s steps(2, start) infinite; }
 @keyframes bsodblink { 50% { opacity: 0; } }
 
-/* ---- MASCOTTE COQ ---- */
-.os-mascot { position: fixed; right: 16px; bottom: 50px; z-index: 600; display: flex; flex-direction: column; align-items: flex-end; gap: 7px; pointer-events: none; }
-.os-mascot > * { pointer-events: auto; }
-.mascot-coq { border: 0; width: 58px; height: 58px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at 50% 36%, #ffffff, #e9eff8); box-shadow: 0 3px 11px rgba(0,0,0,.3); transition: transform .15s ease; }
-.mascot-coq:hover { transform: translateY(-2px) scale(1.05); }
-.mascot-coq.wink { animation: coqwink .42s; }
-@keyframes coqwink { 0%,100% { transform: none; } 45% { transform: rotate(-10deg) scale(1.09); } }
+/* ---- MASCOTTE COQ — marche sur la taskbar à la Clippy ---- */
+
+/* Ancre positionnelle — left mis à jour directement par le RAF sans re-render React */
+.mascot-walker {
+  position: fixed; bottom: 38px; z-index: 598;
+  width: 40px; pointer-events: none;
+  display: flex; flex-direction: column; align-items: center;
+}
+.mascot-walker > * { pointer-events: auto; }
+
+/* Le coq lui-même */
+.mw-coq {
+  width: 36px; height: 36px; font-size: 26px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: transform .12s ease;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,.35));
+}
+.mw-coq.flip { transform: scaleX(-1); }
+.mw-coq:active { transform: scale(.88); }
+.mw-coq.flip:active { transform: scaleX(-1) scale(.88); }
+
+/* Cycle de marche — léger rebond + légère rotation */
+.mw-step { display: block; animation: coq-step .38s ease-in-out infinite; }
+@keyframes coq-step {
+  0%, 100% { transform: translateY(0) rotate(0deg);  }
+  25%       { transform: translateY(-4px) rotate(-4deg); }
+  75%       { transform: translateY(-2px) rotate(3deg);  }
+}
+
+/* Bulle de tip — positionnée au-dessus du coq */
+.mw-bubble {
+  position: absolute; bottom: 44px; left: 50%; transform: translateX(-50%);
+  width: 200px; white-space: normal;
+  background: #fffbe6; border: 1px solid #d8c98a; border-radius: 11px;
+  padding: 9px 24px 9px 11px; font-size: 11.5px; line-height: 1.45; color: #4a4326;
+  box-shadow: 0 5px 16px rgba(0,0,0,.22); animation: mascotin .18s ease;
+  /* Make sure the bubble doesn't clip at screen edges */
+  max-width: min(200px, calc(100vw - 16px));
+}
+/* Queue de la bulle — pointe vers le bas (vers le coq) */
+.mw-tail {
+  position: absolute; bottom: -7px; left: 50%; transform: translateX(-50%) rotate(45deg);
+  width: 12px; height: 12px;
+  background: #fffbe6; border-right: 1px solid #d8c98a; border-bottom: 1px solid #d8c98a;
+}
+/* Bouton fermer */
 .mascot-bubble { position: relative; max-width: 214px; background: #fffbe6; border: 1px solid #d8c98a; border-radius: 11px; padding: 9px 24px 10px 12px; font-size: 12px; line-height: 1.45; color: #4a4326; box-shadow: 0 5px 14px rgba(0,0,0,.2); animation: mascotin .2s ease; }
-@keyframes mascotin { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-.mascot-tail { position: absolute; right: 24px; bottom: -7px; width: 12px; height: 12px; background: #fffbe6; border-right: 1px solid #d8c98a; border-bottom: 1px solid #d8c98a; transform: rotate(45deg); }
+@keyframes mascotin { from { opacity: 0; transform: translateY(6px) translateX(-50%); } to { opacity: 1; transform: translateY(0) translateX(-50%); } }
 .mascot-x { position: absolute; top: 4px; right: 7px; font-size: 10px; color: #b3a98a; cursor: pointer; line-height: 1; }
 .mascot-x:hover { color: #e25b4b; }
-@media (max-width: 720px) { .os-mascot { display: none; } }
+
+@media (max-width: 720px) { .mascot-walker { display: none; } }
 
 /* ---- THÈMES DE BUREAU (commande 'theme') — transition douce ---- */
 .os-wall { transition: filter .5s ease; }
