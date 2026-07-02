@@ -92,6 +92,8 @@ const en: Translations = {
     'A well-placed Postgres index beats a thousand micro-optimizations.',
     'Always write code as if the person maintaining it is you, six months from now.',
   ],
+  projects_loading: 'Loading projects…',
+  projects_error: 'Failed to load projects.',
 };
 
 export default en;

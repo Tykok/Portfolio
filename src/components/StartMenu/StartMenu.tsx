@@ -1,10 +1,11 @@
-import type { Translations } from 'i18n/types';
 import { useLang } from 'context/LangContext';
-import { useWindowContext } from 'context/WindowContext';
 import { useOS } from 'context/OSContext';
+import { useWindowContext } from 'context/WindowContext';
 import { appsMeta } from 'data/apps';
 import { identity } from 'data/identity';
+import type { Translations } from 'i18n/types';
 import type { AppKey } from 'types/app';
+
 import { AppIcon } from '../AppIcon/AppIcon';
 
 interface Props {

@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
 
 import { useLang } from 'context/LangContext';
-import { useOS } from 'context/OSContext';
 import type { DesktopTheme } from 'context/OSContext';
+import { useOS } from 'context/OSContext';
 
 interface Props {
   x: number;

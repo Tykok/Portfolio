@@ -1,7 +1,8 @@
-import type { WindowState } from 'types/window';
 import { useLang } from 'context/LangContext';
 import { useWindowContext } from 'context/WindowContext';
 import { getAppMeta } from 'data/apps';
+import type { WindowState } from 'types/window';
+
 import { AppIcon } from '../../AppIcon/AppIcon';
 
 interface Props {

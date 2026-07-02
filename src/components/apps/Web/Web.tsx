@@ -1,8 +1,7 @@
 import { useState } from 'react';
 
 import { useLang } from 'context/LangContext';
-import { useWindowContext } from 'context/WindowContext';
-import type { AppKey } from 'types/app';
+
 import { PortfolioPage } from './PortfolioPage';
 
 interface Tab {
@@ -20,15 +19,6 @@ const makeTab = (url = HOME_URL, title = ''): Tab => ({
   title: title || (url === HOME_URL ? 'Nouvel onglet' : url),
 });
 
-const SPEED_DIAL: Array<{ emoji: string; label: string; labelEn: string; appKey: AppKey }> = [
-  { emoji: '💻', label: 'À propos', labelEn: 'About', appKey: 'about' },
-  { emoji: '📁', label: 'Projets', labelEn: 'Projects', appKey: 'projects' },
-  { emoji: '📄', label: 'CV', labelEn: 'Résumé', appKey: 'cv' },
-  { emoji: '✉️', label: 'Contact', labelEn: 'Contact', appKey: 'contact' },
-  { emoji: '⌨', label: 'Terminal', labelEn: 'Terminal', appKey: 'terminal' },
-  { emoji: '🎵', label: 'Lecteur', labelEn: 'Media', appKey: 'media' },
-];
-
 const EXT_LINKS = [
   { label: 'GitHub', url: 'https://github.com/Tykok', color: '#24292f', monogram: 'GH' },
   { label: 'LinkedIn', url: 'https://linkedin.com/in/elie-treport', color: '#0a66c2', monogram: 'in' },
@@ -36,14 +26,11 @@ const EXT_LINKS = [
 ];
 
 export function Web() {
-  const { lang, t } = useLang();
-  const { openApp } = useWindowContext();
+  const { t } = useLang();
   const [tabs, setTabs] = useState<Tab[]>([makeTab()]);
   const [activeTabId, setActiveTabId] = useState(tabs[0].id);
   const [addr, setAddr] = useState(HOME_URL);
   const [extUrl, setExtUrl] = useState<string | null>(null);
-
-  const activeTab = tabs.find((tab) => tab.id === activeTabId) ?? tabs[0];
 
   const addTab = () => {
     const t = makeTab();
@@ -67,8 +54,6 @@ export function Web() {
     setExtUrl(url);
     setAddr(url);
   };
-
-  const openPortfolioApp = (key: AppKey) => { openApp(key); };
 
   return (
     <div className="tq-browser">

@@ -1,8 +1,8 @@
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useReducer } from 'react';
 
+import { getAppMeta } from 'data/apps';
 import type { AppKey } from 'types/app';
 import type { WindowAction, WindowState } from 'types/window';
-import { getAppMeta } from 'data/apps';
 
 let zCounter = 10;
 let idCounter = 1;

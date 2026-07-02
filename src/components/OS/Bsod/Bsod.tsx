@@ -9,7 +9,7 @@ export function Bsod() {
         <div className="bsod-h">A problem has been detected</div>
         <p className="bsod-stop">RECURSIVE_HIRE_LOOP_IN_BACKEND_DEVELOPER</p>
         <p>
-          If this is the first time you've seen this Stop error screen,
+          If this is the first time you&aposve seen this Stop error screen,
           restart your computer. If this screen appears again, follow
           these steps:
         </p>

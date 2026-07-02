@@ -1,13 +1,32 @@
 import { useState } from 'react';
 
+import { ChickenLoader } from 'components/ChickenLoader/ChickenLoader';
 import { useLang } from 'context/LangContext';
-import { projects } from 'data/projects';
+import { useProjects } from 'context/ProjectsContext';
 import { getBadge } from 'data/techBadges';
-import type { Project } from 'data/projects';
 
 export function Projects() {
   const { lang, t } = useLang();
-  const [selected, setSelected] = useState<Project>(projects[0]);
+  const { data: projects, loading, error } = useProjects();
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  if (loading) {
+    return (
+      <div className="pj-B pj-state">
+        <ChickenLoader label={String(t('projects_loading'))} />
+      </div>
+    );
+  }
+
+  if (error || projects.length === 0) {
+    return (
+      <div className="pj-B pj-state">
+        <p>{String(t('projects_error'))}</p>
+      </div>
+    );
+  }
+
+  const selected = projects.find((p) => p.id === selectedId) ?? projects[0];
 
   return (
     <div className="pj-B">
@@ -18,7 +37,7 @@ export function Projects() {
           <div
             key={p.id}
             className={`pj-row${selected.id === p.id ? ' on' : ''}`}
-            onClick={() => setSelected(p)}
+            onClick={() => setSelectedId(p.id)}
           >
             <span className="pj-ico" style={{ background: p.gradient, width: 30, height: 30, borderRadius: 9, fontSize: 10.5, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 }}>
               {p.monogram}

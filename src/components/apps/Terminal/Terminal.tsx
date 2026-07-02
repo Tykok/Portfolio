@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { useLang } from 'context/LangContext';
-import { useWindowContext } from 'context/WindowContext';
+import type { DesktopTheme } from 'context/OSContext';
 import { useOS } from 'context/OSContext';
+import { useProjects } from 'context/ProjectsContext';
+import { useWindowContext } from 'context/WindowContext';
 import { identity } from 'data/identity';
-import { projects } from 'data/projects';
 import { socials } from 'data/socials';
 import { techBadges } from 'data/techBadges';
 import type { AppKey } from 'types/app';
-import type { DesktopTheme } from 'context/OSContext';
 
 interface Line {
   type: 'prompt' | 'output' | 'error' | 'dim';
@@ -24,6 +24,7 @@ const VALID_THEMES: DesktopTheme[] = ['bliss', 'field', 'dusk', 'matrix', 'rose'
 
 export function Terminal() {
   const { lang, t } = useLang();
+  const { data: projects, loading, error } = useProjects();
   const { openApp } = useWindowContext();
   const { triggerBsod, setTheme, showMascot } = useOS();
   const [lines, setLines] = useState<Line[]>([
@@ -86,14 +87,20 @@ export function Terminal() {
 
       case 'projects':
       case 'ls':
-        push(
-          { type: 'output', text: `${projects.length} projets :` },
-          ...projects.map((p) => ({
-            type: 'output' as const,
-            text: `  ${p.emoji}  ${p.title[lang].padEnd(30)} [${p.stack.map((s) => s.label).join(', ')}]`,
-          })),
-          { type: 'dim', text: String(t('t_open_hint')) },
-        );
+        if (loading) {
+          push({ type: 'dim', text: String(t('projects_loading')) });
+        } else if (error || projects.length === 0) {
+          push({ type: 'output', text: String(t('projects_error')) });
+        } else {
+          push(
+            { type: 'output', text: `${projects.length} projets :` },
+            ...projects.map((p) => ({
+              type: 'output' as const,
+              text: `  ${p.emoji}  ${p.title[lang].padEnd(30)} [${p.stack.map((s) => s.label).join(', ')}]`,
+            })),
+            { type: 'dim', text: String(t('t_open_hint')) },
+          );
+        }
         break;
 
       case 'skills':

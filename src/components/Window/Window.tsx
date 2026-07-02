@@ -1,10 +1,11 @@
 import type { ReactNode } from 'react';
 import { useEffect, useRef, useState } from 'react';
 
-import type { WindowState } from 'types/window';
+import { useLang } from 'context/LangContext';
 import { useWindowContext } from 'context/WindowContext';
 import { getAppMeta } from 'data/apps';
-import { useLang } from 'context/LangContext';
+import type { WindowState } from 'types/window';
+
 import { TitleBar } from './TitleBar/TitleBar';
 
 interface Props {
@@ -29,7 +30,7 @@ export function Window({ win, isActive, children }: Props) {
   const isDraggingRef = useRef(false);
   const isResizingRef = useRef(false);
 
-  const handleFocus = (e: React.MouseEvent) => {
+  const handleFocus = () => {
     // TitleBar calls focusWindow itself + stops propagation, so only handle body clicks here
     if (!isActive) focusWindow(win.id);
   };

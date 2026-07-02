@@ -1,5 +1,5 @@
-import { createContext, useCallback, useContext, useState } from 'react';
 import type { ReactNode } from 'react';
+import { createContext, useCallback, useContext, useState } from 'react';
 
 export type DesktopTheme = 'bliss' | 'field' | 'dusk' | 'matrix' | 'rose';
 

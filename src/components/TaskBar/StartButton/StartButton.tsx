@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { useLang } from 'context/LangContext'
 import { Lang } from 'helpers/lang'
 import startWindowsLogo from 'images/logo/windows-start.png'
+
+import { useLang } from 'context/LangContext'
 
 import './StartButton.scss'
 

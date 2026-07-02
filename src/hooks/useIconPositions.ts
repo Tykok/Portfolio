@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+
 import { appsMeta } from 'data/apps';
 
 const STORAGE_KEY = 'tq-icon-pos';

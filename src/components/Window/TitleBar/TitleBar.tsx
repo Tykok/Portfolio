@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react';
 
-import type { IconKind } from 'types/app';
 import { useLang } from 'context/LangContext';
+import type { IconKind } from 'types/app';
+
 import { AppIcon } from '../../AppIcon/AppIcon';
 
 interface Props {

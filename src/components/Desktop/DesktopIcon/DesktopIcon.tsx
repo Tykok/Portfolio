@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react';
 
-import type { AppMeta } from 'types/app';
 import { useLang } from 'context/LangContext';
+import type { AppMeta } from 'types/app';
+
 import { AppIcon } from '../../AppIcon/AppIcon';
 
 interface Props {

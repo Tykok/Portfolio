@@ -1,5 +1,5 @@
-import { useOS } from 'context/OSContext';
 import { useLang } from 'context/LangContext';
+import { useOS } from 'context/OSContext';
 
 export function AboutDialog() {
   const { closeAbout } = useOS();

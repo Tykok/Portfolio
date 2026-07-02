@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useLang } from 'context/LangContext';
 import { useClock } from 'hooks/useClock';
 import type { Lang } from 'types/lang';
+
 import { CalPopup } from './CalPopup';
 
 export function Tray() {
