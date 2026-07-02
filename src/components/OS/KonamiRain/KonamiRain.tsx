@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
-import { useOS } from 'context/OSContext';
 import { useLang } from 'context/LangContext';
+import { useOS } from 'context/OSContext';
 
 const COQS = ['🐓', '🐔', '🐣', '🥚'];
 const COUNT = 28;

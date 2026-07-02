@@ -1,7 +1,7 @@
 import { useLang } from 'context/LangContext';
 import { identity } from 'data/identity';
 import { primarySocials } from 'data/socials';
-import { getBadge, techBadges } from 'data/techBadges';
+import { getBadge } from 'data/techBadges';
 
 const MAIN_SKILLS = ['Go', 'TypeScript', 'Python', 'PostgreSQL', 'Redis', 'Kafka', 'Docker', 'Kubernetes', 'gRPC'];
 

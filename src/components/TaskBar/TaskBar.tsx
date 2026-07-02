@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { useWindowContext } from 'context/WindowContext';
 import { useLang } from 'context/LangContext';
+import { useWindowContext } from 'context/WindowContext';
+
 import { StartMenu } from '../StartMenu/StartMenu';
+
 import { TaskList } from './TaskList/TaskList';
 import { Tray } from './Tray/Tray';
 

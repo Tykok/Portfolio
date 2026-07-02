@@ -175,4 +175,7 @@ export interface Translations {
   t_exit: string;
   t_sudo_sandwich: string;
   t_fortunes: string[];
+  // Projects data-loading
+  projects_loading: string;
+  projects_error: string;
 }

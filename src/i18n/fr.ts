@@ -92,6 +92,8 @@ const fr: Translations = {
     'Un index Postgres bien posé vaut mille micro-optimisations.',
     'Toujours écrire le code comme si la personne qui le maintiendra était toi, dans six mois.',
   ],
+  projects_loading: 'Chargement des projets…',
+  projects_error: 'Impossible de charger les projets.',
 };
 
 export default fr;

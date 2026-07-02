@@ -1,26 +1,27 @@
+import type { JSX } from 'react';
 import { useEffect, useRef, useState } from 'react';
 
-import { LangProvider } from 'context/LangContext';
-import { WindowProvider, useWindowContext } from 'context/WindowContext';
-import { OSProvider, useOS } from 'context/OSContext';
+import { About } from 'components/apps/About/About';
+import { Contact } from 'components/apps/Contact/Contact';
+import { Cv } from 'components/apps/Cv/Cv';
+import { Media } from 'components/apps/Media/Media';
+import { Projects } from 'components/apps/Projects/Projects';
+import { Terminal } from 'components/apps/Terminal/Terminal';
+import { Web } from 'components/apps/Web/Web';
+import { Desktop } from 'components/Desktop/Desktop';
+import { AboutDialog } from 'components/OS/AboutDialog/AboutDialog';
 import { Boot } from 'components/OS/Boot/Boot';
-import { Login } from 'components/OS/Login/Login';
-import { Off } from 'components/OS/Off/Off';
 import { Bsod } from 'components/OS/Bsod/Bsod';
 import { KonamiRain } from 'components/OS/KonamiRain/KonamiRain';
-import { AboutDialog } from 'components/OS/AboutDialog/AboutDialog';
-import { Desktop } from 'components/Desktop/Desktop';
+import { Login } from 'components/OS/Login/Login';
+import { Off } from 'components/OS/Off/Off';
 import { TaskBar } from 'components/TaskBar/TaskBar';
 import { Window } from 'components/Window/Window';
-import { About } from 'components/apps/About/About';
-import { Projects } from 'components/apps/Projects/Projects';
-import { Cv } from 'components/apps/Cv/Cv';
-import { Contact } from 'components/apps/Contact/Contact';
-import { Terminal } from 'components/apps/Terminal/Terminal';
-import { Media } from 'components/apps/Media/Media';
-import { Web } from 'components/apps/Web/Web';
+import { LangProvider } from 'context/LangContext';
+import { OSProvider, useOS } from 'context/OSContext';
+import { ProjectsProvider } from 'context/ProjectsContext';
+import { useWindowContext,WindowProvider } from 'context/WindowContext';
 import type { AppKey } from 'types/app';
-import type { JSX } from 'react';
 
 type Phase = 'boot' | 'login' | 'desktop' | 'off';
 
@@ -41,7 +42,7 @@ function AppContent({ appKey }: { appKey: AppKey }): JSX.Element | null {
 }
 
 function OS() {
-  const { windows, activeId } = useWindowContext();
+  const { windows } = useWindowContext();
   const { bsod, konamiRain, triggerRain, aboutOpen, closeAbout, theme } = useOS();
   const [phase, setPhase] = useState<Phase>('boot');
   const konamiSeq = useRef<string[]>([]);
@@ -108,7 +109,9 @@ function Main() {
     <LangProvider>
       <WindowProvider>
         <OSProvider>
-          <OS />
+          <ProjectsProvider>
+            <OS />
+          </ProjectsProvider>
         </OSProvider>
       </WindowProvider>
     </LangProvider>

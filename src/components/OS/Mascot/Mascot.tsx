@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { useOS } from 'context/OSContext';
 import { useLang } from 'context/LangContext';
+import { useOS } from 'context/OSContext';
 
 const TIPS: Record<'fr' | 'en', string[]> = {
   fr: [

@@ -1,12 +1,13 @@
 import { useState } from 'react';
 
-import { appsMeta } from 'data/apps';
-import { useWindowContext } from 'context/WindowContext';
 import { useOS } from 'context/OSContext';
+import { useWindowContext } from 'context/WindowContext';
+import { appsMeta } from 'data/apps';
 import { useIconPositions } from 'hooks/useIconPositions';
+
+import { ContextMenu } from './ContextMenu/ContextMenu';
 import { DesktopIcon } from './DesktopIcon/DesktopIcon';
 import { Wallpaper } from './Wallpaper/Wallpaper';
-import { ContextMenu } from './ContextMenu/ContextMenu';
 
 interface CtxPos { x: number; y: number }
 

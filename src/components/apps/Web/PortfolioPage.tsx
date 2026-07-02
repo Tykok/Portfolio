@@ -1,7 +1,8 @@
-import { identity } from 'data/identity';
-import { projects } from 'data/projects';
+import { ChickenLoader } from 'components/ChickenLoader/ChickenLoader';
 import { useLang } from 'context/LangContext';
+import { useProjects } from 'context/ProjectsContext';
 import { useWindowContext } from 'context/WindowContext';
+import { identity } from 'data/identity';
 
 const EXT_LINKS = [
   { label: 'GitHub',   url: 'https://github.com/Tykok',               color: '#24292f', mono: 'GH' },
@@ -14,8 +15,9 @@ interface Props {
 }
 
 export function PortfolioPage({ onNavigate }: Props) {
-  const { lang } = useLang();
+  const { lang, t } = useLang();
   const { openApp } = useWindowContext();
+  const { data: projects, loading, error } = useProjects();
 
   return (
     <div className="np-root">
@@ -90,7 +92,15 @@ export function PortfolioPage({ onNavigate }: Props) {
             <span className="np-dh">Status</span>
             <span className="np-dh np-yr-col">{lang === 'fr' ? 'Année' : 'Year'}</span>
           </div>
-          {projects.map((p) => (
+          {loading && (
+            <div className="np-dbrow np-db-state">
+              <ChickenLoader label={String(t('projects_loading'))} />
+            </div>
+          )}
+          {!loading && error && (
+            <div className="np-dbrow np-db-state">{String(t('projects_error'))}</div>
+          )}
+          {!loading && !error && projects.map((p) => (
             <div className="np-dbrow" key={p.id} onClick={() => openApp('projects')} title={lang === 'fr' ? 'Ouvrir Projets' : 'Open Projects'}>
               <span className="np-db-ico">{p.emoji}</span>
               <span className="np-db-name">{p.title[lang]}</span>
