@@ -38,6 +38,7 @@ const en: Translations = {
   about_bio: 'I build server-side APIs and systems that stay easy to maintain and hold up under load. I like clean architectures, tidy data, and code you can re-read without wincing.',
   about_f3v: 'Open to opportunities', about_skills: 'Stack & skills',
   p_count_l: 'Projects', p_repo: 'View repo', p_demo: 'Demo', p_links_ph: 'placeholder links',
+  p_role: 'Role', p_prev: 'Previous project', p_next: 'Next project',
   cv_print: 'Print', cv_dl: 'Download PDF',
   cv_exp: 'Experience', cv_edu: 'Education', cv_skills: 'Skills',
   cv_soft: 'Soft skills', cv_lang: 'Languages', cv_interests: 'Interests', cv_en: 'English (school)',

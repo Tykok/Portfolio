@@ -38,6 +38,7 @@ const fr: Translations = {
   about_bio: "Je conçois des APIs et des systèmes côté serveur qui restent simples à maintenir et tiennent la charge. J'aime les architectures claires, les données propres et le code qu'on relit sans grimacer.",
   about_f3v: 'Ouvert aux opportunités', about_skills: 'Stack & compétences',
   p_count_l: 'Projets', p_repo: 'Voir le repo', p_demo: 'Démo', p_links_ph: 'liens placeholder',
+  p_role: 'Rôle', p_prev: 'Projet précédent', p_next: 'Projet suivant',
   cv_print: 'Imprimer', cv_dl: 'Télécharger le PDF',
   cv_exp: 'Expérience', cv_edu: 'Formation', cv_skills: 'Compétences',
   cv_soft: 'Soft skills', cv_lang: 'Langues', cv_interests: "Centres d'intérêt", cv_en: 'Anglais (scolaire)',

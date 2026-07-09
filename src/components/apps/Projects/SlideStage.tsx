@@ -1,0 +1,55 @@
+import { useLang } from 'context/LangContext';
+import type { Project } from 'data/projects';
+
+import { ProjectSlide } from './ProjectSlide';
+
+interface SlideStageProps {
+  projects: Project[];
+  activeIndex: number;
+  onSelect: (i: number) => void;
+}
+
+export function SlideStage({ projects, activeIndex, onSelect }: SlideStageProps) {
+  const { t } = useLang();
+  const total = projects.length;
+  const atStart = activeIndex <= 0;
+  const atEnd = activeIndex >= total - 1;
+
+  const go = (i: number) => {
+    if (i >= 0 && i < total) onSelect(i);
+  };
+
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowRight') go(activeIndex + 1);
+    else if (e.key === 'ArrowLeft') go(activeIndex - 1);
+  };
+
+  return (
+    <div className="deck-stage" tabIndex={0} onKeyDown={onKeyDown}>
+      <div className="deck-scroll" key={activeIndex}>
+        {projects[activeIndex] && <ProjectSlide project={projects[activeIndex]} />}
+      </div>
+
+      <button
+        type="button"
+        className="deck-nav prev"
+        aria-label={String(t('p_prev'))}
+        disabled={atStart}
+        onClick={() => go(activeIndex - 1)}
+      >
+        ‹
+      </button>
+      <button
+        type="button"
+        className="deck-nav next"
+        aria-label={String(t('p_next'))}
+        disabled={atEnd}
+        onClick={() => go(activeIndex + 1)}
+      >
+        ›
+      </button>
+
+      <div className="deck-counter">{activeIndex + 1} / {total}</div>
+    </div>
+  );
+}
