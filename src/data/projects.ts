@@ -22,4 +22,6 @@ export interface Project {
   bullets: LocalizedStringArray;
   repo: string;
   demo: string;
+  cover?: string;
+  role?: LocalizedString;
 }

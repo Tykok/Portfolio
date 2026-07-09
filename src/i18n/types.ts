@@ -102,6 +102,9 @@ export interface Translations {
   p_repo: string;
   p_demo: string;
   p_links_ph: string;
+  p_role: string;
+  p_prev: string;
+  p_next: string;
   // CV app
   cv_print: string;
   cv_dl: string;
