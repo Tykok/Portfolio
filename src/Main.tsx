@@ -95,7 +95,7 @@ function OS() {
             onShutdown={() => setPhase('off')}
             onLogoff={() => setPhase('login')}
           />
-{bsod        && <Bsod />}
+          {bsod        && <Bsod />}
           {konamiRain  && <KonamiRain />}
           {aboutOpen   && <AboutDialog />}
         </>
