@@ -4,47 +4,58 @@ import { getBadge } from 'data/techBadges';
 
 const EXPERIENCE = [
   {
-    org: { fr: 'Startup FinTech (confidentiel)', en: 'FinTech Startup (confidential)' },
-    pos: { fr: 'Développeur Backend Senior', en: 'Senior Backend Developer' },
-    when: '2023 – présent',
+    org: { fr: 'Pictarine · Toulouse', en: 'Pictarine · Toulouse' },
+    pos: { fr: 'Développeur Back-End', en: 'Back-End Developer' },
+    when: '2022 – présent',
     bullets: {
-      fr: ['Passerelle de paiement idempotente (Go + Kafka) : milliers de tx/min, p99 < 40 ms', 'Bus d\'événements interne : at-least-once delivery + rejeu horodaté', 'Migration PostgreSQL sans downtime sur 50M+ lignes'],
-      en: ['Idempotent payment gateway (Go + Kafka): thousands of tx/min, p99 < 40 ms', 'Internal event bus: at-least-once delivery + time-stamped replay', 'Zero-downtime PostgreSQL migration on 50M+ rows'],
+      fr: ['APIs backend en Kotlin / Spring Boot avec PostgreSQL', 'Intégrations de paiement (Stripe) et de services tiers (Klaviyo)', 'Tooling interne (Next.js / TypeScript) utilisé par toutes les équipes', 'Cycle complet : conception, mise en production, analyse d\'impact — Docker & monitoring'],
+      en: ['Backend APIs in Kotlin / Spring Boot with PostgreSQL', 'Payment integrations (Stripe) and third-party services (Klaviyo)', 'Internal tooling (Next.js / TypeScript) used across all teams', 'Full feature cycle: design, release, impact analysis — Docker & monitoring'],
     },
-    tags: ['Go', 'Kafka', 'PostgreSQL', 'Redis'],
+    tags: ['Kotlin', 'Spring Boot', 'PostgreSQL', 'Stripe', 'Next.js'],
   },
   {
-    org: { fr: 'Agence web · Toulouse', en: 'Web agency · Toulouse' },
-    pos: { fr: 'Développeur Fullstack', en: 'Fullstack Developer' },
-    when: '2021 – 2023',
+    org: { fr: 'MecaLIFE Group · Toulouse', en: 'MecaLIFE Group · Toulouse' },
+    pos: { fr: 'Développeur Full Stack', en: 'Full Stack Developer' },
+    when: '2021 – 2022',
     bullets: {
-      fr: ['Service OAuth2 + sessions (Go / gRPC) : p99 < 20 ms', 'SDK multi-langages généré depuis spec OpenAPI — publié en open source', 'APIs REST & microservices pour 3 clients e-commerce'],
-      en: ['OAuth2 + sessions service (Go / gRPC): p99 < 20 ms', 'Multi-language SDK generated from OpenAPI spec — released open source', 'REST APIs & microservices for 3 e-commerce clients'],
+      fr: ['Plateforme de ventes aux enchères & outils internes : APIs REST, modélisation BDD', 'Sécurisation des accès (JWT, droits utilisateurs), paiement Stripe, tarification dynamique', 'Admin serveur (Apache, PostgreSQL, SSH), automatisation (Python / Bash / cron)', 'Qualité logicielle & déploiement : tests, CI/CD, GitFlow'],
+      en: ['Auction platform & internal tools: REST APIs, database modeling', 'Access security (JWT, user rights), Stripe payments, dynamic pricing', 'Server admin (Apache, PostgreSQL, SSH), automation (Python / Bash / cron)', 'Software quality & delivery: tests, CI/CD, GitFlow'],
     },
-    tags: ['Go', 'gRPC', 'TypeScript', 'OpenAPI'],
+    tags: ['TypeScript', 'PostgreSQL', 'Stripe', 'Python', 'Bash'],
   },
   {
-    org: { fr: 'Mission freelance', en: 'Freelance project' },
-    pos: { fr: 'Ingénieur Données', en: 'Data Engineer' },
-    when: '2022',
+    org: { fr: 'Réseau Canopé · La Réunion', en: 'Réseau Canopé · Réunion' },
+    pos: { fr: 'Développeur Web (Front & Back)', en: 'Web Developer (Front & Back)' },
+    when: '2020',
     bullets: {
-      fr: ['Pipeline ETL orchestré avec Airflow (DAGs idempotents)', 'Tableaux de bord BigQuery quasi temps réel · réduction des coûts stockage –35 %'],
-      en: ['ETL pipeline orchestrated with Airflow (idempotent DAGs)', 'Near-real-time BigQuery dashboards · storage cost reduction –35%'],
+      fr: ['Localisation des établissements scolaires sur carte interactive', 'Recherche avancée par formulaire, connexion sécurisée & gestion des droits', 'Modélisation et création de la base de données (MySQL)'],
+      en: ['School locator on an interactive map', 'Advanced form search, secure login & rights management', 'Database modeling and creation (MySQL)'],
     },
-    tags: ['Python', 'Airflow', 'BigQuery'],
+    tags: ['MySQL', 'JavaScript', 'PHP'],
+  },
+  {
+    org: { fr: 'Cegid · Roubaix', en: 'Cegid · Roubaix' },
+    pos: { fr: 'Développeur JEE & Angular', en: 'JEE & Angular Developer' },
+    when: '2019',
+    bullets: {
+      fr: ['Outil d\'analyse de Thread Dump Java', 'API : récupération des dumps, transformation JSON, exposition HTTP', 'Interface web de tri des threads'],
+      en: ['Java Thread Dump analysis tool', 'API: dump retrieval, JSON transformation, HTTP exposure', 'Web UI for thread sorting'],
+    },
+    tags: ['Java', 'JEE', 'Angular'],
   },
 ];
 
 const EDUCATION = [
-  { yr: '2019 – 2021', ti: { fr: 'BUT Informatique', en: 'Computer Science Degree (BUT)' }, sc: 'IUT · Toulouse' },
-  { yr: '2019', ti: { fr: 'Baccalauréat STI2D', en: 'Technology Baccalaureate (STI2D)' }, sc: 'Lycée · Toulouse' },
+  { yr: '2022 – 2024', ti: { fr: 'Chef de projet Ingénierie Logicielle — IA & Big Data', en: 'Software Engineering Project Manager — AI & Big Data' }, sc: 'IPI · Toulouse' },
+  { yr: '2020 – 2021', ti: { fr: 'L3 MIAGE — Ingénierie des systèmes d\'information', en: 'BSc MIAGE — Information Systems Engineering' }, sc: 'Université Paul Sabatier · Toulouse III' },
+  { yr: '2018 – 2020', ti: { fr: 'BTS SIO option SLAM — Développement', en: 'BTS SIO (SLAM) — Software Development' }, sc: 'Lycée Bellepierre · La Réunion' },
 ];
 
-const HARD_SKILLS = ['Go', 'TypeScript', 'Python', 'PostgreSQL', 'Redis', 'Kafka', 'Docker', 'Kubernetes', 'gRPC', 'Git', 'Linux'];
-const SOFT_SKILLS_FR = ['Communication claire', 'Autonomie', 'Code maintenable', 'Curiosité technique'];
-const SOFT_SKILLS_EN = ['Clear communication', 'Autonomy', 'Maintainable code', 'Technical curiosity'];
-const LANGUAGES_FR = ['Français — natif', 'Anglais — professionnel (B2)'];
-const LANGUAGES_EN = ['French — native', 'English — professional (B2)'];
+const HARD_SKILLS = ['Kotlin', 'Spring Boot', 'TypeScript', 'Next.js', 'PostgreSQL', 'MySQL', 'Docker', 'Stripe', 'Python', 'Git', 'Linux'];
+const SOFT_SKILLS_FR = ['Communication claire', 'Autonomie', 'Esprit critique', 'Curiosité technique'];
+const SOFT_SKILLS_EN = ['Clear communication', 'Autonomy', 'Critical thinking', 'Technical curiosity'];
+const LANGUAGES_FR = ['Français — natif', 'Anglais — professionnel'];
+const LANGUAGES_EN = ['French — native', 'English — professional'];
 
 export function Cv() {
   const { lang, t } = useLang();

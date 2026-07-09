@@ -17,13 +17,16 @@ export function TaskBar({ onShutdown, onLogoff }: Props) {
   const { windows, activeId, minimizeWindow } = useWindowContext();
   const { t } = useLang();
   const [startOpen, setStartOpen] = useState(false);
-  const startBtnRef = useRef<HTMLButtonElement>(null);
+  const startWrapRef = useRef<HTMLDivElement>(null);
 
-  /* Close StartMenu when clicking outside the button */
+  /* Close StartMenu when clicking outside the button *or* the menu itself.
+     The menu is a sibling of the button, so checking only the button would
+     treat clicks on menu items as "outside" — closing (and unmounting) the
+     menu on mousedown before the item's click handler can fire. */
   useEffect(() => {
     if (!startOpen) return;
     const onDown = (e: MouseEvent) => {
-      if (!startBtnRef.current?.contains(e.target as Node)) {
+      if (!startWrapRef.current?.contains(e.target as Node)) {
         setStartOpen(false);
       }
     };
@@ -49,23 +52,24 @@ export function TaskBar({ onShutdown, onLogoff }: Props) {
 
   return (
     <>
-      {startOpen && (
-        <StartMenu
-          onClose={() => setStartOpen(false)}
-          onShutdown={() => { setStartOpen(false); onShutdown(); }}
-          onLogoff={() => { setStartOpen(false); onLogoff(); }}
-        />
-      )}
       <div className="os-taskbar tq-taskbar">
-        <button
-          ref={startBtnRef}
-          className={`tq-start${startOpen ? ' open' : ''}`}
-          onClick={() => setStartOpen((v) => !v)}
-          title={String(t('tip_start'))}
-        >
-          <span className="orb" />
-          {t('start')}
-        </button>
+        <div className="tq-start-wrap" ref={startWrapRef}>
+          {startOpen && (
+            <StartMenu
+              onClose={() => setStartOpen(false)}
+              onShutdown={() => { setStartOpen(false); onShutdown(); }}
+              onLogoff={() => { setStartOpen(false); onLogoff(); }}
+            />
+          )}
+          <button
+            className={`tq-start${startOpen ? ' open' : ''}`}
+            onClick={() => setStartOpen((v) => !v)}
+            title={String(t('tip_start'))}
+          >
+            <span className="orb" />
+            {t('start')}
+          </button>
+        </div>
         <div className="os-quickdiv" />
         <button
           className="os-showdesk"

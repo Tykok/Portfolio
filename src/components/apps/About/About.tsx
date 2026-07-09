@@ -3,7 +3,7 @@ import { identity } from 'data/identity';
 import { primarySocials } from 'data/socials';
 import { getBadge } from 'data/techBadges';
 
-const MAIN_SKILLS = ['Go', 'TypeScript', 'Python', 'PostgreSQL', 'Redis', 'Kafka', 'Docker', 'Kubernetes', 'gRPC'];
+const MAIN_SKILLS = ['Kotlin', 'Spring Boot', 'TypeScript', 'Next.js', 'PostgreSQL', 'MySQL', 'Docker', 'Stripe', 'Git'];
 
 export function About() {
   const { lang, t } = useLang();
