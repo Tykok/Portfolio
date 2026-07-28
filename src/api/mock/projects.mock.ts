@@ -20,6 +20,7 @@ export const mockProjects: Project[] = [
       fr: 'Portfolio façon OS rétro : fenêtres, taskbar, terminal et apps. Le site que vous parcourez.',
       en: 'A retro-OS style portfolio: windows, taskbar, terminal and apps. The site you are browsing.',
     },
+    role: { fr: 'Projet personnel — conception, design et développement', en: 'Personal project — design and development' },
     bullets: {
       fr: ['Gestionnaire de fenêtres & taskbar maison', 'i18n FR/EN, thèmes et easter eggs', 'API projets dynamique'],
       en: ['Custom window manager & taskbar', 'FR/EN i18n, themes and easter eggs', 'Dynamic projects API'],
@@ -46,6 +47,7 @@ export const mockProjects: Project[] = [
       fr: 'Outil interne (Next.js / TypeScript) utilisé par toutes les équipes : produit, design, data et front.',
       en: 'Internal tool (Next.js / TypeScript) used across all teams: product, design, data and front.',
     },
+    role: { fr: "Développeur back-end — création puis maintenance de l'outil", en: 'Backend developer — built it, then maintained it' },
     bullets: {
       fr: ['Adopté par toutes les équipes', 'Maintenance & évolution continue', 'Intégré au backend Kotlin / Spring'],
       en: ['Adopted by every team', 'Continuous maintenance & evolution', 'Wired to the Kotlin / Spring backend'],
@@ -73,6 +75,7 @@ export const mockProjects: Project[] = [
       fr: 'APIs Kotlin / Spring Boot pour le paiement (Stripe), la gestion de compte client et les services marketing (Klaviyo).',
       en: 'Kotlin / Spring Boot APIs for payments (Stripe), customer account management and marketing services (Klaviyo).',
     },
+    role: { fr: 'Développeur back-end — APIs Kotlin / Spring Boot', en: 'Backend developer — Kotlin / Spring Boot APIs' },
     bullets: {
       fr: ['Flows de paiement Stripe', 'Gestion & intégration de compte client', 'Services tiers (Klaviyo) pour le marketing'],
       en: ['Stripe payment flows', 'Customer account management & onboarding', 'Third-party services (Klaviyo) for marketing'],
@@ -99,6 +102,7 @@ export const mockProjects: Project[] = [
       fr: "Plateforme d'enchères & outils internes chez MecaLIFE : APIs REST, sécurité JWT et tarification dynamique.",
       en: 'Auction platform & internal tools at MecaLIFE: REST APIs, JWT security and dynamic pricing.',
     },
+    role: { fr: 'Développeur full stack — APIs, BDD et sécurité', en: 'Full stack developer — APIs, database and security' },
     bullets: {
       fr: ['APIs REST & modélisation BDD', 'Accès sécurisés (JWT, droits utilisateurs)', 'Paiement Stripe & tarification dynamique'],
       en: ['REST APIs & database modeling', 'Secure access (JWT, user rights)', 'Stripe payments & dynamic pricing'],
@@ -124,6 +128,7 @@ export const mockProjects: Project[] = [
       fr: "Outil d'analyse de thread dumps Java chez Cegid : API de traitement et interface de tri des threads.",
       en: 'Java thread dump analysis tool at Cegid: processing API and a thread-sorting UI.',
     },
+    role: { fr: 'Développeur JEE & Angular — stage', en: 'JEE & Angular developer — internship' },
     bullets: {
       fr: ["Récupération des dumps d'un programme Java", 'Transformation des données en JSON', 'Exposition HTTP & interface de tri'],
       en: ['Retrieval of dumps from a Java program', 'Data transformation to JSON', 'HTTP exposure & sorting UI'],
@@ -146,9 +151,10 @@ export const mockProjects: Project[] = [
     ],
     tags: ['MySQL', 'JavaScript', 'PHP'],
     desc: {
-      fr: "Application web (Réseau Canopé) de localisation des établissements scolaires sur carte interactive.",
+      fr: 'Application web (Réseau Canopé) de localisation des établissements scolaires sur carte interactive.',
       en: 'Web app (Réseau Canopé) locating schools on an interactive map.',
     },
+    role: { fr: 'Développeur web front & back — stage', en: 'Web developer, front & back — internship' },
     bullets: {
       fr: ['Carte interactive des établissements', 'Recherche avancée par formulaire', 'Connexion sécurisée & gestion des droits'],
       en: ['Interactive school map', 'Advanced form-based search', 'Secure login & rights management'],
