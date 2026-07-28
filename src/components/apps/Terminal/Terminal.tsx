@@ -7,7 +7,7 @@ import { useProjects } from 'context/ProjectsContext';
 import { useWindowContext } from 'context/WindowContext';
 import { identity } from 'data/identity';
 import { socials } from 'data/socials';
-import { techBadges } from 'data/techBadges';
+import type { StringKey } from 'i18n/types';
 import type { AppKey } from 'types/app';
 
 interface Line {
@@ -21,6 +21,15 @@ const APP_MAP: Record<string, AppKey> = {
 };
 
 const VALID_THEMES: DesktopTheme[] = ['bliss', 'field', 'dusk', 'matrix', 'rose'];
+
+/** `skills` output, grouped so the list reads like a stack rather than a dump. */
+const SKILL_GROUPS: Array<[StringKey, string[]]> = [
+  ['t_sk_backend', ['Kotlin', 'Spring Boot', 'Java / JEE', 'Python']],
+  ['t_sk_data', ['PostgreSQL', 'MySQL']],
+  ['t_sk_front', ['TypeScript', 'Next.js', 'React', 'Angular']],
+  ['t_sk_ops', ['Docker', 'Linux', 'Bash', 'Git', 'CI/CD']],
+  ['t_sk_integr', ['Stripe', 'Klaviyo', 'JWT / OAuth2']],
+];
 
 export function Terminal() {
   const { lang, t } = useLang();
@@ -79,9 +88,14 @@ export function Terminal() {
       case 'whoami':
         push(
           { type: 'output', text: `${identity.name} (${identity.alias})` },
-          { type: 'output', text: identity.role[lang] },
-          { type: 'output', text: identity.location[lang] },
-          { type: 'output', text: identity.bio[lang] },
+          { type: 'output', text: `${identity.role[lang]} · ${identity.location[lang]}` },
+          { type: 'dim', text: identity.tagline[lang] },
+          { type: 'dim', text: '' },
+          ...identity.bio[lang].split('\n\n').map((para) => ({ type: 'output' as const, text: para })),
+          { type: 'dim', text: '' },
+          { type: 'output', text: identity.now[lang] },
+          { type: 'output', text: `${t('t_who_status')} ${identity.status[lang]}` },
+          { type: 'dim', text: t('t_who_more') },
         );
         break;
 
@@ -93,7 +107,7 @@ export function Terminal() {
           push({ type: 'output', text: t('projects_error') });
         } else {
           push(
-            { type: 'output', text: `${projects.length} projets :` },
+            { type: 'output', text: t('t_projects_l', { n: projects.length }) },
             ...projects.map((p) => ({
               type: 'output' as const,
               text: `  ${p.emoji}  ${p.title[lang].padEnd(30)} [${p.stack.map((s) => s.label).join(', ')}]`,
@@ -105,14 +119,19 @@ export function Terminal() {
 
       case 'skills':
         push(
-          { type: 'output', text: 'Stack :' },
-          { type: 'output', text: Object.keys(techBadges).join('  ·  ') },
+          { type: 'output', text: t('t_stack_l') },
+          ...SKILL_GROUPS.map(([labelKey, techs]) => ({
+            type: 'output' as const,
+            text: `  ${t(labelKey).padEnd(16)} ${techs.join(' · ')}`,
+          })),
+          { type: 'dim', text: '' },
+          { type: 'dim', text: t('t_skills_note') },
         );
         break;
 
       case 'contact':
         push(
-          { type: 'output', text: 'Liens :' },
+          { type: 'output', text: t('t_links_l') },
           ...socials.map((s) => ({ type: 'output' as const, text: `  ${s.label.padEnd(12)} ${s.value}` })),
         );
         break;

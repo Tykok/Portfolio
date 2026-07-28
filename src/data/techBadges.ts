@@ -9,6 +9,8 @@ export const techBadges: Record<string, TechBadge> = {
   Python:     { color: '#3776ab', monogram: 'Py' },
   'Node.js':  { color: '#5fa04e', monogram: 'N'  },
   Kotlin:     { color: '#7f52ff', monogram: 'Kt' },
+  Java:       { color: '#e76f00', monogram: 'Ja' },
+  JEE:        { color: '#e76f00', monogram: 'EE' },
   Spring:     { color: '#5a9e30', monogram: 'Sp' },
   'Spring Boot': { color: '#5a9e30', monogram: 'SB' },
   'Next.js':  { color: '#2a2a2a', monogram: 'Nx' },

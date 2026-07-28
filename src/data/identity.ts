@@ -1,4 +1,4 @@
-import type { LocalizedString } from '../types/lang';
+import type { LocalizedString, LocalizedStringArray } from '../types/lang';
 
 export interface Identity {
   name: string;
@@ -7,11 +7,16 @@ export interface Identity {
   role: LocalizedString;
   location: LocalizedString;
   status: LocalizedString;
-  phone: string;
   email: string;
   github: string;
   githubUrl: string;
+  /** Short pitch — one line, used where space is tight (terminal, tooltips). */
+  tagline: LocalizedString;
+  /** Full profile paragraph — About app, CV header. */
   bio: LocalizedString;
+  /** What I'm doing right now, in one sentence. */
+  now: LocalizedString;
+  interests: LocalizedStringArray;
 }
 
 export const identity: Identity = {
@@ -21,12 +26,33 @@ export const identity: Identity = {
   role: { fr: 'Développeur Backend Kotlin', en: 'Kotlin Backend Developer' },
   location: { fr: 'Escalquens, Occitanie · Toulouse', en: 'Escalquens, Occitania · Toulouse' },
   status: { fr: 'Ouvert aux opportunités', en: 'Open to opportunities' },
-  phone: '06 51 77 34 04',
   email: 'treportelie12@gmail.com',
   github: 'github.com/Tykok',
   githubUrl: 'https://github.com/Tykok',
+  tagline: {
+    fr: 'APIs Kotlin / Spring Boot, PostgreSQL et intégrations qui tiennent en production.',
+    en: 'Kotlin / Spring Boot APIs, PostgreSQL and integrations that hold up in production.',
+  },
   bio: {
-    fr: "Développeur backend chez Pictarine, je conçois des APIs en Kotlin / Spring Boot avec PostgreSQL, intégrations de paiement (Stripe) et de services tiers. Créatif et curieux, j'aime les architectures claires et le code qu'on relit sans grimacer.",
-    en: 'Backend developer at Pictarine, I build APIs in Kotlin / Spring Boot with PostgreSQL, payment integrations (Stripe) and third-party services. Creative and curious, I like clean architectures and code you can re-read without wincing.',
+    fr: "Développeur backend chez Pictarine depuis 2022, je conçois des APIs en Kotlin / Spring Boot avec PostgreSQL : paiement (Stripe), services tiers (Klaviyo), gestion de compte client et un tooling interne utilisé par toutes les équipes. Je suis les fonctionnalités de bout en bout — conception, mise en production, analyse d'impact — en travaillant avec le Produit, le Design, la Data et les équipes Front (iOS, Android, Web).\n\nCréatif, avec un esprit critique et une vraie envie de progresser en continu. Ma curiosité me pousse à explorer de nouveaux sujets en permanence, et j'aime particulièrement partager et discuter d'informatique — d'où ce portfolio et mes articles.",
+    en: "Backend developer at Pictarine since 2022, I build APIs in Kotlin / Spring Boot with PostgreSQL: payments (Stripe), third-party services (Klaviyo), customer account management and internal tooling used across every team. I follow features end to end — design, release, impact analysis — working with Product, Design, Data and the Front teams (iOS, Android, Web).\n\nCreative, with a critical eye and a real drive to keep getting better. Curiosity keeps pushing me into new territory, and I especially enjoy sharing and talking software — hence this portfolio and my articles.",
+  },
+  now: {
+    fr: 'Actuellement : APIs backend Kotlin / Spring Boot chez Pictarine, à Toulouse.',
+    en: 'Currently: Kotlin / Spring Boot backend APIs at Pictarine, in Toulouse.',
+  },
+  interests: {
+    fr: [
+      'Écriture technique (Medium, dev.to)',
+      'Projets personnels & side projects',
+      'Veille et discussions autour du dev',
+      'Apprentissage continu',
+    ],
+    en: [
+      'Technical writing (Medium, dev.to)',
+      'Personal & side projects',
+      'Keeping up with dev and talking shop',
+      'Continuous learning',
+    ],
   },
 };

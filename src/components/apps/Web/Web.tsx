@@ -7,6 +7,7 @@ import { PortfolioPage } from './PortfolioPage';
 interface Tab {
   id: string;
   url: string;
+  /** Empty on the home tab — the label is resolved at render so it follows the language. */
   title: string;
 }
 
@@ -16,13 +17,14 @@ let tabCounter = 1;
 const makeTab = (url = HOME_URL, title = ''): Tab => ({
   id: `t${tabCounter++}`,
   url,
-  title: title || (url === HOME_URL ? 'Nouvel onglet' : url),
+  title: title || (url === HOME_URL ? '' : url),
 });
 
 const EXT_LINKS = [
   { label: 'GitHub', url: 'https://github.com/Tykok', color: '#24292f', monogram: 'GH' },
   { label: 'LinkedIn', url: 'https://linkedin.com/in/elie-treport', color: '#0a66c2', monogram: 'in' },
   { label: 'Dev.to', url: 'https://dev.to/tykok', color: '#0a0a0a', monogram: 'D' },
+  { label: 'Medium', url: 'https://medium.com/@tykok', color: '#191919', monogram: 'M' },
 ];
 
 export function Web() {
@@ -66,22 +68,37 @@ export function Web() {
             onClick={() => { setActiveTabId(tab.id); setAddr(tab.url); setExtUrl(null); }}
           >
             <span className="bt-favi gly">🌐</span>
-            <span className="bt-title">{tab.title}</span>
-            <span className="bt-close" onClick={(e) => { e.stopPropagation(); closeTab(tab.id); }}>✕</span>
+            <span className="bt-title">{tab.title || t('br_nt_title')}</span>
+            <span
+              className="bt-close"
+              title={t('br_closetab')}
+              onClick={(e) => { e.stopPropagation(); closeTab(tab.id); }}
+            >
+              ✕
+            </span>
           </div>
         ))}
-        <button className="tq-tabnew" onClick={addTab}>+</button>
+        <button className="tq-tabnew" title={t('br_newtab')} onClick={addTab}>+</button>
       </div>
 
       {/* Nav bar */}
       <div className="tq-bnav">
-        <button className="bnav-btn" disabled>‹</button>
-        <button className="bnav-btn" disabled>›</button>
-        <button className="bnav-btn" onClick={() => { setAddr(HOME_URL); setExtUrl(null); }}>⟳</button>
+        <button className="bnav-btn" title={t('br_back')} aria-label={t('br_back')} disabled>‹</button>
+        <button className="bnav-btn" title={t('br_fwd')} aria-label={t('br_fwd')} disabled>›</button>
+        <button
+          className="bnav-btn"
+          title={t('br_reload')}
+          aria-label={t('br_reload')}
+          onClick={() => { setAddr(HOME_URL); setExtUrl(null); }}
+        >
+          ⟳
+        </button>
         <div className="bnav-addr">
           <span className="bnav-favi">🌐</span>
           <input
             className="bnav-input"
+            placeholder={t('br_addr_ph')}
+            aria-label={t('br_addr_ph')}
             value={addr}
             onChange={(e) => setAddr(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && navigate(addr)}

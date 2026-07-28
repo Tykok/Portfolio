@@ -3,7 +3,7 @@ import { identity } from 'data/identity';
 import { primarySocials } from 'data/socials';
 import { getBadge } from 'data/techBadges';
 
-const MAIN_SKILLS = ['Kotlin', 'Spring Boot', 'TypeScript', 'Next.js', 'PostgreSQL', 'MySQL', 'Docker', 'Stripe', 'Git'];
+const MAIN_SKILLS = ['Kotlin', 'Spring Boot', 'Java', 'TypeScript', 'Next.js', 'PostgreSQL', 'MySQL', 'Docker', 'Stripe', 'Git'];
 
 export function About() {
   const { lang, t } = useLang();
@@ -25,7 +25,9 @@ export function About() {
         {identity.status[lang]}
       </div>
 
-      <p className="ab-bio">{identity.bio[lang]}</p>
+      {identity.bio[lang].split('\n\n').map((para) => (
+        <p key={para.slice(0, 24)} className="ab-bio">{para}</p>
+      ))}
 
       <div className="ab-socs">
         {primarySocials.map((s) => (

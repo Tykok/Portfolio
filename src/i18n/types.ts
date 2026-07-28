@@ -36,6 +36,7 @@ export interface Translations {
   tip_show_desktop: string;
   // Calendar
   cal_days: string[];
+  cal_months: string[];
   cal_weekstart: number;
   // Window menus
   m_file: string;
@@ -114,7 +115,6 @@ export interface Translations {
   cv_soft: string;
   cv_lang: string;
   cv_interests: string;
-  cv_en: string;
   // Contact app
   c_greet: string;
   c_auto: string;
@@ -144,6 +144,15 @@ export interface Translations {
   br_bm_links: string;
   br_ext_body: string;
   br_ext_open: string;
+  // Browser — portfolio page (Notion-style)
+  np_location: string;
+  np_status: string;
+  np_email: string;
+  np_name: string;
+  np_stack: string;
+  np_year: string;
+  np_links: string;
+  np_open_projects: string;
   // Terminal
   t_b1: string;
   t_b2: string;
@@ -158,6 +167,17 @@ export interface Translations {
   t_h_clear: string;
   t_h_games: string;
   t_open_hint: string;
+  t_projects_l: string;
+  t_stack_l: string;
+  t_links_l: string;
+  t_skills_note: string;
+  t_sk_backend: string;
+  t_sk_data: string;
+  t_sk_front: string;
+  t_sk_ops: string;
+  t_sk_integr: string;
+  t_who_status: string;
+  t_who_more: string;
   t_opening: string;
   t_cv_open: string;
   t_unknown_open: string;
@@ -175,6 +195,7 @@ export interface Translations {
   t_theme_list: string;
   t_theme_ok: string;
   t_konami_hint: string;
+  konami_banner: string;
   t_exit: string;
   t_sudo_sandwich: string;
   t_fortunes: string[];

@@ -21,3 +21,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# agent scratch (holds git worktrees — must never be committed)
+/.claude
