@@ -39,7 +39,7 @@ export function About() {
       </div>
 
       <div className="ab-rule" />
-      <div className="ab-sklab">{String(t('about_skills'))}</div>
+      <div className="ab-sklab">{t('about_skills')}</div>
       <div className="ab-chips">
         {MAIN_SKILLS.map((tech) => {
           const badge = getBadge(tech);

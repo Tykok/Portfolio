@@ -3,7 +3,7 @@ import { useOS } from 'context/OSContext';
 import { useWindowContext } from 'context/WindowContext';
 import { appsMeta } from 'data/apps';
 import { identity } from 'data/identity';
-import type { Translations } from 'i18n/types';
+import type { StringKey } from 'i18n/types';
 import type { AppKey } from 'types/app';
 
 import { AppIcon } from '../AppIcon/AppIcon';
@@ -16,7 +16,7 @@ interface Props {
 
 const PINNED: AppKey[] = ['about', 'projects', 'cv', 'contact', 'terminal'];
 
-const SUB_KEY: Record<AppKey, keyof Translations> = {
+const SUB_KEY: Record<AppKey, StringKey> = {
   about: 'sub_about',
   projects: 'sub_projects',
   cv: 'sub_cv',
@@ -59,7 +59,7 @@ export function StartMenu({ onClose, onShutdown, onLogoff }: Props) {
               </span>
               <div className="os-si-tx">
                 <b>{app.title[lang]}</b>
-                <div className="sub">{String(t(SUB_KEY[app.key]))}</div>
+                <div className="sub">{t(SUB_KEY[app.key])}</div>
               </div>
             </div>
           ))}

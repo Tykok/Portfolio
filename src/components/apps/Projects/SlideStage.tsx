@@ -33,7 +33,7 @@ export function SlideStage({ projects, activeIndex, onSelect }: SlideStageProps)
       <button
         type="button"
         className="deck-nav prev"
-        aria-label={String(t('p_prev'))}
+        aria-label={t('p_prev')}
         disabled={atStart}
         onClick={() => go(activeIndex - 1)}
       >
@@ -42,7 +42,7 @@ export function SlideStage({ projects, activeIndex, onSelect }: SlideStageProps)
       <button
         type="button"
         className="deck-nav next"
-        aria-label={String(t('p_next'))}
+        aria-label={t('p_next')}
         disabled={atEnd}
         onClick={() => go(activeIndex + 1)}
       >

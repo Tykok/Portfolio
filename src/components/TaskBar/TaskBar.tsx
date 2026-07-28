@@ -64,7 +64,7 @@ export function TaskBar({ onShutdown, onLogoff }: Props) {
           <button
             className={`tq-start${startOpen ? ' open' : ''}`}
             onClick={() => setStartOpen((v) => !v)}
-            title={String(t('tip_start'))}
+            title={t('tip_start')}
           >
             <span className="orb" />
             {t('start')}
@@ -74,7 +74,7 @@ export function TaskBar({ onShutdown, onLogoff }: Props) {
         <button
           className="os-showdesk"
           onClick={handleShowDesktop}
-          title={String(t('tip_show_desktop'))}
+          title={t('tip_show_desktop')}
         >
           🖥
         </button>

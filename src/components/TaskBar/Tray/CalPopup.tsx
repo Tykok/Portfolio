@@ -22,8 +22,8 @@ export function CalPopup({ onClose }: Props) {
   const today = new Date();
   const [view, setView] = useState({ month: today.getMonth(), year: today.getFullYear() });
 
-  const days = t('cal_days') as string[];
-  const weekstart = t('cal_weekstart') as number;
+  const days = t('cal_days');
+  const weekstart = t('cal_weekstart');
 
   const prev = () =>
     setView(({ month, year }) =>

@@ -54,7 +54,7 @@ export function Media() {
           <i style={{ width: `${progress}%` }} />
         </div>
         <div style={{ fontSize: 11, color: '#8fb0e0', marginTop: 4 }}>
-          {String(t('m_demo'))}
+          {t('m_demo')}
         </div>
       </div>
 

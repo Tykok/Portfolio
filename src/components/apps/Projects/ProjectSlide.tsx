@@ -28,7 +28,7 @@ export function ProjectSlide({ project }: { project: Project }) {
         <p className="deck-desc">{project.desc[lang]}</p>
         {project.role && (
           <p className="deck-role">
-            <span className="deck-role-l">{String(t('p_role'))}</span>
+            <span className="deck-role-l">{t('p_role')}</span>
             {project.role[lang]}
           </p>
         )}
@@ -65,17 +65,17 @@ export function ProjectSlide({ project }: { project: Project }) {
         <div className="deck-acts">
           {project.repo !== '#' && (
             <a href={project.repo} target="_blank" rel="noreferrer" className="pj-btn">
-              ↗ {String(t('p_repo'))}
+              ↗ {t('p_repo')}
             </a>
           )}
           {project.demo !== '#' && (
             <a href={project.demo} target="_blank" rel="noreferrer" className="pj-btn ghost">
-              ▶ {String(t('p_demo'))}
+              ▶ {t('p_demo')}
             </a>
           )}
           {noLinks && (
             <span style={{ fontSize: 12, color: 'var(--ink-dim)', fontStyle: 'italic' }}>
-              {String(t('p_links_ph'))}
+              {t('p_links_ph')}
             </span>
           )}
         </div>

@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Lang } from 'helpers/lang'
 import startWindowsLogo from 'images/logo/windows-start.png'
 
 import { useLang } from 'context/LangContext'
@@ -7,7 +6,7 @@ import { useLang } from 'context/LangContext'
 import './StartButton.scss'
 
 const StartButton = () => {
-  const langContext = useLang()
+  const { t } = useLang()
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false)
 
   const handleStartButtonClick = () => {
@@ -18,7 +17,7 @@ const StartButton = () => {
     <div className="start pointer" onClick={handleStartButtonClick}>
       <div className={isStartMenuOpen ? 'active' : ''}>
         <img src={startWindowsLogo} alt="start windows logo" className="start-icon" />
-        <span className="start-text">{Lang.getForKey(langContext.lang, 'taskBarStart')}</span>
+        <span className="start-text">{t('start')}</span>
       </div>
     </div>
   )

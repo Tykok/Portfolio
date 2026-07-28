@@ -87,7 +87,7 @@ export function Web() {
             onKeyDown={(e) => e.key === 'Enter' && navigate(addr)}
           />
         </div>
-        <button className="bnav-go" onClick={() => navigate(addr)}>{String(t('br_go'))}</button>
+        <button className="bnav-go" onClick={() => navigate(addr)}>{t('br_go')}</button>
       </div>
 
       {/* Bookmarks */}
@@ -103,7 +103,7 @@ export function Web() {
         <div className="bm-sep" />
         <button className="bm-item" onClick={() => { setAddr(HOME_URL); setExtUrl(null); }}>
           <span className="bm-favi">🏠</span>
-          {String(t('br_bm_home'))}
+          {t('br_bm_home')}
         </button>
       </div>
 
@@ -116,9 +116,9 @@ export function Web() {
               <div className="ext-ico" style={{ background: '#2f6ff2' }}>↗</div>
               <div className="ext-name">{extUrl.replace(/^https?:\/\//, '').split('/')[0]}</div>
               <div className="ext-url">{extUrl}</div>
-              <p className="ext-body">{String(t('br_ext_body'))}</p>
+              <p className="ext-body">{t('br_ext_body')}</p>
               <a href={extUrl} target="_blank" rel="noreferrer" className="tq-btn is-default ext-btn">
-                {String(t('br_ext_open'))} ↗
+                {t('br_ext_open')} ↗
               </a>
             </div>
           </div>

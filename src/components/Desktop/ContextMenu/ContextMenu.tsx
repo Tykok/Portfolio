@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 import { useLang } from 'context/LangContext';
 import type { DesktopTheme } from 'context/OSContext';
 import { useOS } from 'context/OSContext';
+import type { StringKey } from 'i18n/types';
 
 interface Props {
   x: number;
@@ -11,7 +12,7 @@ interface Props {
   onLineup: () => void;
 }
 
-const THEME_ENTRIES: Array<[DesktopTheme, string, string]> = [
+const THEME_ENTRIES: Array<[DesktopTheme, StringKey, string]> = [
   ['bliss', 'th_bliss', '☀️'],
   ['field', 'th_field', '🌿'],
   ['dusk', 'th_dusk', '🌅'],
@@ -44,40 +45,40 @@ export function ContextMenu({ x, y, onClose, onLineup }: Props) {
     <div className="os-ctxmenu" style={{ left: safeX, top: safeY }} ref={ref}>
       <div className="os-mi has-sub">
         <span className="os-mi-ico" />
-        <span className="os-mi-label">{String(t('ctx_arrange'))}</span>
+        <span className="os-mi-label">{t('ctx_arrange')}</span>
         <span className="os-mi-sub-arrow">›</span>
         <div className="os-submenu">
           <div className="os-mi" onClick={onClose}>
             <span className="os-mi-check" />
-            <span className="os-mi-label">{String(t('ctx_by_name'))}</span>
+            <span className="os-mi-label">{t('ctx_by_name')}</span>
           </div>
           <div className="os-mi" onClick={onClose}>
             <span className="os-mi-check" />
-            <span className="os-mi-label">{String(t('ctx_by_type'))}</span>
+            <span className="os-mi-label">{t('ctx_by_type')}</span>
           </div>
         </div>
       </div>
       <div className="os-mi" onClick={() => { onLineup(); onClose(); }}>
         <span className="os-mi-ico" />
-        <span className="os-mi-label">{String(t('ctx_lineup'))}</span>
+        <span className="os-mi-label">{t('ctx_lineup')}</span>
       </div>
       <div className="os-mi" onClick={onClose}>
         <span className="os-mi-ico" />
-        <span className="os-mi-label">{String(t('ctx_refresh'))}</span>
+        <span className="os-mi-label">{t('ctx_refresh')}</span>
       </div>
       <div className="os-mi-sep" />
       <div className="os-mi is-disabled">
         <span className="os-mi-ico" />
-        <span className="os-mi-label">{String(t('ctx_paste'))}</span>
+        <span className="os-mi-label">{t('ctx_paste')}</span>
       </div>
       <div className="os-mi is-disabled">
         <span className="os-mi-ico" />
-        <span className="os-mi-label">{String(t('ctx_newfolder'))}</span>
+        <span className="os-mi-label">{t('ctx_newfolder')}</span>
       </div>
       <div className="os-mi-sep" />
       <div className="os-mi has-sub">
         <span className="os-mi-ico">🎨</span>
-        <span className="os-mi-label">{String(t('ctx_theme'))}</span>
+        <span className="os-mi-label">{t('ctx_theme')}</span>
         <span className="os-mi-sub-arrow">›</span>
         <div className="os-submenu">
           {THEME_ENTRIES.map(([key, labelKey, ico]) => (
@@ -88,7 +89,7 @@ export function ContextMenu({ x, y, onClose, onLineup }: Props) {
             >
               <span className="os-mi-check">{theme === key ? '✓' : ''}</span>
               <span className="os-mi-ico">{ico}</span>
-              <span className="os-mi-label">{String(t(labelKey as Parameters<typeof t>[0]))}</span>
+              <span className="os-mi-label">{t(labelKey)}</span>
             </div>
           ))}
         </div>
@@ -96,7 +97,7 @@ export function ContextMenu({ x, y, onClose, onLineup }: Props) {
       <div className="os-mi-sep" />
       <div className="os-mi" onClick={onClose}>
         <span className="os-mi-ico">⚙</span>
-        <span className="os-mi-label">{String(t('ctx_props'))}</span>
+        <span className="os-mi-label">{t('ctx_props')}</span>
       </div>
     </div>
   );
