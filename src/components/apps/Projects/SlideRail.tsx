@@ -11,8 +11,8 @@ export function SlideRail({ projects, activeIndex, onSelect }: SlideRailProps) {
   const { lang, t } = useLang();
 
   return (
-    <nav className="deck-rail" aria-label={String(t('p_count_l'))}>
-      <div className="hd">{String(t('p_count_l'))} ({projects.length})</div>
+    <nav className="deck-rail" aria-label={t('p_count_l')}>
+      <div className="hd">{t('p_count_l')} ({projects.length})</div>
       {projects.map((p, i) => (
         <button
           key={p.id}

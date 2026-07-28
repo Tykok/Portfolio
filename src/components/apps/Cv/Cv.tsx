@@ -66,8 +66,8 @@ export function Cv() {
     <div className="cv2" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       {/* Toolbar */}
       <div className="cv2-tb">
-        <button className="cv2-act primary" onClick={handlePrint}>{String(t('cv_print'))}</button>
-        <button className="cv2-act" style={{ opacity: 0.5, cursor: 'default' }}>{String(t('cv_dl'))}</button>
+        <button className="cv2-act primary" onClick={handlePrint}>{t('cv_print')}</button>
+        <button className="cv2-act" style={{ opacity: 0.5, cursor: 'default' }}>{t('cv_dl')}</button>
       </div>
 
       <div className="cv2-body">
@@ -91,7 +91,7 @@ export function Cv() {
           {/* Main column */}
           <div>
             <div className="cv2-sec">
-              <h2>{String(t('cv_exp'))}</h2>
+              <h2>{t('cv_exp')}</h2>
               {EXPERIENCE.map((xp, i) => (
                 <div key={i} className="cv2-xp">
                   <div className="when">{xp.when}</div>
@@ -108,7 +108,7 @@ export function Cv() {
             </div>
 
             <div className="cv2-sec">
-              <h2>{String(t('cv_edu'))}</h2>
+              <h2>{t('cv_edu')}</h2>
               {EDUCATION.map((ed, i) => (
                 <div key={i} className="cv2-edu">
                   <div className="yr">{ed.yr}</div>
@@ -122,7 +122,7 @@ export function Cv() {
           {/* Side column */}
           <div className="cv2-side">
             <div>
-              <h3>{String(t('cv_skills'))}</h3>
+              <h3>{t('cv_skills')}</h3>
               <div className="wrap">
                 {HARD_SKILLS.map((tech) => {
                   const badge = getBadge(tech);
@@ -139,7 +139,7 @@ export function Cv() {
             </div>
 
             <div>
-              <h3>{String(t('cv_soft'))}</h3>
+              <h3>{t('cv_soft')}</h3>
               <div className="wrap">
                 {(lang === 'fr' ? SOFT_SKILLS_FR : SOFT_SKILLS_EN).map((s) => (
                   <span key={s} className="cv2-soft">{s}</span>
@@ -148,7 +148,7 @@ export function Cv() {
             </div>
 
             <div>
-              <h3>{String(t('cv_lang'))}</h3>
+              <h3>{t('cv_lang')}</h3>
               <div className="wrap" style={{ flexDirection: 'column', gap: 4 }}>
                 {(lang === 'fr' ? LANGUAGES_FR : LANGUAGES_EN).map((l) => (
                   <span key={l} style={{ fontSize: 12, color: 'var(--ink)' }}>{l}</span>

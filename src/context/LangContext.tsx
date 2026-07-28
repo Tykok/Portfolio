@@ -1,19 +1,27 @@
 import React, { createContext, type ReactNode,useContext, useMemo, useState } from 'react';
 
-import { getTranslations } from 'i18n';
+import { getTranslations, interpolate, type TVars } from 'i18n';
 import type { Translations } from 'i18n/types';
 import type { Lang } from 'types/lang';
+
+/**
+ * Generic in the key so callers get the exact value type back — `string` for
+ * labels, `string[]` for lists, `number` for `cal_weekstart`. Without the
+ * generic, every call widens to the union of all value types and needs a cast
+ * at the call site.
+ */
+type TranslateFn = <K extends keyof Translations>(key: K, vars?: TVars) => Translations[K];
 
 interface LangContextValue {
   lang: Lang;
   setLang: (lang: Lang) => void;
-  t: (key: keyof Translations) => Translations[keyof Translations];
+  t: TranslateFn;
 }
 
 const LangContext = createContext<LangContextValue>({
   lang: 'fr',
   setLang: () => {},
-  t: (key) => key as string,
+  t: ((key: keyof Translations) => key) as TranslateFn,
 });
 
 export function LangProvider({ children }: { children: ReactNode }) {
@@ -30,11 +38,15 @@ export function LangProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<LangContextValue>(() => {
     const translations = getTranslations(lang);
-    return {
-      lang,
-      setLang,
-      t: (key) => translations[key],
+    const translate = <K extends keyof Translations>(key: K, vars?: TVars): Translations[K] => {
+      const entry = translations[key];
+      if (typeof entry === 'string') {
+        return interpolate(entry, vars) as Translations[K];
+      }
+      return entry;
     };
+
+    return { lang, setLang, t: translate };
   }, [lang]);
 
   return <LangContext.Provider value={value}>{children}</LangContext.Provider>;

@@ -182,3 +182,8 @@ export interface Translations {
   projects_loading: string;
   projects_error: string;
 }
+
+/** Keys whose translation is a plain string — safe to render directly. */
+export type StringKey = {
+  [K in keyof Translations]: Translations[K] extends string ? K : never;
+}[keyof Translations];

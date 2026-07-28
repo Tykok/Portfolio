@@ -94,11 +94,11 @@ export function PortfolioPage({ onNavigate }: Props) {
           </div>
           {loading && (
             <div className="np-dbrow np-db-state">
-              <ChickenLoader label={String(t('projects_loading'))} />
+              <ChickenLoader label={t('projects_loading')} />
             </div>
           )}
           {!loading && error && (
-            <div className="np-dbrow np-db-state">{String(t('projects_error'))}</div>
+            <div className="np-dbrow np-db-state">{t('projects_error')}</div>
           )}
           {!loading && !error && projects.map((p) => (
             <div className="np-dbrow" key={p.id} onClick={() => openApp('projects')} title={lang === 'fr' ? 'Ouvrir Projets' : 'Open Projects'}>

@@ -27,13 +27,13 @@ export function TitleBar({ icon, title, isMax, onMouseDown, onDblClick, onMin, o
       </span>
       <span className="tq-tb-title">{title}</span>
       <span className="tq-tb-btns">
-        <button className="tq-tb-btn os-tb-btn-real" title={String(t('w_min'))} onMouseDown={(e) => e.stopPropagation()} onClick={onMin}>
+        <button className="tq-tb-btn os-tb-btn-real" title={t('w_min')} onMouseDown={(e) => e.stopPropagation()} onClick={onMin}>
           <span className="gl">_</span>
         </button>
-        <button className="tq-tb-btn os-tb-btn-real" title={String(t('w_max'))} onMouseDown={(e) => e.stopPropagation()} onClick={onMax}>
+        <button className="tq-tb-btn os-tb-btn-real" title={t('w_max')} onMouseDown={(e) => e.stopPropagation()} onClick={onMax}>
           {isMax ? '❐' : '▢'}
         </button>
-        <button className="tq-tb-btn is-close os-tb-btn-real" title={String(t('w_close'))} onMouseDown={(e) => e.stopPropagation()} onClick={onClose}>
+        <button className="tq-tb-btn is-close os-tb-btn-real" title={t('w_close')} onMouseDown={(e) => e.stopPropagation()} onClick={onClose}>
           ✕
         </button>
       </span>

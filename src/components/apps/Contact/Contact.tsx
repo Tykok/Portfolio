@@ -16,7 +16,7 @@ export function Contact() {
   const { lang, t } = useLang();
   const [active, setActive] = useState(CONTACTS[0]);
   const [messages, setMessages] = useState<Message[]>([
-    { from: 'them', text: String(t('c_greet')), ts: Date.now() - 60000 },
+    { from: 'them', text: t('c_greet'), ts: Date.now() - 60000 },
   ]);
   const [input, setInput] = useState('');
   const logRef = useRef<HTMLDivElement>(null);
@@ -34,7 +34,7 @@ export function Contact() {
     setMessages((prev) => [
       ...prev,
       { from: 'me', text: msg, ts: now },
-      { from: 'them', text: String(t('c_auto')), ts: now + 1000 },
+      { from: 'them', text: t('c_auto'), ts: now + 1000 },
     ]);
     setInput('');
   };
@@ -54,7 +54,7 @@ export function Contact() {
             <div style={{ fontWeight: 700, fontSize: 12 }}>{identity.alias}</div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
               <div className="msn-status" />
-              <span style={{ fontSize: 11 }}>{String(t('c_online'))}</span>
+              <span style={{ fontSize: 11 }}>{t('c_online')}</span>
             </div>
           </div>
         </div>
@@ -107,11 +107,11 @@ export function Contact() {
           <input
             className="tq-input"
             value={input}
-            placeholder={String(t('c_ph'))}
+            placeholder={t('c_ph')}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && send()}
           />
-          <button className="tq-btn is-default" onClick={send}>{String(t('c_send'))}</button>
+          <button className="tq-btn is-default" onClick={send}>{t('c_send')}</button>
         </div>
       </div>
     </div>

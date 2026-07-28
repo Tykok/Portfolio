@@ -28,8 +28,8 @@ export function Terminal() {
   const { openApp } = useWindowContext();
   const { triggerBsod, setTheme, showMascot } = useOS();
   const [lines, setLines] = useState<Line[]>([
-    { type: 'output', text: String(t('t_b1')) },
-    { type: 'output', text: String(t('t_b2')) },
+    { type: 'output', text: t('t_b1') },
+    { type: 'output', text: t('t_b2') },
     { type: 'dim', text: '' },
   ]);
   const [input, setInput] = useState('');
@@ -60,18 +60,18 @@ export function Terminal() {
     switch (base) {
       case 'help':
         push(
-          { type: 'output', text: String(t('t_help')) },
+          { type: 'output', text: t('t_help') },
           { type: 'dim', text: '' },
-          { type: 'output', text: `  help        — ${String(t('t_h_help'))}` },
-          { type: 'output', text: `  who         — ${String(t('t_h_who'))}` },
-          { type: 'output', text: `  projects    — ${String(t('t_h_proj'))}` },
-          { type: 'output', text: `  skills      — ${String(t('t_h_skills'))}` },
-          { type: 'output', text: `  contact     — ${String(t('t_h_contact'))}` },
-          { type: 'output', text: `  cv          — ${String(t('t_h_cv'))}` },
-          { type: 'output', text: `  open <app>  — ${String(t('t_h_open'))}` },
-          { type: 'output', text: `  theme <n>   — ${String(t('t_theme_list'))}` },
-          { type: 'output', text: `  clear       — ${String(t('t_h_clear'))}` },
-          { type: 'dim', text: String(t('t_secret_hint')) },
+          { type: 'output', text: `  help        — ${t('t_h_help')}` },
+          { type: 'output', text: `  who         — ${t('t_h_who')}` },
+          { type: 'output', text: `  projects    — ${t('t_h_proj')}` },
+          { type: 'output', text: `  skills      — ${t('t_h_skills')}` },
+          { type: 'output', text: `  contact     — ${t('t_h_contact')}` },
+          { type: 'output', text: `  cv          — ${t('t_h_cv')}` },
+          { type: 'output', text: `  open <app>  — ${t('t_h_open')}` },
+          { type: 'output', text: `  theme <n>   — ${t('t_theme_list')}` },
+          { type: 'output', text: `  clear       — ${t('t_h_clear')}` },
+          { type: 'dim', text: t('t_secret_hint') },
         );
         break;
 
@@ -88,9 +88,9 @@ export function Terminal() {
       case 'projects':
       case 'ls':
         if (loading) {
-          push({ type: 'dim', text: String(t('projects_loading')) });
+          push({ type: 'dim', text: t('projects_loading') });
         } else if (error || projects.length === 0) {
-          push({ type: 'output', text: String(t('projects_error')) });
+          push({ type: 'output', text: t('projects_error') });
         } else {
           push(
             { type: 'output', text: `${projects.length} projets :` },
@@ -98,7 +98,7 @@ export function Terminal() {
               type: 'output' as const,
               text: `  ${p.emoji}  ${p.title[lang].padEnd(30)} [${p.stack.map((s) => s.label).join(', ')}]`,
             })),
-            { type: 'dim', text: String(t('t_open_hint')) },
+            { type: 'dim', text: t('t_open_hint') },
           );
         }
         break;
@@ -118,32 +118,32 @@ export function Terminal() {
         break;
 
       case 'cv':
-        push({ type: 'output', text: String(t('t_cv_open')) });
+        push({ type: 'output', text: t('t_cv_open') });
         openApp('cv');
         break;
 
       case 'open':
         if (!arg) {
-          push({ type: 'output', text: String(t('t_h_open')) });
+          push({ type: 'output', text: t('t_h_open') });
         } else if (APP_MAP[arg]) {
-          push({ type: 'output', text: `${String(t('t_opening'))} ${arg}…` });
+          push({ type: 'output', text: `${t('t_opening')} ${arg}…` });
           openApp(APP_MAP[arg]);
         } else {
-          push({ type: 'error', text: String(t('t_unknown_open')).replace('{a}', arg) });
+          push({ type: 'error', text: t('t_unknown_open', { a: arg }) });
         }
         break;
 
       case 'theme':
         if (!arg) {
-          push({ type: 'dim', text: String(t('t_theme_list')) });
+          push({ type: 'dim', text: t('t_theme_list') });
         } else if (arg === 'next') {
           setTheme('next');
-          push({ type: 'output', text: String(t('t_theme_ok')).replace('{a}', 'next →') });
+          push({ type: 'output', text: t('t_theme_ok', { a: 'next →' }) });
         } else if ((VALID_THEMES as string[]).includes(arg)) {
           setTheme(arg as DesktopTheme);
-          push({ type: 'output', text: String(t('t_theme_ok')).replace('{a}', arg) });
+          push({ type: 'output', text: t('t_theme_ok', { a: arg }) });
         } else {
-          push({ type: 'error', text: `Thème inconnu : ${arg}. ${String(t('t_theme_list'))}` });
+          push({ type: 'error', text: `Thème inconnu : ${arg}. ${t('t_theme_list')}` });
         }
         break;
 
@@ -153,7 +153,7 @@ export function Terminal() {
 
       case 'neofetch':
       case 'fetch': {
-        const rows = t('t_neofetch') as [string, string][];
+        const rows = t('t_neofetch');
         push(
           { type: 'output', text: '   _____ _  __  ___  ____  __ __' },
           { type: 'output', text: '  |_   _|  \\/  |/ _ \\/ __ \\/ _ \\' },
@@ -166,7 +166,7 @@ export function Terminal() {
       }
 
       case 'cowsay': {
-        const msg = arg || String(t('t_coqsay_default'));
+        const msg = arg || t('t_coqsay_default');
         showMascot(msg);
         push(
           { type: 'output', text: `  ${'-'.repeat(msg.length + 2)}` },
@@ -180,53 +180,53 @@ export function Terminal() {
 
       case 'sudo':
         if (arg === 'make me a sandwich' || arg === 'make me a sandwich!') {
-          push({ type: 'output', text: String(t('t_sudo_sandwich')) });
+          push({ type: 'output', text: t('t_sudo_sandwich') });
         } else {
-          push({ type: 'error', text: String(t('t_sudo')) });
+          push({ type: 'error', text: t('t_sudo') });
         }
         break;
 
       case 'coffee':
-        push({ type: 'output', text: `☕  ${String(t('t_coffee'))}` });
+        push({ type: 'output', text: `☕  ${t('t_coffee')}` });
         break;
 
       case 'cocorico':
-        push({ type: 'output', text: `🐓  ${String(t('t_cocorico'))}` });
+        push({ type: 'output', text: `🐓  ${t('t_cocorico')}` });
         break;
 
       case 'fortune': {
-        const fortunes = t('t_fortunes') as string[];
+        const fortunes = t('t_fortunes');
         push({ type: 'dim', text: `"${fortunes[Math.floor(Math.random() * fortunes.length)]}"` });
         break;
       }
 
       case 'matrix':
-        push({ type: 'dim', text: String(t('t_matrix')) });
+        push({ type: 'dim', text: t('t_matrix') });
         break;
 
       case 'crash':
-        push({ type: 'error', text: String(t('t_crash')) });
+        push({ type: 'error', text: t('t_crash') });
         setTimeout(triggerBsod, 800);
         break;
 
       case 'easter':
       case 'egg':
         push(
-          { type: 'output', text: String(t('t_egg')) },
-          { type: 'dim', text: String(t('t_egg2')) },
+          { type: 'output', text: t('t_egg') },
+          { type: 'dim', text: t('t_egg2') },
         );
         break;
 
       case 'exit':
-        push({ type: 'dim', text: String(t('t_exit')) });
+        push({ type: 'dim', text: t('t_exit') });
         break;
 
       case 'konami':
-        push({ type: 'output', text: String(t('t_konami_hint')) });
+        push({ type: 'output', text: t('t_konami_hint') });
         break;
 
       default:
-        push({ type: 'error', text: String(t('t_unknown')).replace('{c}', cmd) });
+        push({ type: 'error', text: t('t_unknown', { c: cmd }) });
     }
 
     push({ type: 'dim', text: '' });

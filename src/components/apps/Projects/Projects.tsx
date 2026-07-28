@@ -15,7 +15,7 @@ export function Projects() {
   if (loading) {
     return (
       <div className="pj-state">
-        <ChickenLoader label={String(t('projects_loading'))} />
+        <ChickenLoader label={t('projects_loading')} />
       </div>
     );
   }
@@ -23,7 +23,7 @@ export function Projects() {
   if (error || projects.length === 0) {
     return (
       <div className="pj-state">
-        <p>{String(t('projects_error'))}</p>
+        <p>{t('projects_error')}</p>
       </div>
     );
   }
