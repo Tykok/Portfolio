@@ -3,36 +3,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLang } from 'context/LangContext';
 import { useOS } from 'context/OSContext';
 
-const TIPS: Record<'fr' | 'en', string[]> = {
-  fr: [
-    'Double-clique sur une icône pour l\'ouvrir !',
-    'Tu peux glisser les icônes du bureau n\'importe où.',
-    'Essaie le Konami Code : ↑↑↓↓←→←→BA 🤫',
-    'Clic droit sur le bureau pour changer de thème.',
-    'Le terminal connaît `neofetch`, `cowsay` et `easter`…',
-    'Elie est ouvert aux nouvelles opportunités !',
-    'Clique sur l\'horloge pour voir le calendrier.',
-    'Je suis Cocorico, mascotte de TicoqOS 🐓',
-    'Les fenêtres se redimensionnent par le coin bas-droit.',
-    'Double-clique sur la barre de titre pour maximiser.',
-    'Ouvre TicoqExplorer pour voir le portfolio complet.',
-    'Tu peux changer la langue en bas à droite de l\'écran.',
-  ],
-  en: [
-    'Double-click an icon to open it!',
-    'You can drag desktop icons anywhere.',
-    'Try the Konami Code: ↑↑↓↓←→←→BA 🤫',
-    'Right-click the desktop to switch themes.',
-    'The terminal knows `neofetch`, `cowsay` & `easter`…',
-    'Elie is open to new opportunities!',
-    'Click the clock to view the calendar.',
-    'I\'m Cocorico, TicoqOS mascot 🐓',
-    'Resize windows from the bottom-right corner.',
-    'Double-click a title bar to maximise.',
-    'Open TicoqExplorer to see the full portfolio.',
-    'Switch language with the FR/EN buttons on the right.',
-  ],
-};
 
 const SPEED            = 0.75;  // px per frame at 60fps
 const WALK_PX_PER_TIP = 300;   // px walked between each tip
@@ -40,7 +10,7 @@ const TIP_DURATION_MS  = 5000;  // ms a tip stays visible
 
 export function Mascot() {
   const { mascot, hideMascot } = useOS();
-  const { lang } = useLang();
+  const { t } = useLang();
 
   // DOM reference — position is driven directly to avoid 60fps React re-renders
   const coqRef     = useRef<HTMLDivElement>(null);
@@ -60,7 +30,7 @@ export function Mascot() {
 
   /* ---- tip logic ---- */
   const showNextTip = useCallback(() => {
-    const list = TIPS[lang] ?? TIPS.fr;
+    const list = t('mascot_tips');
     const msg  = list[tipIdxRef.current % list.length];
     tipIdxRef.current++;
 
@@ -73,7 +43,7 @@ export function Mascot() {
       setLocalTip(null);
       pausedRef.current = false;
     }, TIP_DURATION_MS);
-  }, [lang]);
+  }, [t]);
 
   /* ---- RAF walking loop ---- */
   useEffect(() => {

@@ -14,6 +14,7 @@ import { Boot } from 'components/OS/Boot/Boot';
 import { Bsod } from 'components/OS/Bsod/Bsod';
 import { KonamiRain } from 'components/OS/KonamiRain/KonamiRain';
 import { Login } from 'components/OS/Login/Login';
+import { Mascot } from 'components/OS/Mascot/Mascot';
 import { Off } from 'components/OS/Off/Off';
 import { TaskBar } from 'components/TaskBar/TaskBar';
 import { Window } from 'components/Window/Window';
@@ -95,6 +96,7 @@ function OS() {
             onShutdown={() => setPhase('off')}
             onLogoff={() => setPhase('login')}
           />
+          <Mascot />
           {bsod        && <Bsod />}
           {konamiRain  && <KonamiRain />}
           {aboutOpen   && <AboutDialog />}

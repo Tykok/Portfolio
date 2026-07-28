@@ -30,6 +30,27 @@ describe('locale completeness', () => {
     });
     expect(empties).toEqual([]);
   });
+
+  it('keeps list-valued keys the same length across locales', () => {
+    const lists = ['cal_days', 'cal_months', 'mascot_tips', 't_fortunes', 't_neofetch'] as const;
+    lists.forEach((k) => {
+      expect(en[k]).toHaveLength(fr[k].length);
+      expect(fr[k].length).toBeGreaterThan(0);
+    });
+  });
+
+  it('has twelve month names per locale', () => {
+    expect(fr.cal_months).toHaveLength(12);
+    expect(en.cal_months).toHaveLength(12);
+  });
+
+  it('has one weekday label per day, and a valid week start', () => {
+    [fr, en].forEach((locale) => {
+      expect(locale.cal_days).toHaveLength(7);
+      expect(locale.cal_weekstart).toBeGreaterThanOrEqual(0);
+      expect(locale.cal_weekstart).toBeLessThanOrEqual(6);
+    });
+  });
 });
 
 describe('interpolate', () => {
@@ -52,7 +73,7 @@ describe('interpolate', () => {
 
 describe('t', () => {
   it('interpolates string values', () => {
-    expect(t('fr', 'st_objs', { n: 3 })).toBe('3 objets');
+    expect(t('fr', 't_projects_l', { n: 3 })).toBe('3 projets :');
   });
 
   it('returns non-string values as-is', () => {
