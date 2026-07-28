@@ -12,7 +12,7 @@ export function Boot({ onDone }: Props) {
       <div className="os-boot-logo">
         Ticoq<b>OS</b>
       </div>
-      <div className="os-boot-sub">Backend Edition</div>
+      <div className="os-boot-sub">{t('boot_sub')}</div>
       <div className="os-bootbar">
         <i />
       </div>

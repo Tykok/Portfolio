@@ -10,8 +10,6 @@ export interface Translations {
   boot_foot: string;
   off_title: string;
   off_sub: string;
-  mute_on: string;
-  mute_off: string;
   w_min: string;
   w_max: string;
   w_close: string;
@@ -34,44 +32,15 @@ export interface Translations {
   // Tooltips
   tip_start: string;
   tip_show_desktop: string;
+  tip_calendar: string;
+  // Mascot — the walking rooster's rotating hints
+  mascot_tips: string[];
+  // Konami rain overlay
+  konami_banner: string;
   // Calendar
   cal_days: string[];
   cal_months: string[];
   cal_weekstart: number;
-  // Window menus
-  m_file: string;
-  m_edit: string;
-  m_view: string;
-  m_fav: string;
-  m_format: string;
-  m_help: string;
-  m_close: string;
-  m_min: string;
-  m_max: string;
-  m_restore: string;
-  m_print: string;
-  m_selall: string;
-  m_copyall: string;
-  m_undo: string;
-  m_cut: string;
-  m_paste: string;
-  m_lang_fr: string;
-  m_lang_en: string;
-  m_lang_grp: string;
-  m_wrap: string;
-  m_font: string;
-  m_help_topics: string;
-  m_about_os: string;
-  fav_about: string;
-  fav_cv: string;
-  fav_contact: string;
-  fav_repo: string;
-  // Status bar
-  st_ready: string;
-  st_about: string;
-  st_objs: string;
-  st_zone: string;
-  st_cv: string;
   // About TicoqOS dialog
   aos_title: string;
   aos_name: string;
@@ -88,15 +57,9 @@ export interface Translations {
   sub_terminal: string;
   sub_media: string;
   sub_web: string;
-  sm_games: string;
   sm_allprogs: string;
-  sm_docs: string;
-  sm_help: string;
-  sm_search: string;
-  sm_ctrl: string;
+  m_about_os: string;
   // About app
-  about_bio: string;
-  about_f3v: string;
   about_skills: string;
   // Projects app
   p_count_l: string;
@@ -127,21 +90,12 @@ export interface Translations {
   br_back: string;
   br_fwd: string;
   br_reload: string;
-  br_home: string;
   br_newtab: string;
   br_closetab: string;
   br_go: string;
   br_addr_ph: string;
-  br_loading: string;
   br_nt_title: string;
-  br_nt_hi: string;
-  br_nt_sub: string;
-  br_nt_portfolio: string;
-  br_nt_links: string;
   br_bm_home: string;
-  br_bm_projects: string;
-  br_bm_blog: string;
-  br_bm_links: string;
   br_ext_body: string;
   br_ext_open: string;
   // Browser — portfolio page (Notion-style)
@@ -165,7 +119,6 @@ export interface Translations {
   t_h_cv: string;
   t_h_open: string;
   t_h_clear: string;
-  t_h_games: string;
   t_open_hint: string;
   t_projects_l: string;
   t_stack_l: string;
@@ -195,7 +148,6 @@ export interface Translations {
   t_theme_list: string;
   t_theme_ok: string;
   t_konami_hint: string;
-  konami_banner: string;
   t_exit: string;
   t_sudo_sandwich: string;
   t_fortunes: string[];

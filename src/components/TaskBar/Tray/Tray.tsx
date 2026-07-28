@@ -7,7 +7,7 @@ import type { Lang } from 'types/lang';
 import { CalPopup } from './CalPopup';
 
 export function Tray() {
-  const { lang, setLang } = useLang();
+  const { lang, setLang, t } = useLang();
   const clock = useClock();
   const [calOpen, setCalOpen] = useState(false);
   const calRef = useRef<HTMLDivElement>(null);
@@ -40,7 +40,7 @@ export function Tray() {
         </div>
       )}
       <div className="tq-tray">
-        <div className="os-langsw">
+        <div className="os-langsw" role="group" aria-label={t('lang_switch')}>
           <button className={`os-langopt${lang === 'fr' ? ' on' : ''}`} onClick={() => setLang('fr' as Lang)}>FR</button>
           <button className={`os-langopt${lang === 'en' ? ' on' : ''}`} onClick={() => setLang('en' as Lang)}>EN</button>
         </div>
@@ -49,7 +49,7 @@ export function Tray() {
           className="tq-clock"
           style={{ cursor: 'pointer' }}
           onClick={() => setCalOpen((v) => !v)}
-          title="Cliquer pour afficher le calendrier"
+          title={t('tip_calendar')}
         >
           {clock}
         </span>
