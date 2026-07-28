@@ -6,9 +6,6 @@ interface Props {
   onClose: () => void;
 }
 
-const MONTH_FR = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
-const MONTH_EN = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-
 function daysInMonth(year: number, month: number) {
   return new Date(year, month + 1, 0).getDate();
 }
@@ -35,7 +32,7 @@ export function CalPopup({ onClose }: Props) {
     );
 
   const { month, year } = view;
-  const monthNames = lang === 'fr' ? MONTH_FR : MONTH_EN;
+  const monthNames = t('cal_months');
   const totalDays = daysInMonth(year, month);
   const rawFirst = firstDayOfMonth(year, month);
   const leading = (rawFirst - weekstart + 7) % 7;

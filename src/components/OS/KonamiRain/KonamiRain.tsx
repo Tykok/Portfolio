@@ -32,14 +32,14 @@ const coqs = makeCoqs();
 
 export function KonamiRain() {
   const { clearRain } = useOS();
-  const { lang } = useLang();
+  const { t } = useLang();
 
   useEffect(() => {
     const id = setTimeout(clearRain, 5500);
     return () => clearTimeout(id);
   }, [clearRain]);
 
-  const banner = lang === 'fr' ? 'COCORICO ! 🐓 Tu connais le Konami Code !' : 'COCK-A-DOODLE-DOO! 🐓 You know the Konami Code!';
+  const banner = t('konami_banner');
 
   return (
     <div className="os-rain" onClick={clearRain}>

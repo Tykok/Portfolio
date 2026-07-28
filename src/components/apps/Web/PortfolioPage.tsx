@@ -8,6 +8,7 @@ const EXT_LINKS = [
   { label: 'GitHub',   url: 'https://github.com/Tykok',               color: '#24292f', mono: 'GH' },
   { label: 'LinkedIn', url: 'https://linkedin.com/in/elie-treport',   color: '#0a66c2', mono: 'in' },
   { label: 'Dev.to',   url: 'https://dev.to/tykok',                   color: '#0a0a0a', mono: 'D'  },
+  { label: 'Medium',   url: 'https://medium.com/@tykok',               color: '#191919', mono: 'M'  },
 ];
 
 interface Props {
@@ -26,7 +27,7 @@ export function PortfolioPage({ onNavigate }: Props) {
       <div className="np-toolbar">
         <span className="np-crumb dim">TicoqOS</span>
         <span className="np-sep">›</span>
-        <span className="np-crumb dim">{lang === 'fr' ? 'Portfolio' : 'Portfolio'}</span>
+        <span className="np-crumb dim">Portfolio</span>
         <span className="np-sep">›</span>
         <span className="np-crumb">{identity.name}</span>
       </div>
@@ -47,19 +48,19 @@ export function PortfolioPage({ onNavigate }: Props) {
         {/* Properties block — Notion database-style */}
         <div className="np-props">
           <div className="np-prop">
-            <span className="np-pk"><span className="np-pico">💼</span>{lang === 'fr' ? 'Rôle' : 'Role'}</span>
+            <span className="np-pk"><span className="np-pico">💼</span>{t('p_role')}</span>
             <span className="np-pv">{identity.role[lang]}</span>
           </div>
           <div className="np-prop">
-            <span className="np-pk"><span className="np-pico">📍</span>{lang === 'fr' ? 'Ville' : 'Location'}</span>
+            <span className="np-pk"><span className="np-pico">📍</span>{t('np_location')}</span>
             <span className="np-pv">{identity.location[lang]}</span>
           </div>
           <div className="np-prop">
-            <span className="np-pk"><span className="np-pico">🟢</span>Status</span>
+            <span className="np-pk"><span className="np-pico">🟢</span>{t('np_status')}</span>
             <span className="np-pv np-status-pill">{identity.status[lang]}</span>
           </div>
           <div className="np-prop">
-            <span className="np-pk"><span className="np-pico">✉️</span>Email</span>
+            <span className="np-pk"><span className="np-pico">✉️</span>{t('np_email')}</span>
             <span className="np-pv np-link-val" onClick={() => {}}>
               {identity.email}
             </span>
@@ -75,7 +76,11 @@ export function PortfolioPage({ onNavigate }: Props) {
         {/* Bio callout */}
         <div className="np-callout">
           <span className="np-callout-ico">💡</span>
-          <span className="np-callout-body">{identity.bio[lang]}</span>
+          <span className="np-callout-body">
+            {identity.bio[lang].split('\n\n').map((para) => (
+              <p key={para.slice(0, 24)}>{para}</p>
+            ))}
+          </span>
         </div>
 
         <div className="np-divider" />
@@ -83,14 +88,14 @@ export function PortfolioPage({ onNavigate }: Props) {
         {/* Projects — Notion database table */}
         <div className="np-h2">
           <span>💼</span>
-          {lang === 'fr' ? 'Projets' : 'Projects'}
+          {t('p_count_l')}
         </div>
         <div className="np-db">
           <div className="np-db-head">
-            <span className="np-dh" style={{ flex: '1 1 auto' }}>{lang === 'fr' ? 'Nom' : 'Name'}</span>
-            <span className="np-dh np-hide-sm">Stack</span>
-            <span className="np-dh">Status</span>
-            <span className="np-dh np-yr-col">{lang === 'fr' ? 'Année' : 'Year'}</span>
+            <span className="np-dh" style={{ flex: '1 1 auto' }}>{t('np_name')}</span>
+            <span className="np-dh np-hide-sm">{t('np_stack')}</span>
+            <span className="np-dh">{t('np_status')}</span>
+            <span className="np-dh np-yr-col">{t('np_year')}</span>
           </div>
           {loading && (
             <div className="np-dbrow np-db-state">
@@ -101,7 +106,7 @@ export function PortfolioPage({ onNavigate }: Props) {
             <div className="np-dbrow np-db-state">{t('projects_error')}</div>
           )}
           {!loading && !error && projects.map((p) => (
-            <div className="np-dbrow" key={p.id} onClick={() => openApp('projects')} title={lang === 'fr' ? 'Ouvrir Projets' : 'Open Projects'}>
+            <div className="np-dbrow" key={p.id} onClick={() => openApp('projects')} title={t('np_open_projects')}>
               <span className="np-db-ico">{p.emoji}</span>
               <span className="np-db-name">{p.title[lang]}</span>
               <span className="np-db-tags np-hide-sm">
@@ -122,7 +127,7 @@ export function PortfolioPage({ onNavigate }: Props) {
         {/* Links */}
         <div className="np-h2">
           <span>🔗</span>
-          {lang === 'fr' ? 'Liens' : 'Links'}
+          {t('np_links')}
         </div>
         <div className="np-linklist">
           {EXT_LINKS.map((l) => (
