@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import { vi } from 'vitest';
 
 import LangProvider from 'context/LangContext';
 import type { Project } from 'data/projects';
@@ -16,7 +17,7 @@ const mk = (id: string, title: string): Project => ({
 
 const projects = [mk('a', 'Alpha'), mk('b', 'Beta'), mk('c', 'Gamma')];
 
-const renderStage = (activeIndex: number, onSelect = jest.fn()) => {
+const renderStage = (activeIndex: number, onSelect = vi.fn()) => {
   // Set language to English for the test
   localStorage.setItem('ticoq.lang', 'en');
   const utils = render(
@@ -45,13 +46,13 @@ it('prev is disabled on first slide, next disabled on last', () => {
   localStorage.setItem('ticoq.lang', 'en');
   const { rerender } = render(
     <LangProvider>
-      <SlideStage projects={projects} activeIndex={0} onSelect={jest.fn()} />
+      <SlideStage projects={projects} activeIndex={0} onSelect={vi.fn()} />
     </LangProvider>,
   );
   expect(screen.getByRole('button', { name: 'Previous project' })).toBeDisabled();
   rerender(
     <LangProvider>
-      <SlideStage projects={projects} activeIndex={2} onSelect={jest.fn()} />
+      <SlideStage projects={projects} activeIndex={2} onSelect={vi.fn()} />
     </LangProvider>,
   );
   expect(screen.getByRole('button', { name: 'Next project' })).toBeDisabled();

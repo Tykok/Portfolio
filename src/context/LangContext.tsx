@@ -1,4 +1,4 @@
-import React, { createContext, type ReactNode,useContext, useMemo, useState } from 'react';
+import React, { createContext, type ReactNode,useContext, useEffect, useMemo, useState } from 'react';
 
 import { getTranslations, interpolate, type TVars } from 'i18n';
 import type { Translations } from 'i18n/types';
@@ -33,8 +33,14 @@ export function LangProvider({ children }: { children: ReactNode }) {
   const setLang = (newLang: Lang) => {
     setLangState(newLang);
     localStorage.setItem('ticoq.lang', newLang);
-    document.documentElement.lang = newLang;
   };
+
+  /* Mirror the active language onto <html lang>. Doing it here rather than in
+     setLang covers the first render too: a visitor who stored 'en' used to get
+     the document's hardcoded lang until they toggled the switch. */
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
 
   const value = useMemo<LangContextValue>(() => {
     const translations = getTranslations(lang);

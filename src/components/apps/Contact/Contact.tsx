@@ -15,7 +15,8 @@ const CONTACTS = socials.filter((s) => s.primary);
 export function Contact() {
   const { lang, t } = useLang();
   const [active, setActive] = useState(CONTACTS[0]);
-  const [messages, setMessages] = useState<Message[]>([
+  // Lazy initializer: Date.now() must not run on every render.
+  const [messages, setMessages] = useState<Message[]>(() => [
     { from: 'them', text: t('c_greet'), ts: Date.now() - 60000 },
   ]);
   const [input, setInput] = useState('');
