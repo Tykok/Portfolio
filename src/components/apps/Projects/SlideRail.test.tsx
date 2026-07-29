@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import { vi } from 'vitest';
 
 import LangProvider from 'context/LangContext';
 import type { Project } from 'data/projects';
@@ -38,7 +39,7 @@ it('marks the active thumbnail with the "on" class', () => {
 });
 
 it('fires onSelect with the index when a thumbnail is clicked', () => {
-  const onSelect = jest.fn();
+  const onSelect = vi.fn();
   render(
     <LangProvider>
       <SlideRail projects={projects} activeIndex={0} onSelect={onSelect} />

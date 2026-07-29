@@ -4,6 +4,7 @@ import { useLang } from 'context/LangContext';
 import { useOS } from 'context/OSContext';
 
 
+const START_X          = -50;   // starting x, just off the left edge
 const SPEED            = 0.75;  // px per frame at 60fps
 const WALK_PX_PER_TIP = 300;   // px walked between each tip
 const TIP_DURATION_MS  = 5000;  // ms a tip stays visible
@@ -16,7 +17,7 @@ export function Mascot() {
   const coqRef     = useRef<HTMLDivElement>(null);
 
   // Mutable state stored in refs so the RAF closure always sees fresh values
-  const posRef     = useRef(-50);           // current x position (px)
+  const posRef     = useRef(START_X);       // current x position (px)
   const dirRef     = useRef<1 | -1>(1);    // 1 = right, -1 = left
   const walkedRef  = useRef(0);            // px walked since last tip
   const pausedRef  = useRef(false);        // true while a tip is visible
@@ -95,7 +96,9 @@ export function Mascot() {
     <div
       ref={coqRef}
       className="mascot-walker"
-      style={{ left: posRef.current }}
+      /* Only the first paint — after that the RAF loop writes style.left directly,
+         so reading posRef here would be an impure render. */
+      style={{ left: START_X }}
     >
       {activeTip && (
         <div className="mascot-bubble mw-bubble">

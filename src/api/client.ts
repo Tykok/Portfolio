@@ -8,7 +8,7 @@ export class ApiError extends Error {
   }
 }
 
-const BASE_URL = process.env.REACT_APP_API_URL ?? '';
+const BASE_URL = import.meta.env.VITE_API_URL ?? '';
 
 export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE_URL}${path}`, {
