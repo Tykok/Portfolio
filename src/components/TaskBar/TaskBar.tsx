@@ -41,7 +41,9 @@ export function TaskBar({ onShutdown, onLogoff }: Props) {
   /* Escape closes StartMenu */
   useEffect(() => {
     if (!startOpen) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setStartOpen(false); };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setStartOpen(false);
+    };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
   }, [startOpen]);
@@ -57,25 +59,23 @@ export function TaskBar({ onShutdown, onLogoff }: Props) {
           {startOpen && (
             <StartMenu
               onClose={() => setStartOpen(false)}
-              onShutdown={() => { setStartOpen(false); onShutdown(); }}
-              onLogoff={() => { setStartOpen(false); onLogoff(); }}
+              onShutdown={() => {
+                setStartOpen(false);
+                onShutdown();
+              }}
+              onLogoff={() => {
+                setStartOpen(false);
+                onLogoff();
+              }}
             />
           )}
-          <button
-            className={`tq-start${startOpen ? ' open' : ''}`}
-            onClick={() => setStartOpen((v) => !v)}
-            title={t('tip_start')}
-          >
+          <button className={`tq-start${startOpen ? ' open' : ''}`} onClick={() => setStartOpen((v) => !v)} title={t('tip_start')}>
             <span className="orb" />
             {t('start')}
           </button>
         </div>
         <div className="os-quickdiv" />
-        <button
-          className="os-showdesk"
-          onClick={handleShowDesktop}
-          title={t('tip_show_desktop')}
-        >
+        <button className="os-showdesk" onClick={handleShowDesktop} title={t('tip_show_desktop')}>
           🖥
         </button>
         <div className="os-quickdiv" />

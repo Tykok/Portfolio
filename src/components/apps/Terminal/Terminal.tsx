@@ -16,8 +16,14 @@ interface Line {
 }
 
 const APP_MAP: Record<string, AppKey> = {
-  about: 'about', projets: 'projects', projects: 'projects',
-  cv: 'cv', contact: 'contact', media: 'media', web: 'web', terminal: 'terminal',
+  about: 'about',
+  projets: 'projects',
+  projects: 'projects',
+  cv: 'cv',
+  contact: 'contact',
+  media: 'media',
+  web: 'web',
+  terminal: 'terminal',
 };
 
 const VALID_THEMES: DesktopTheme[] = ['bliss', 'field', 'dusk', 'matrix', 'rose'];
@@ -51,8 +57,7 @@ export function Terminal() {
     if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
   }, [lines]);
 
-  const push = (...newLines: Line[]) =>
-    setLines((prev) => [...prev, ...newLines]);
+  const push = (...newLines: Line[]) => setLines((prev) => [...prev, ...newLines]);
 
   const runCommand = (raw: string) => {
     const cmd = raw.trim().toLowerCase();
@@ -230,10 +235,7 @@ export function Terminal() {
 
       case 'easter':
       case 'egg':
-        push(
-          { type: 'output', text: t('t_egg') },
-          { type: 'dim', text: t('t_egg2') },
-        );
+        push({ type: 'output', text: t('t_egg') }, { type: 'dim', text: t('t_egg2') });
         break;
 
       case 'exit':
@@ -264,16 +266,12 @@ export function Terminal() {
       e.preventDefault();
       const next = Math.max(histIdx - 1, -1);
       setHistIdx(next);
-      setInput(next === -1 ? '' : history[next] ?? '');
+      setInput(next === -1 ? '' : (history[next] ?? ''));
     }
   };
 
   return (
-    <div
-      className="os-term"
-      onClick={() => inputRef.current?.focus()}
-      style={{ cursor: 'text', minHeight: '100%' }}
-    >
+    <div className="os-term" onClick={() => inputRef.current?.focus()} style={{ cursor: 'text', minHeight: '100%' }}>
       <div ref={logRef} style={{ overflow: 'auto', maxHeight: 'calc(100% - 28px)' }}>
         {lines.map((l, i) => (
           <div key={i} className={`line${l.type === 'error' ? ' er' : l.type === 'dim' ? ' dim' : l.type === 'prompt' ? ' pa' : ''}`}>

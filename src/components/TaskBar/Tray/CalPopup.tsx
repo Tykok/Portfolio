@@ -22,14 +22,8 @@ export function CalPopup({ onClose }: Props) {
   const days = t('cal_days');
   const weekstart = t('cal_weekstart');
 
-  const prev = () =>
-    setView(({ month, year }) =>
-      month === 0 ? { month: 11, year: year - 1 } : { month: month - 1, year }
-    );
-  const next = () =>
-    setView(({ month, year }) =>
-      month === 11 ? { month: 0, year: year + 1 } : { month: month + 1, year }
-    );
+  const prev = () => setView(({ month, year }) => (month === 0 ? { month: 11, year: year - 1 } : { month: month - 1, year }));
+  const next = () => setView(({ month, year }) => (month === 11 ? { month: 0, year: year + 1 } : { month: month + 1, year }));
 
   const { month, year } = view;
   const monthNames = t('cal_months');
@@ -37,38 +31,36 @@ export function CalPopup({ onClose }: Props) {
   const rawFirst = firstDayOfMonth(year, month);
   const leading = (rawFirst - weekstart + 7) % 7;
 
-  const cells: Array<number | null> = [
-    ...Array(leading).fill(null),
-    ...Array.from({ length: totalDays }, (_, i) => i + 1),
-  ];
+  const cells: Array<number | null> = [...Array(leading).fill(null), ...Array.from({ length: totalDays }, (_, i) => i + 1)];
   while (cells.length % 7 !== 0) cells.push(null);
 
-  const isToday = (d: number | null) =>
-    d !== null &&
-    d === today.getDate() &&
-    month === today.getMonth() &&
-    year === today.getFullYear();
+  const isToday = (d: number | null) => d !== null && d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
 
   return (
     <div className="os-calpop tq">
       <div className="os-calpop-bar">
-        <span className="nav" onClick={prev}>‹</span>
-        <span>{monthNames[month]} {year}</span>
-        <span className="nav" onClick={next}>›</span>
+        <span className="nav" onClick={prev}>
+          ‹
+        </span>
+        <span>
+          {monthNames[month]} {year}
+        </span>
+        <span className="nav" onClick={next}>
+          ›
+        </span>
       </div>
       <div className="os-calgrid">
         <div className="os-calrow">
           {days.map((d) => (
-            <div key={d} className="os-cal-dow">{d}</div>
+            <div key={d} className="os-cal-dow">
+              {d}
+            </div>
           ))}
         </div>
         {Array.from({ length: cells.length / 7 }, (_, row) => (
           <div key={row} className="os-calrow">
             {cells.slice(row * 7, row * 7 + 7).map((d, col) => (
-              <div
-                key={col}
-                className={`os-cal-d${d === null ? ' muted' : ''}${isToday(d) ? ' today' : ''}`}
-              >
+              <div key={col} className={`os-cal-d${d === null ? ' muted' : ''}${isToday(d) ? ' today' : ''}`}>
                 {d ?? ''}
               </div>
             ))}

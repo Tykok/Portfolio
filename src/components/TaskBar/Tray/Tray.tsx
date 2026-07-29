@@ -17,13 +17,17 @@ export function Tray() {
     if (!calOpen) return;
     const handleDown = (e: MouseEvent) => {
       if (
-        calRef.current && !calRef.current.contains(e.target as Node) &&
-        clockRef.current && !clockRef.current.contains(e.target as Node)
+        calRef.current &&
+        !calRef.current.contains(e.target as Node) &&
+        clockRef.current &&
+        !clockRef.current.contains(e.target as Node)
       ) {
         setCalOpen(false);
       }
     };
-    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setCalOpen(false); };
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setCalOpen(false);
+    };
     document.addEventListener('mousedown', handleDown);
     document.addEventListener('keydown', handleKey);
     return () => {
@@ -41,8 +45,12 @@ export function Tray() {
       )}
       <div className="tq-tray">
         <div className="os-langsw" role="group" aria-label={t('lang_switch')}>
-          <button className={`os-langopt${lang === 'fr' ? ' on' : ''}`} onClick={() => setLang('fr' as Lang)}>FR</button>
-          <button className={`os-langopt${lang === 'en' ? ' on' : ''}`} onClick={() => setLang('en' as Lang)}>EN</button>
+          <button className={`os-langopt${lang === 'fr' ? ' on' : ''}`} onClick={() => setLang('fr' as Lang)}>
+            FR
+          </button>
+          <button className={`os-langopt${lang === 'en' ? ' on' : ''}`} onClick={() => setLang('en' as Lang)}>
+            EN
+          </button>
         </div>
         <span
           ref={clockRef}

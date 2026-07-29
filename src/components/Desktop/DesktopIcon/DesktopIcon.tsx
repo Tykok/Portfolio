@@ -34,11 +34,11 @@ export function DesktopIcon({ app, x, y, selected, onSelect, onOpen, onDragMove 
       const dx = ev.clientX - dragRef.current.sx;
       const dy = ev.clientY - dragRef.current.sy;
       if (!didDragRef.current && Math.abs(dx) < 5 && Math.abs(dy) < 5) return;
-      if (!didDragRef.current) { didDragRef.current = true; setIsDragging(true); }
-      onDragMove(
-        Math.max(0, dragRef.current.ox + dx),
-        Math.max(0, dragRef.current.oy + dy),
-      );
+      if (!didDragRef.current) {
+        didDragRef.current = true;
+        setIsDragging(true);
+      }
+      onDragMove(Math.max(0, dragRef.current.ox + dx), Math.max(0, dragRef.current.oy + dy));
     };
 
     const onUp = () => {

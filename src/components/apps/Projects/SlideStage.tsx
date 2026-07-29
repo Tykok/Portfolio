@@ -30,26 +30,16 @@ export function SlideStage({ projects, activeIndex, onSelect }: SlideStageProps)
         {projects[activeIndex] && <ProjectSlide project={projects[activeIndex]} />}
       </div>
 
-      <button
-        type="button"
-        className="deck-nav prev"
-        aria-label={t('p_prev')}
-        disabled={atStart}
-        onClick={() => go(activeIndex - 1)}
-      >
+      <button type="button" className="deck-nav prev" aria-label={t('p_prev')} disabled={atStart} onClick={() => go(activeIndex - 1)}>
         ‹
       </button>
-      <button
-        type="button"
-        className="deck-nav next"
-        aria-label={t('p_next')}
-        disabled={atEnd}
-        onClick={() => go(activeIndex + 1)}
-      >
+      <button type="button" className="deck-nav next" aria-label={t('p_next')} disabled={atEnd} onClick={() => go(activeIndex + 1)}>
         ›
       </button>
 
-      <div className="deck-counter">{activeIndex + 1} / {total}</div>
+      <div className="deck-counter">
+        {activeIndex + 1} / {total}
+      </div>
     </div>
   );
 }

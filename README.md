@@ -17,26 +17,26 @@ npm run dev      # http://localhost:3000
 
 ## Scripts
 
-| Commande | Effet |
-|---|---|
-| `npm run dev` | serveur de dev avec HMR |
-| `npm run build` | typecheck puis build de production dans `build/` |
-| `npm run preview` | sert le build de production localement |
-| `npm run typecheck` | `tsc --noEmit` |
-| `npm test` | suite Vitest, une passe |
-| `npm run test:watch` | Vitest en watch |
-| `npm run lint` | ESLint sur `src` |
-| `npm run lint:fix` | ESLint avec `--fix` |
+| Commande             | Effet                                            |
+| -------------------- | ------------------------------------------------ |
+| `npm run dev`        | serveur de dev avec HMR                          |
+| `npm run build`      | typecheck puis build de production dans `build/` |
+| `npm run preview`    | sert le build de production localement           |
+| `npm run typecheck`  | `tsc --noEmit`                                   |
+| `npm test`           | suite Vitest, une passe                          |
+| `npm run test:watch` | Vitest en watch                                  |
+| `npm run lint`       | ESLint sur `src`                                 |
+| `npm run lint:fix`   | ESLint avec `--fix`                              |
 
 ## Variables d'environnement
 
 Copier `.env.example` en `.env.local` pour surcharger. Préfixe `VITE_` obligatoire
 pour qu'une variable soit exposée au client.
 
-| Variable | Défaut | Effet |
-|---|---|---|
-| `VITE_USE_MOCK` | `true` | Sert les projets depuis `src/api/mock/`. À `false`, appelle l'API. |
-| `VITE_API_URL` | vide | URL de base de l'API projets. Lue seulement si `VITE_USE_MOCK=false`. |
+| Variable        | Défaut | Effet                                                                 |
+| --------------- | ------ | --------------------------------------------------------------------- |
+| `VITE_USE_MOCK` | `true` | Sert les projets depuis `src/api/mock/`. À `false`, appelle l'API.    |
+| `VITE_API_URL`  | vide   | URL de base de l'API projets. Lue seulement si `VITE_USE_MOCK=false`. |
 
 ## Organisation
 
@@ -64,9 +64,9 @@ sinon TypeScript refuse de compiler.
 ```tsx
 const { t, lang } = useLang();
 
-t('cv_exp')                      // string
-t('t_projects_l', { n: 6 })      // interpolation de {n}
-t('cal_months')                  // string[] — le type suit la clé
+t('cv_exp'); // string
+t('t_projects_l', { n: 6 }); // interpolation de {n}
+t('cal_months'); // string[] — le type suit la clé
 ```
 
 Le contenu (identité, projets, CV) utilise un autre motif, `{ fr, en }` par champ,

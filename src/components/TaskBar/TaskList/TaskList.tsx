@@ -31,11 +31,7 @@ export function TaskList({ windows, activeId }: Props) {
         if (!meta) return null;
         const isActive = activeId === win.id && !win.min;
         return (
-          <button
-            key={win.id}
-            className={`tq-task${isActive ? ' is-active' : ''}`}
-            onClick={() => handleClick(win)}
-          >
+          <button key={win.id} className={`tq-task${isActive ? ' is-active' : ''}`} onClick={() => handleClick(win)}>
             <span className="ti">
               <AppIcon kind={meta.icon} size={14} />
             </span>

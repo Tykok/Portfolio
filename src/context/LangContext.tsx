@@ -1,4 +1,4 @@
-import React, { createContext, type ReactNode,useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, type ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 
 import { getTranslations, interpolate, type TVars } from 'i18n';
 import type { Translations } from 'i18n/types';

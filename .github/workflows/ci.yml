@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   verify:
-    name: Lint, typecheck, test, build
+    name: Format, lint, typecheck, test, build, audit
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -35,6 +35,10 @@ jobs:
 
       # Every check runs even when an earlier one failed, so a single run
       # reports the full picture instead of one failure at a time.
+      - name: Format
+        if: ${{ !cancelled() }}
+        run: npm run format:check
+
       - name: Lint
         if: ${{ !cancelled() }}
         run: npm run lint
@@ -50,3 +54,11 @@ jobs:
       - name: Build
         if: ${{ !cancelled() }}
         run: npm run build
+
+      # The repo is at 0 findings, so this gate is meaningful today. If a new
+      # advisory ever lands on an unpatchable dev-only dependency, narrow it to
+      # `npm audit --omit=dev --audit-level=high` rather than deleting it — that
+      # still covers everything that reaches the browser.
+      - name: Audit
+        if: ${{ !cancelled() }}
+        run: npm run audit

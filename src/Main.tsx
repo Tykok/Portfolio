@@ -21,24 +21,32 @@ import { Window } from 'components/Window/Window';
 import { LangProvider } from 'context/LangContext';
 import { OSProvider, useOS } from 'context/OSContext';
 import { ProjectsProvider } from 'context/ProjectsContext';
-import { useWindowContext,WindowProvider } from 'context/WindowContext';
+import { useWindowContext, WindowProvider } from 'context/WindowContext';
 import type { AppKey } from 'types/app';
 
 type Phase = 'boot' | 'login' | 'desktop' | 'off';
 
 const BOOT_MS = 2800;
-const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+const KONAMI = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
 
 function AppContent({ appKey }: { appKey: AppKey }): JSX.Element | null {
   switch (appKey) {
-    case 'about':    return <About />;
-    case 'projects': return <Projects />;
-    case 'cv':       return <Cv />;
-    case 'contact':  return <Contact />;
-    case 'terminal': return <Terminal />;
-    case 'media':    return <Media />;
-    case 'web':      return <Web />;
-    default:         return null;
+    case 'about':
+      return <About />;
+    case 'projects':
+      return <Projects />;
+    case 'cv':
+      return <Cv />;
+    case 'contact':
+      return <Contact />;
+    case 'terminal':
+      return <Terminal />;
+    case 'media':
+      return <Media />;
+    case 'web':
+      return <Web />;
+    default:
+      return null;
   }
 }
 
@@ -70,7 +78,9 @@ function OS() {
   /* Escape closes About dialog */
   useEffect(() => {
     if (!aboutOpen) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') closeAbout(); };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeAbout();
+    };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
   }, [aboutOpen, closeAbout]);
@@ -80,9 +90,9 @@ function OS() {
   return (
     /* .tq always present — CSS variables are always in scope */
     <div className={`os-root tq${themeClass}`}>
-      {phase === 'boot'    && <Boot    onDone={() => setPhase('login')} />}
-      {phase === 'login'   && <Login   onLogin={() => setPhase('desktop')} />}
-      {phase === 'off'     && <Off     onRestart={() => setPhase('boot')} />}
+      {phase === 'boot' && <Boot onDone={() => setPhase('login')} />}
+      {phase === 'login' && <Login onLogin={() => setPhase('desktop')} />}
+      {phase === 'off' && <Off onRestart={() => setPhase('boot')} />}
 
       {phase === 'desktop' && (
         <>
@@ -92,14 +102,11 @@ function OS() {
               <AppContent appKey={win.key} />
             </Window>
           ))}
-          <TaskBar
-            onShutdown={() => setPhase('off')}
-            onLogoff={() => setPhase('login')}
-          />
+          <TaskBar onShutdown={() => setPhase('off')} onLogoff={() => setPhase('login')} />
           <Mascot />
-          {bsod        && <Bsod />}
-          {konamiRain  && <KonamiRain />}
-          {aboutOpen   && <AboutDialog />}
+          {bsod && <Bsod />}
+          {konamiRain && <KonamiRain />}
+          {aboutOpen && <AboutDialog />}
         </>
       )}
     </div>

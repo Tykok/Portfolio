@@ -15,7 +15,7 @@ const EXPERIENCE = [
         'Intégration et gestion de compte client',
         'Maintenance et évolution du tooling interne utilisé par toutes les équipes',
         'Collaboration avec Produit, Design, Data et Front (iOS, Android, Web)',
-        'Cycle complet : conception, développement, mise en production, analyse d\'impact — Docker & monitoring',
+        "Cycle complet : conception, développement, mise en production, analyse d'impact — Docker & monitoring",
       ],
       en: [
         'Backend APIs in Kotlin / Spring Boot, data on PostgreSQL',
@@ -35,9 +35,9 @@ const EXPERIENCE = [
     bullets: {
       fr: [
         'APIs backend en Kotlin / Spring Boot',
-        'Intégration d\'une première version du catalogue produit',
-        'Évolution de la gestion du paiement utilisateur dans l\'application (Stripe)',
-        'Création d\'un outil interne (Next.js / TypeScript) utilisé par plusieurs équipes',
+        "Intégration d'une première version du catalogue produit",
+        "Évolution de la gestion du paiement utilisateur dans l'application (Stripe)",
+        "Création d'un outil interne (Next.js / TypeScript) utilisé par plusieurs équipes",
         'Amélioration et maintenance de services existants, gestion des données sous PostgreSQL',
         'Environnement agile avec les équipes Produit et Techniques',
       ],
@@ -78,10 +78,10 @@ const EXPERIENCE = [
     when: { fr: 'mars – août 2021', en: 'Mar – Aug 2021' },
     bullets: {
       fr: [
-        'Outil interne d\'aide à la conception de rapports',
+        "Outil interne d'aide à la conception de rapports",
         'Conception et gestion de la base de données : modélisation, création, migration, administration',
         'Interface web avec recherche et authentification utilisateurs',
-        'Mise en place et évolution d\'une API : gestion des droits, sécurisation des accès, protection des données',
+        "Mise en place et évolution d'une API : gestion des droits, sécurisation des accès, protection des données",
       ],
       en: [
         'Internal tool to help design reports',
@@ -118,8 +118,8 @@ const EXPERIENCE = [
     when: { fr: 'juin – juil. 2019', en: 'Jun – Jul 2019' },
     bullets: {
       fr: [
-        'Outil d\'analyse de Thread Dump Java',
-        'API : récupération des dumps d\'un programme Java, transformation en JSON, exposition HTTP',
+        "Outil d'analyse de Thread Dump Java",
+        "API : récupération des dumps d'un programme Java, transformation en JSON, exposition HTTP",
         'Interface web de tri des threads',
       ],
       en: [
@@ -133,14 +133,51 @@ const EXPERIENCE = [
 ];
 
 const EDUCATION = [
-  { yr: '2022 – 2024', ti: { fr: 'Chef de projet Ingénierie Logicielle — spécialisation IA & Big Data', en: 'Software Engineering Project Manager — AI & Big Data' }, sc: 'IPI, école d\'informatique · Toulouse' },
-  { yr: '2021 – 2022', ti: { fr: 'Bachelor — Programmation informatique', en: 'Bachelor — Computer Programming' }, sc: 'IPI Institut Poly Informatique' },
-  { yr: '2020 – 2021', ti: { fr: 'L3 MIAGE — Ingénierie des systèmes d\'information', en: 'BSc MIAGE — Information Systems Engineering' }, sc: 'Université Paul Sabatier · Toulouse III' },
-  { yr: '2018 – 2020', ti: { fr: 'BTS SIO option SLAM — Développement informatique', en: 'BTS SIO (SLAM) — Software Development' }, sc: 'Lycée Bellepierre · La Réunion' },
-  { yr: '2015 – 2018', ti: { fr: 'Baccalauréat — Systèmes d\'information de gestion', en: 'Baccalauréat — Management Information Systems' }, sc: 'Lycée Bellepierre · La Réunion' },
+  {
+    yr: '2022 – 2024',
+    ti: {
+      fr: 'Chef de projet Ingénierie Logicielle — spécialisation IA & Big Data',
+      en: 'Software Engineering Project Manager — AI & Big Data',
+    },
+    sc: "IPI, école d'informatique · Toulouse",
+  },
+  {
+    yr: '2021 – 2022',
+    ti: { fr: 'Bachelor — Programmation informatique', en: 'Bachelor — Computer Programming' },
+    sc: 'IPI Institut Poly Informatique',
+  },
+  {
+    yr: '2020 – 2021',
+    ti: { fr: "L3 MIAGE — Ingénierie des systèmes d'information", en: 'BSc MIAGE — Information Systems Engineering' },
+    sc: 'Université Paul Sabatier · Toulouse III',
+  },
+  {
+    yr: '2018 – 2020',
+    ti: { fr: 'BTS SIO option SLAM — Développement informatique', en: 'BTS SIO (SLAM) — Software Development' },
+    sc: 'Lycée Bellepierre · La Réunion',
+  },
+  {
+    yr: '2015 – 2018',
+    ti: { fr: "Baccalauréat — Systèmes d'information de gestion", en: 'Baccalauréat — Management Information Systems' },
+    sc: 'Lycée Bellepierre · La Réunion',
+  },
 ];
 
-const HARD_SKILLS = ['Kotlin', 'Spring Boot', 'Java', 'TypeScript', 'Next.js', 'PostgreSQL', 'MySQL', 'Docker', 'Stripe', 'Python', 'Bash', 'Git', 'Linux'];
+const HARD_SKILLS = [
+  'Kotlin',
+  'Spring Boot',
+  'Java',
+  'TypeScript',
+  'Next.js',
+  'PostgreSQL',
+  'MySQL',
+  'Docker',
+  'Stripe',
+  'Python',
+  'Bash',
+  'Git',
+  'Linux',
+];
 const SOFT_SKILLS: LocalizedStringArray = {
   fr: ['Communication claire', 'Esprit critique', 'Autonomie', 'Curiosité technique', 'Amélioration continue'],
   en: ['Clear communication', 'Critical thinking', 'Autonomy', 'Technical curiosity', 'Continuous improvement'],
@@ -159,8 +196,12 @@ export function Cv() {
     <div className="cv2" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       {/* Toolbar */}
       <div className="cv2-tb">
-        <button className="cv2-act primary" onClick={handlePrint}>{t('cv_print')}</button>
-        <button className="cv2-act" style={{ opacity: 0.5, cursor: 'default' }}>{t('cv_dl')}</button>
+        <button className="cv2-act primary" onClick={handlePrint}>
+          {t('cv_print')}
+        </button>
+        <button className="cv2-act" style={{ opacity: 0.5, cursor: 'default' }}>
+          {t('cv_dl')}
+        </button>
       </div>
 
       <div className="cv2-body">
@@ -178,7 +219,9 @@ export function Cv() {
         </div>
 
         {identity.bio[lang].split('\n\n').map((para) => (
-          <p key={para.slice(0, 24)} className="cv2-profile">{para}</p>
+          <p key={para.slice(0, 24)} className="cv2-profile">
+            {para}
+          </p>
         ))}
 
         {/* Two-column body */}
@@ -193,10 +236,16 @@ export function Cv() {
                   <div className="org">{xp.org[lang]}</div>
                   <div className="pos">{xp.pos[lang]}</div>
                   <ul>
-                    {xp.bullets[lang].map((b, j) => <li key={j}>{b}</li>)}
+                    {xp.bullets[lang].map((b, j) => (
+                      <li key={j}>{b}</li>
+                    ))}
                   </ul>
                   <div className="cv2-tags">
-                    {xp.tags.map((tag) => <span key={tag} className="cv2-tag">{tag}</span>)}
+                    {xp.tags.map((tag) => (
+                      <span key={tag} className="cv2-tag">
+                        {tag}
+                      </span>
+                    ))}
                   </div>
                 </div>
               ))}
@@ -237,7 +286,9 @@ export function Cv() {
               <h3>{t('cv_soft')}</h3>
               <div className="wrap">
                 {SOFT_SKILLS[lang].map((s) => (
-                  <span key={s} className="cv2-soft">{s}</span>
+                  <span key={s} className="cv2-soft">
+                    {s}
+                  </span>
                 ))}
               </div>
             </div>
@@ -246,7 +297,9 @@ export function Cv() {
               <h3>{t('cv_lang')}</h3>
               <div className="wrap" style={{ flexDirection: 'column', gap: 4 }}>
                 {LANGUAGES[lang].map((l) => (
-                  <span key={l} style={{ fontSize: 12, color: 'var(--ink)' }}>{l}</span>
+                  <span key={l} style={{ fontSize: 12, color: 'var(--ink)' }}>
+                    {l}
+                  </span>
                 ))}
               </div>
             </div>
@@ -255,7 +308,9 @@ export function Cv() {
               <h3>{t('cv_interests')}</h3>
               <div className="wrap">
                 {identity.interests[lang].map((i) => (
-                  <span key={i} className="cv2-soft">{i}</span>
+                  <span key={i} className="cv2-soft">
+                    {i}
+                  </span>
                 ))}
               </div>
             </div>

@@ -35,7 +35,7 @@ export const identity: Identity = {
   },
   bio: {
     fr: "Développeur backend chez Pictarine depuis 2022, je conçois des APIs en Kotlin / Spring Boot avec PostgreSQL : paiement (Stripe), services tiers (Klaviyo), gestion de compte client et un tooling interne utilisé par toutes les équipes. Je suis les fonctionnalités de bout en bout — conception, mise en production, analyse d'impact — en travaillant avec le Produit, le Design, la Data et les équipes Front (iOS, Android, Web).\n\nCréatif, avec un esprit critique et une vraie envie de progresser en continu. Ma curiosité me pousse à explorer de nouveaux sujets en permanence, et j'aime particulièrement partager et discuter d'informatique — d'où ce portfolio et mes articles.",
-    en: "Backend developer at Pictarine since 2022, I build APIs in Kotlin / Spring Boot with PostgreSQL: payments (Stripe), third-party services (Klaviyo), customer account management and internal tooling used across every team. I follow features end to end — design, release, impact analysis — working with Product, Design, Data and the Front teams (iOS, Android, Web).\n\nCreative, with a critical eye and a real drive to keep getting better. Curiosity keeps pushing me into new territory, and I especially enjoy sharing and talking software — hence this portfolio and my articles.",
+    en: 'Backend developer at Pictarine since 2022, I build APIs in Kotlin / Spring Boot with PostgreSQL: payments (Stripe), third-party services (Klaviyo), customer account management and internal tooling used across every team. I follow features end to end — design, release, impact analysis — working with Product, Design, Data and the Front teams (iOS, Android, Web).\n\nCreative, with a critical eye and a real drive to keep getting better. Curiosity keeps pushing me into new territory, and I especially enjoy sharing and talking software — hence this portfolio and my articles.',
   },
   now: {
     fr: 'Actuellement : APIs backend Kotlin / Spring Boot chez Pictarine, à Toulouse.',
@@ -48,11 +48,6 @@ export const identity: Identity = {
       'Veille et discussions autour du dev',
       'Apprentissage continu',
     ],
-    en: [
-      'Technical writing (Medium, dev.to)',
-      'Personal & side projects',
-      'Keeping up with dev and talking shop',
-      'Continuous learning',
-    ],
+    en: ['Technical writing (Medium, dev.to)', 'Personal & side projects', 'Keeping up with dev and talking shop', 'Continuous learning'],
   },
 };

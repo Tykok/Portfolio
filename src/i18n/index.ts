@@ -22,16 +22,10 @@ export type TVars = Record<string, string | number>;
  */
 export function interpolate(text: string, vars?: TVars): string {
   if (!vars) return text;
-  return text.replace(/\{(\w+)\}/g, (match, name: string) =>
-    (name in vars ? String(vars[name]) : match),
-  );
+  return text.replace(/\{(\w+)\}/g, (match, name: string) => (name in vars ? String(vars[name]) : match));
 }
 
-export function t<K extends keyof Translations>(
-  lang: Lang,
-  key: K,
-  vars?: TVars,
-): Translations[K] {
+export function t<K extends keyof Translations>(lang: Lang, key: K, vars?: TVars): Translations[K] {
   const value = translations[lang][key] ?? translations.fr[key];
   if (typeof value === 'string') {
     return interpolate(value, vars) as Translations[K];

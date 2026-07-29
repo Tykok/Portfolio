@@ -12,7 +12,9 @@ export function AboutDialog() {
         <div className="tq-titlebar os-dialog-bar">
           <span className="tq-tb-title">{t('aos_title')}</span>
           <div className="tq-tb-btns">
-            <button className="tq-tb-btn is-close os-tb-btn-real" onClick={closeAbout}>✕</button>
+            <button className="tq-tb-btn is-close os-tb-btn-real" onClick={closeAbout}>
+              ✕
+            </button>
           </div>
         </div>
 
@@ -33,7 +35,9 @@ export function AboutDialog() {
 
         {/* Footer */}
         <div className="os-dialog-foot">
-          <button className="tq-btn is-default" onClick={closeAbout}>{t('aos_ok')}</button>
+          <button className="tq-btn is-default" onClick={closeAbout}>
+            {t('aos_ok')}
+          </button>
         </div>
       </div>
     </div>

@@ -23,11 +23,20 @@ interface OSContextValue {
 }
 
 const OSContext = createContext<OSContextValue>({
-  bsod: false, triggerBsod: () => {}, clearBsod: () => {},
-  konamiRain: false, triggerRain: () => {}, clearRain: () => {},
-  theme: 'bliss', setTheme: () => {},
-  mascot: { visible: false, msg: '' }, showMascot: () => {}, hideMascot: () => {},
-  aboutOpen: false, openAbout: () => {}, closeAbout: () => {},
+  bsod: false,
+  triggerBsod: () => {},
+  clearBsod: () => {},
+  konamiRain: false,
+  triggerRain: () => {},
+  clearRain: () => {},
+  theme: 'bliss',
+  setTheme: () => {},
+  mascot: { visible: false, msg: '' },
+  showMascot: () => {},
+  hideMascot: () => {},
+  aboutOpen: false,
+  openAbout: () => {},
+  closeAbout: () => {},
 });
 
 export function OSProvider({ children }: { children: ReactNode }) {
@@ -59,13 +68,24 @@ export function OSProvider({ children }: { children: ReactNode }) {
   const closeAbout = useCallback(() => setAboutOpen(false), []);
 
   return (
-    <OSContext.Provider value={{
-      bsod, triggerBsod, clearBsod,
-      konamiRain, triggerRain, clearRain,
-      theme, setTheme,
-      mascot, showMascot, hideMascot,
-      aboutOpen, openAbout, closeAbout,
-    }}>
+    <OSContext.Provider
+      value={{
+        bsod,
+        triggerBsod,
+        clearBsod,
+        konamiRain,
+        triggerRain,
+        clearRain,
+        theme,
+        setTheme,
+        mascot,
+        showMascot,
+        hideMascot,
+        aboutOpen,
+        openAbout,
+        closeAbout,
+      }}
+    >
       {children}
     </OSContext.Provider>
   );

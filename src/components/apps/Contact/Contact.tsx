@@ -16,9 +16,7 @@ export function Contact() {
   const { lang, t } = useLang();
   const [active, setActive] = useState(CONTACTS[0]);
   // Lazy initializer: Date.now() must not run on every render.
-  const [messages, setMessages] = useState<Message[]>(() => [
-    { from: 'them', text: t('c_greet'), ts: Date.now() - 60000 },
-  ]);
+  const [messages, setMessages] = useState<Message[]>(() => [{ from: 'them', text: t('c_greet'), ts: Date.now() - 60000 }]);
   const [input, setInput] = useState('');
   const logRef = useRef<HTMLDivElement>(null);
 
@@ -32,11 +30,7 @@ export function Contact() {
     const msg = input.trim();
     if (!msg) return;
     const now = Date.now();
-    setMessages((prev) => [
-      ...prev,
-      { from: 'me', text: msg, ts: now },
-      { from: 'them', text: t('c_auto'), ts: now + 1000 },
-    ]);
+    setMessages((prev) => [...prev, { from: 'me', text: msg, ts: now }, { from: 'them', text: t('c_auto'), ts: now + 1000 }]);
     setInput('');
   };
 
@@ -48,7 +42,21 @@ export function Contact() {
       {/* Contacts sidebar */}
       <div className="msn-side">
         <div className="msn-me">
-          <div style={{ width: 32, height: 32, borderRadius: 6, background: 'linear-gradient(150deg,#ff9d57,#b83d12)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, color: '#fff', fontSize: 13, flexShrink: 0 }}>
+          <div
+            style={{
+              width: 32,
+              height: 32,
+              borderRadius: 6,
+              background: 'linear-gradient(150deg,#ff9d57,#b83d12)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontWeight: 700,
+              color: '#fff',
+              fontSize: 13,
+              flexShrink: 0,
+            }}
+          >
             T
           </div>
           <div>
@@ -67,7 +75,21 @@ export function Contact() {
             style={{ background: active.key === s.key ? 'rgba(255,255,255,.85)' : undefined }}
             onClick={() => setActive(s)}
           >
-            <div style={{ width: 28, height: 28, borderRadius: 50, background: s.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, color: '#fff', fontSize: 10, flexShrink: 0 }}>
+            <div
+              style={{
+                width: 28,
+                height: 28,
+                borderRadius: 50,
+                background: s.color,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 700,
+                color: '#fff',
+                fontSize: 10,
+                flexShrink: 0,
+              }}
+            >
               {s.monogram}
             </div>
             <div>
@@ -81,8 +103,32 @@ export function Contact() {
       {/* Chat */}
       <div className="msn-chat">
         {/* Chat header */}
-        <div style={{ padding: '8px 12px', background: 'linear-gradient(180deg,#eaf2ff,#dbe7ff)', borderBottom: '1px solid #b9cdf0', display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-          <div style={{ width: 32, height: 32, borderRadius: 50, background: active.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, color: '#fff', fontSize: 11, flexShrink: 0 }}>
+        <div
+          style={{
+            padding: '8px 12px',
+            background: 'linear-gradient(180deg,#eaf2ff,#dbe7ff)',
+            borderBottom: '1px solid #b9cdf0',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 10,
+            flexShrink: 0,
+          }}
+        >
+          <div
+            style={{
+              width: 32,
+              height: 32,
+              borderRadius: 50,
+              background: active.color,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontWeight: 700,
+              color: '#fff',
+              fontSize: 11,
+              flexShrink: 0,
+            }}
+          >
             {active.monogram}
           </div>
           <div>
@@ -112,7 +158,9 @@ export function Contact() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && send()}
           />
-          <button className="tq-btn is-default" onClick={send}>{t('c_send')}</button>
+          <button className="tq-btn is-default" onClick={send}>
+            {t('c_send')}
+          </button>
         </div>
       </div>
     </div>

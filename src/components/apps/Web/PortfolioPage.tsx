@@ -5,10 +5,10 @@ import { useWindowContext } from 'context/WindowContext';
 import { identity } from 'data/identity';
 
 const EXT_LINKS = [
-  { label: 'GitHub',   url: 'https://github.com/Tykok',               color: '#24292f', mono: 'GH' },
-  { label: 'LinkedIn', url: 'https://linkedin.com/in/elie-treport',   color: '#0a66c2', mono: 'in' },
-  { label: 'Dev.to',   url: 'https://dev.to/tykok',                   color: '#0a0a0a', mono: 'D'  },
-  { label: 'Medium',   url: 'https://medium.com/@tykok',               color: '#191919', mono: 'M'  },
+  { label: 'GitHub', url: 'https://github.com/Tykok', color: '#24292f', mono: 'GH' },
+  { label: 'LinkedIn', url: 'https://linkedin.com/in/elie-treport', color: '#0a66c2', mono: 'in' },
+  { label: 'Dev.to', url: 'https://dev.to/tykok', color: '#0a0a0a', mono: 'D' },
+  { label: 'Medium', url: 'https://medium.com/@tykok', color: '#191919', mono: 'M' },
 ];
 
 interface Props {
@@ -22,7 +22,6 @@ export function PortfolioPage({ onNavigate }: Props) {
 
   return (
     <div className="np-root">
-
       {/* Notion-style sticky breadcrumb toolbar */}
       <div className="np-toolbar">
         <span className="np-crumb dim">TicoqOS</span>
@@ -44,29 +43,42 @@ export function PortfolioPage({ onNavigate }: Props) {
 
       {/* Body */}
       <div className="np-body">
-
         {/* Properties block — Notion database-style */}
         <div className="np-props">
           <div className="np-prop">
-            <span className="np-pk"><span className="np-pico">💼</span>{t('p_role')}</span>
+            <span className="np-pk">
+              <span className="np-pico">💼</span>
+              {t('p_role')}
+            </span>
             <span className="np-pv">{identity.role[lang]}</span>
           </div>
           <div className="np-prop">
-            <span className="np-pk"><span className="np-pico">📍</span>{t('np_location')}</span>
+            <span className="np-pk">
+              <span className="np-pico">📍</span>
+              {t('np_location')}
+            </span>
             <span className="np-pv">{identity.location[lang]}</span>
           </div>
           <div className="np-prop">
-            <span className="np-pk"><span className="np-pico">🟢</span>{t('np_status')}</span>
+            <span className="np-pk">
+              <span className="np-pico">🟢</span>
+              {t('np_status')}
+            </span>
             <span className="np-pv np-status-pill">{identity.status[lang]}</span>
           </div>
           <div className="np-prop">
-            <span className="np-pk"><span className="np-pico">✉️</span>{t('np_email')}</span>
+            <span className="np-pk">
+              <span className="np-pico">✉️</span>
+              {t('np_email')}
+            </span>
             <span className="np-pv np-link-val" onClick={() => {}}>
               {identity.email}
             </span>
           </div>
           <div className="np-prop">
-            <span className="np-pk"><span className="np-pico">🐙</span>GitHub</span>
+            <span className="np-pk">
+              <span className="np-pico">🐙</span>GitHub
+            </span>
             <span className="np-pv np-link-val" onClick={() => onNavigate(identity.githubUrl)}>
               {identity.github} ↗
             </span>
@@ -92,7 +104,9 @@ export function PortfolioPage({ onNavigate }: Props) {
         </div>
         <div className="np-db">
           <div className="np-db-head">
-            <span className="np-dh" style={{ flex: '1 1 auto' }}>{t('np_name')}</span>
+            <span className="np-dh" style={{ flex: '1 1 auto' }}>
+              {t('np_name')}
+            </span>
             <span className="np-dh np-hide-sm">{t('np_stack')}</span>
             <span className="np-dh">{t('np_status')}</span>
             <span className="np-dh np-yr-col">{t('np_year')}</span>
@@ -102,24 +116,24 @@ export function PortfolioPage({ onNavigate }: Props) {
               <ChickenLoader label={t('projects_loading')} />
             </div>
           )}
-          {!loading && error && (
-            <div className="np-dbrow np-db-state">{t('projects_error')}</div>
-          )}
-          {!loading && !error && projects.map((p) => (
-            <div className="np-dbrow" key={p.id} onClick={() => openApp('projects')} title={t('np_open_projects')}>
-              <span className="np-db-ico">{p.emoji}</span>
-              <span className="np-db-name">{p.title[lang]}</span>
-              <span className="np-db-tags np-hide-sm">
-                {p.stack.slice(0, 2).map((s) => (
-                  <span key={s.label} className="np-tag">{s.label}</span>
-                ))}
-              </span>
-              <span className={`np-badge np-st-${p.status.type}`}>
-                {p.status.label[lang]}
-              </span>
-              <span className="np-yr">{p.year}</span>
-            </div>
-          ))}
+          {!loading && error && <div className="np-dbrow np-db-state">{t('projects_error')}</div>}
+          {!loading &&
+            !error &&
+            projects.map((p) => (
+              <div className="np-dbrow" key={p.id} onClick={() => openApp('projects')} title={t('np_open_projects')}>
+                <span className="np-db-ico">{p.emoji}</span>
+                <span className="np-db-name">{p.title[lang]}</span>
+                <span className="np-db-tags np-hide-sm">
+                  {p.stack.slice(0, 2).map((s) => (
+                    <span key={s.label} className="np-tag">
+                      {s.label}
+                    </span>
+                  ))}
+                </span>
+                <span className={`np-badge np-st-${p.status.type}`}>{p.status.label[lang]}</span>
+                <span className="np-yr">{p.year}</span>
+              </div>
+            ))}
         </div>
 
         <div className="np-divider" />
@@ -132,10 +146,7 @@ export function PortfolioPage({ onNavigate }: Props) {
         <div className="np-linklist">
           {EXT_LINKS.map((l) => (
             <div key={l.label} className="np-extlink" onClick={() => onNavigate(l.url)}>
-              <span
-                className="np-extlink-dot"
-                style={{ background: l.color }}
-              >
+              <span className="np-extlink-dot" style={{ background: l.color }}>
                 {l.mono}
               </span>
               <span className="np-extlink-name">{l.label}</span>
@@ -143,7 +154,6 @@ export function PortfolioPage({ onNavigate }: Props) {
             </div>
           ))}
         </div>
-
       </div>
     </div>
   );

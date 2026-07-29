@@ -6,19 +6,28 @@ import type { Project } from 'data/projects';
 import { ProjectSlide } from './ProjectSlide';
 
 const base: Project = {
-  id: 'x', emoji: '🚀', monogram: 'XX', accent: '#123456',
+  id: 'x',
+  emoji: '🚀',
+  monogram: 'XX',
+  accent: '#123456',
   gradient: 'linear-gradient(135deg,#667eea,#764ba2)',
-  title: { fr: 'Titre', en: 'Title' }, year: '2024',
+  title: { fr: 'Titre', en: 'Title' },
+  year: '2024',
   status: { label: { fr: 'En prod', en: 'Live' }, type: 'live' },
   stack: [{ label: 'Go', color: 'blue' }],
   tags: ['Go'],
   desc: { fr: 'Desc FR', en: 'Desc EN' },
   bullets: { fr: ['point un'], en: ['bullet one'] },
-  repo: '#', demo: '#',
+  repo: '#',
+  demo: '#',
 };
 
 const renderSlide = (p: Project) =>
-  render(<LangProvider><ProjectSlide project={p} /></LangProvider>);
+  render(
+    <LangProvider>
+      <ProjectSlide project={p} />
+    </LangProvider>,
+  );
 
 it('renders title, desc and bullets (FR default)', () => {
   renderSlide(base);

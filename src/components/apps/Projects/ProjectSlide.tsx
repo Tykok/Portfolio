@@ -16,9 +16,7 @@ export function ProjectSlide({ project }: { project: Project }) {
           <h2 className="deck-title">{project.title[lang]}</h2>
           <div className="deck-meta">
             <span className="deck-year">{project.year}</span>
-            <span className={`deck-status ${project.status.type}`}>
-              {project.status.label[lang]}
-            </span>
+            <span className={`deck-status ${project.status.type}`}>{project.status.label[lang]}</span>
           </div>
         </div>
       </header>
@@ -53,7 +51,18 @@ export function ProjectSlide({ project }: { project: Project }) {
               <div key={s.label} className="pj-chip">
                 <span
                   className="pj-bdg"
-                  style={{ background: badge.color, width: 17, height: 17, borderRadius: 5, fontSize: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, color: '#fff' }}
+                  style={{
+                    background: badge.color,
+                    width: 17,
+                    height: 17,
+                    borderRadius: 5,
+                    fontSize: 8,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: 700,
+                    color: '#fff',
+                  }}
                 >
                   {badge.monogram}
                 </span>
@@ -73,11 +82,7 @@ export function ProjectSlide({ project }: { project: Project }) {
               ▶ {t('p_demo')}
             </a>
           )}
-          {noLinks && (
-            <span style={{ fontSize: 12, color: 'var(--ink-dim)', fontStyle: 'italic' }}>
-              {t('p_links_ph')}
-            </span>
-          )}
+          {noLinks && <span style={{ fontSize: 12, color: 'var(--ink-dim)', fontStyle: 'italic' }}>{t('p_links_ph')}</span>}
         </div>
       </section>
     </article>
