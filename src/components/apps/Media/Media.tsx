@@ -24,19 +24,28 @@ export function Media() {
     if (playing) {
       intervalRef.current = setInterval(() => {
         setProgress((p) => {
-          if (p >= 100) { setPlaying(false); return 0; }
+          if (p >= 100) {
+            setPlaying(false);
+            return 0;
+          }
           return p + 0.5;
         });
       }, 200);
     } else {
       if (intervalRef.current) clearInterval(intervalRef.current);
     }
-    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
   }, [playing]);
 
   const prev = () => setTrackIdx((i) => (i === 0 ? TRACKS.length - 1 : i - 1));
   const next = () => setTrackIdx((i) => (i + 1) % TRACKS.length);
-  const select = (i: number) => { setTrackIdx(i); setProgress(0); setPlaying(true); };
+  const select = (i: number) => {
+    setTrackIdx(i);
+    setProgress(0);
+    setPlaying(true);
+  };
 
   const track = TRACKS[trackIdx];
 
@@ -53,17 +62,19 @@ export function Media() {
         <div className="media-bar">
           <i style={{ width: `${progress}%` }} />
         </div>
-        <div style={{ fontSize: 11, color: '#8fb0e0', marginTop: 4 }}>
-          {t('m_demo')}
-        </div>
+        <div style={{ fontSize: 11, color: '#8fb0e0', marginTop: 4 }}>{t('m_demo')}</div>
       </div>
 
       <div className="media-ctrl">
-        <button className="media-btn" onClick={prev} title="Précédent">⏮</button>
+        <button className="media-btn" onClick={prev} title="Précédent">
+          ⏮
+        </button>
         <button className="media-btn big" onClick={() => setPlaying((p) => !p)} title={playing ? 'Pause' : 'Lecture'}>
           {playing ? '⏸' : '▶'}
         </button>
-        <button className="media-btn" onClick={next} title="Suivant">⏭</button>
+        <button className="media-btn" onClick={next} title="Suivant">
+          ⏭
+        </button>
       </div>
 
       <div className="media-list">

@@ -39,11 +39,7 @@ export function ProjectsProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  return (
-    <ProjectsContext.Provider value={{ data, loading, error }}>
-      {children}
-    </ProjectsContext.Provider>
-  );
+  return <ProjectsContext.Provider value={{ data, loading, error }}>{children}</ProjectsContext.Provider>;
 }
 
 export function useProjects(): ProjectsContextValue {

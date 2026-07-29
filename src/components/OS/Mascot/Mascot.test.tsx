@@ -8,7 +8,11 @@ import { Mascot } from './Mascot';
 /** Drives the mascot the way the Terminal's coqsay command does. */
 function Trigger({ msg }: { msg: string }) {
   const { showMascot } = useOS();
-  return <button type="button" onClick={() => showMascot(msg)}>go</button>;
+  return (
+    <button type="button" onClick={() => showMascot(msg)}>
+      go
+    </button>
+  );
 }
 
 function renderMascot(msg = 'Cocorico depuis le terminal') {
@@ -32,17 +36,23 @@ describe('Mascot', () => {
     renderMascot('Cocorico depuis le terminal');
     expect(screen.queryByText('Cocorico depuis le terminal')).not.toBeInTheDocument();
 
-    act(() => { fireEvent.click(screen.getByRole('button', { name: 'go' })); });
+    act(() => {
+      fireEvent.click(screen.getByRole('button', { name: 'go' }));
+    });
 
     expect(screen.getByText('Cocorico depuis le terminal')).toBeInTheDocument();
   });
 
   it('dismisses an external message on click', () => {
     renderMascot('à fermer');
-    act(() => { fireEvent.click(screen.getByRole('button', { name: 'go' })); });
+    act(() => {
+      fireEvent.click(screen.getByRole('button', { name: 'go' }));
+    });
     expect(screen.getByText('à fermer')).toBeInTheDocument();
 
-    act(() => { fireEvent.click(screen.getByText('✕')); });
+    act(() => {
+      fireEvent.click(screen.getByText('✕'));
+    });
     expect(screen.queryByText('à fermer')).not.toBeInTheDocument();
   });
 });

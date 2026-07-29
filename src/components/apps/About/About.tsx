@@ -26,13 +26,30 @@ export function About() {
       </div>
 
       {identity.bio[lang].split('\n\n').map((para) => (
-        <p key={para.slice(0, 24)} className="ab-bio">{para}</p>
+        <p key={para.slice(0, 24)} className="ab-bio">
+          {para}
+        </p>
       ))}
 
       <div className="ab-socs">
         {primarySocials.map((s) => (
           <a key={s.key} href={s.href} target="_blank" rel="noreferrer" className="ab-soc">
-            <span className="ic" style={{ background: s.color, width: 24, height: 24, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 700, color: '#fff', flexShrink: 0 }}>
+            <span
+              className="ic"
+              style={{
+                background: s.color,
+                width: 24,
+                height: 24,
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 10,
+                fontWeight: 700,
+                color: '#fff',
+                flexShrink: 0,
+              }}
+            >
               {s.monogram}
             </span>
             {s.label}
@@ -47,7 +64,22 @@ export function About() {
           const badge = getBadge(tech);
           return (
             <div key={tech} className="ab-chip">
-              <span className="bdg" style={{ background: badge.color, width: 20, height: 20, borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 700, color: '#fff', flexShrink: 0 }}>
+              <span
+                className="bdg"
+                style={{
+                  background: badge.color,
+                  width: 20,
+                  height: 20,
+                  borderRadius: 6,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: 9,
+                  fontWeight: 700,
+                  color: '#fff',
+                  flexShrink: 0,
+                }}
+              >
                 {badge.monogram}
               </span>
               {tech}

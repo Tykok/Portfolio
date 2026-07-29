@@ -17,11 +17,7 @@ function windowReducer(state: WindowState[], action: WindowAction): WindowState[
       const existing = state.find((w) => w.key === action.key);
       if (existing) {
         // Re-focus existing window
-        return state.map((w) =>
-          w.key === action.key
-            ? { ...w, min: false, z: ++zCounter, active: true }
-            : { ...w, active: false }
-        );
+        return state.map((w) => (w.key === action.key ? { ...w, min: false, z: ++zCounter, active: true } : { ...w, active: false }));
       }
       const { defaultWidth: dw, defaultHeight: dh } = action.meta;
       const vw = window.innerWidth;
@@ -43,15 +39,9 @@ function windowReducer(state: WindowState[], action: WindowAction): WindowState[
     case 'START_CLOSE':
       return state.map((w) => (w.id === action.id ? { ...w, closing: true } : w));
     case 'FOCUS':
-      return state.map((w) =>
-        w.id === action.id
-          ? { ...w, min: false, z: ++zCounter, active: true }
-          : { ...w, active: false }
-      );
+      return state.map((w) => (w.id === action.id ? { ...w, min: false, z: ++zCounter, active: true } : { ...w, active: false }));
     case 'MINIMIZE':
-      return state.map((w) =>
-        w.id === action.id ? { ...w, min: true, active: false, moX: action.moX, moY: action.moY } : w
-      );
+      return state.map((w) => (w.id === action.id ? { ...w, min: true, active: false, moX: action.moX, moY: action.moY } : w));
     case 'MAXIMIZE':
       return state.map((w) => (w.id === action.id ? { ...w, max: !w.max } : w));
     case 'MOVE':
@@ -125,8 +115,15 @@ export function WindowProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value: WindowContextValue = {
-    windows, activeId,
-    openApp, closeWindow, focusWindow, minimizeWindow, maximizeWindow, moveWindow, resizeWindow,
+    windows,
+    activeId,
+    openApp,
+    closeWindow,
+    focusWindow,
+    minimizeWindow,
+    maximizeWindow,
+    moveWindow,
+    resizeWindow,
   };
 
   return <WindowContext.Provider value={value}>{children}</WindowContext.Provider>;

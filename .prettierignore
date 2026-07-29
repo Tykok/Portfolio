@@ -1,0 +1,14 @@
+build
+coverage
+.claude
+.superpowers
+node_modules
+package-lock.json
+
+# Hand-formatted stylesheets. One rule per line is a deliberate scanning aid:
+# Prettier expands os.css from 1218 lines to 4041 for no correctness gain.
+*.css
+*.scss
+
+# Planning and spec documents, kept exactly as written.
+docs/

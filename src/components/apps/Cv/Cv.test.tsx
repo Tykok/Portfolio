@@ -6,7 +6,12 @@ import fr from 'i18n/fr';
 
 import { Cv } from './Cv';
 
-const renderCv = () => render(<LangProvider><Cv /></LangProvider>);
+const renderCv = () =>
+  render(
+    <LangProvider>
+      <Cv />
+    </LangProvider>,
+  );
 
 describe('Cv app', () => {
   it('lists the two Pictarine roles separately', () => {

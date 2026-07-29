@@ -9,7 +9,10 @@ import { ContextMenu } from './ContextMenu/ContextMenu';
 import { DesktopIcon } from './DesktopIcon/DesktopIcon';
 import { Wallpaper } from './Wallpaper/Wallpaper';
 
-interface CtxPos { x: number; y: number }
+interface CtxPos {
+  x: number;
+  y: number;
+}
 
 export function Desktop() {
   const { openApp } = useWindowContext();
@@ -47,16 +50,21 @@ export function Desktop() {
               x={pos.x}
               y={pos.y}
               selected={selectedKey === app.key}
-              onSelect={(e) => { e.stopPropagation(); setSelectedKey(app.key); setCtx(null); }}
-              onOpen={() => { setSelectedKey(null); openApp(app.key); }}
+              onSelect={(e) => {
+                e.stopPropagation();
+                setSelectedKey(app.key);
+                setCtx(null);
+              }}
+              onOpen={() => {
+                setSelectedKey(null);
+                openApp(app.key);
+              }}
               onDragMove={(nx, ny) => moveIcon(app.key, nx, ny)}
             />
           );
         })}
       </div>
-      {ctx && (
-        <ContextMenu x={ctx.x} y={ctx.y} onClose={() => setCtx(null)} onLineup={resetPositions} />
-      )}
+      {ctx && <ContextMenu x={ctx.x} y={ctx.y} onClose={() => setCtx(null)} onLineup={resetPositions} />}
     </div>
   );
 }

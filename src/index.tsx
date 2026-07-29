@@ -7,11 +7,9 @@ import './index.scss';
 import './styles/design.css';
 import './styles/os.css';
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
     <Main />
-  </React.StrictMode>
+  </React.StrictMode>,
 );

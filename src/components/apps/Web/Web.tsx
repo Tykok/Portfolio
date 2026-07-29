@@ -43,7 +43,9 @@ export function Web() {
   };
 
   const closeTab = (id: string) => {
-    if (tabs.length === 1) { addTab(); }
+    if (tabs.length === 1) {
+      addTab();
+    }
     setTabs((prev) => {
       const next = prev.filter((t) => t.id !== id);
       if (activeTabId === id && next.length > 0) setActiveTabId(next[next.length - 1].id);
@@ -52,7 +54,11 @@ export function Web() {
   };
 
   const navigate = (url: string) => {
-    if (!url.startsWith('http')) { setAddr(HOME_URL); setExtUrl(null); return; }
+    if (!url.startsWith('http')) {
+      setAddr(HOME_URL);
+      setExtUrl(null);
+      return;
+    }
     setExtUrl(url);
     setAddr(url);
   };
@@ -65,31 +71,47 @@ export function Web() {
           <div
             key={tab.id}
             className={`tq-tab${tab.id === activeTabId ? ' on' : ''}`}
-            onClick={() => { setActiveTabId(tab.id); setAddr(tab.url); setExtUrl(null); }}
+            onClick={() => {
+              setActiveTabId(tab.id);
+              setAddr(tab.url);
+              setExtUrl(null);
+            }}
           >
             <span className="bt-favi gly">🌐</span>
             <span className="bt-title">{tab.title || t('br_nt_title')}</span>
             <span
               className="bt-close"
               title={t('br_closetab')}
-              onClick={(e) => { e.stopPropagation(); closeTab(tab.id); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                closeTab(tab.id);
+              }}
             >
               ✕
             </span>
           </div>
         ))}
-        <button className="tq-tabnew" title={t('br_newtab')} onClick={addTab}>+</button>
+        <button className="tq-tabnew" title={t('br_newtab')} onClick={addTab}>
+          +
+        </button>
       </div>
 
       {/* Nav bar */}
       <div className="tq-bnav">
-        <button className="bnav-btn" title={t('br_back')} aria-label={t('br_back')} disabled>‹</button>
-        <button className="bnav-btn" title={t('br_fwd')} aria-label={t('br_fwd')} disabled>›</button>
+        <button className="bnav-btn" title={t('br_back')} aria-label={t('br_back')} disabled>
+          ‹
+        </button>
+        <button className="bnav-btn" title={t('br_fwd')} aria-label={t('br_fwd')} disabled>
+          ›
+        </button>
         <button
           className="bnav-btn"
           title={t('br_reload')}
           aria-label={t('br_reload')}
-          onClick={() => { setAddr(HOME_URL); setExtUrl(null); }}
+          onClick={() => {
+            setAddr(HOME_URL);
+            setExtUrl(null);
+          }}
         >
           ⟳
         </button>
@@ -104,21 +126,43 @@ export function Web() {
             onKeyDown={(e) => e.key === 'Enter' && navigate(addr)}
           />
         </div>
-        <button className="bnav-go" onClick={() => navigate(addr)}>{t('br_go')}</button>
+        <button className="bnav-go" onClick={() => navigate(addr)}>
+          {t('br_go')}
+        </button>
       </div>
 
       {/* Bookmarks */}
       <div className="tq-bmbar">
         {EXT_LINKS.map((l) => (
           <button key={l.label} className="bm-item" onClick={() => navigate(l.url)}>
-            <span className="bm-favi letter" style={{ background: l.color, width: 15, height: 15, borderRadius: 3, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 8, fontWeight: 800, color: '#fff' }}>
+            <span
+              className="bm-favi letter"
+              style={{
+                background: l.color,
+                width: 15,
+                height: 15,
+                borderRadius: 3,
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 8,
+                fontWeight: 800,
+                color: '#fff',
+              }}
+            >
               {l.monogram}
             </span>
             {l.label}
           </button>
         ))}
         <div className="bm-sep" />
-        <button className="bm-item" onClick={() => { setAddr(HOME_URL); setExtUrl(null); }}>
+        <button
+          className="bm-item"
+          onClick={() => {
+            setAddr(HOME_URL);
+            setExtUrl(null);
+          }}
+        >
           <span className="bm-favi">🏠</span>
           {t('br_bm_home')}
         </button>
@@ -130,7 +174,9 @@ export function Web() {
           /* External link interstitial */
           <div className="tq-bpage tq-extpage">
             <div className="ext-card">
-              <div className="ext-ico" style={{ background: '#2f6ff2' }}>↗</div>
+              <div className="ext-ico" style={{ background: '#2f6ff2' }}>
+                ↗
+              </div>
               <div className="ext-name">{extUrl.replace(/^https?:\/\//, '').split('/')[0]}</div>
               <div className="ext-url">{extUrl}</div>
               <p className="ext-body">{t('br_ext_body')}</p>

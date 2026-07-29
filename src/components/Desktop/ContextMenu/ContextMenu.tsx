@@ -29,7 +29,9 @@ export function ContextMenu({ x, y, onClose, onLineup }: Props) {
     const handleDown = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) onClose();
     };
-    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
     document.addEventListener('mousedown', handleDown);
     document.addEventListener('keydown', handleKey);
     return () => {
@@ -58,7 +60,13 @@ export function ContextMenu({ x, y, onClose, onLineup }: Props) {
           </div>
         </div>
       </div>
-      <div className="os-mi" onClick={() => { onLineup(); onClose(); }}>
+      <div
+        className="os-mi"
+        onClick={() => {
+          onLineup();
+          onClose();
+        }}
+      >
         <span className="os-mi-ico" />
         <span className="os-mi-label">{t('ctx_lineup')}</span>
       </div>
@@ -85,7 +93,10 @@ export function ContextMenu({ x, y, onClose, onLineup }: Props) {
             <div
               key={key}
               className="os-mi"
-              onClick={() => { setTheme(key); onClose(); }}
+              onClick={() => {
+                setTheme(key);
+                onClose();
+              }}
             >
               <span className="os-mi-check">{theme === key ? '✓' : ''}</span>
               <span className="os-mi-ico">{ico}</span>

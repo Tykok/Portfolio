@@ -48,13 +48,15 @@ export function KonamiRain() {
         <span
           key={c.id}
           className="rain-coq"
-          style={{
-            left: `${c.left}%`,
-            fontSize: c.size,
-            animationDelay: `${c.delay}s`,
-            animationDuration: `${c.duration}s`,
-            '--rot': `${c.rot}deg`,
-          } as React.CSSProperties}
+          style={
+            {
+              left: `${c.left}%`,
+              fontSize: c.size,
+              animationDelay: `${c.delay}s`,
+              animationDuration: `${c.duration}s`,
+              '--rot': `${c.rot}deg`,
+            } as React.CSSProperties
+          }
         >
           {c.emoji}
         </span>

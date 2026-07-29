@@ -7,12 +7,20 @@ import type { Project } from 'data/projects';
 import { SlideRail } from './SlideRail';
 
 const mk = (id: string, title: string): Project => ({
-  id, emoji: '', monogram: id.toUpperCase(), accent: '#000',
+  id,
+  emoji: '',
+  monogram: id.toUpperCase(),
+  accent: '#000',
   gradient: 'linear-gradient(135deg,#111,#222)',
-  title: { fr: title, en: title }, year: '2024',
+  title: { fr: title, en: title },
+  year: '2024',
   status: { label: { fr: 'x', en: 'x' }, type: 'live' },
-  stack: [], tags: [], desc: { fr: '', en: '' }, bullets: { fr: [], en: [] },
-  repo: '#', demo: '#',
+  stack: [],
+  tags: [],
+  desc: { fr: '', en: '' },
+  bullets: { fr: [], en: [] },
+  repo: '#',
+  demo: '#',
 });
 
 const projects = [mk('a', 'Alpha'), mk('b', 'Beta'), mk('c', 'Gamma')];

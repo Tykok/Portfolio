@@ -11,9 +11,11 @@ type Positions = Record<string, { x: number; y: number }>;
 
 function buildDefaults(): Positions {
   const out: Positions = {};
-  appsMeta.filter((a) => !a.hidden).forEach((app, idx) => {
-    out[app.key] = { x: ICON_COL_X, y: ICON_START_Y + idx * ICON_ROW_H };
-  });
+  appsMeta
+    .filter((a) => !a.hidden)
+    .forEach((app, idx) => {
+      out[app.key] = { x: ICON_COL_X, y: ICON_START_Y + idx * ICON_ROW_H };
+    });
   return out;
 }
 
@@ -36,8 +38,7 @@ export function useIconPositions() {
     }
   }, [positions]);
 
-  const moveIcon = (key: string, x: number, y: number) =>
-    setPositions((prev) => ({ ...prev, [key]: { x, y } }));
+  const moveIcon = (key: string, x: number, y: number) => setPositions((prev) => ({ ...prev, [key]: { x, y } }));
 
   const resetPositions = () => {
     const d = buildDefaults();

@@ -66,14 +66,20 @@ export function Window({ win, isActive, children }: Props) {
         const dy = e.clientY - dragRef.current.startY;
         // Start drag only after threshold — avoids animation restart on simple clicks
         if (!isDraggingRef.current && Math.abs(dx) < DRAG_THRESHOLD && Math.abs(dy) < DRAG_THRESHOLD) return;
-        if (!isDraggingRef.current) { isDraggingRef.current = true; setIsDragging(true); }
+        if (!isDraggingRef.current) {
+          isDraggingRef.current = true;
+          setIsDragging(true);
+        }
         moveWindow(win.id, dragRef.current.winX + dx, dragRef.current.winY + dy);
       }
       if (resizeRef.current) {
         const dx = e.clientX - resizeRef.current.startX;
         const dy = e.clientY - resizeRef.current.startY;
         if (!isResizingRef.current && Math.abs(dx) < DRAG_THRESHOLD && Math.abs(dy) < DRAG_THRESHOLD) return;
-        if (!isResizingRef.current) { isResizingRef.current = true; setIsResizing(true); }
+        if (!isResizingRef.current) {
+          isResizingRef.current = true;
+          setIsResizing(true);
+        }
         const nw = Math.max(240, resizeRef.current.winW + dx);
         const nh = Math.max(150, resizeRef.current.winH + dy);
         resizeWindow(win.id, nw, nh);
@@ -119,7 +125,9 @@ export function Window({ win, isActive, children }: Props) {
     isMax ? 'maxd' : '',
     isDragging ? 'dragging' : '',
     isResizing ? 'resizing' : '',
-  ].filter(Boolean).join(' ');
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <div className={classes} style={style} onMouseDown={handleFocus}>
@@ -134,12 +142,8 @@ export function Window({ win, isActive, children }: Props) {
           onMax={() => maximizeWindow(win.id)}
           onClose={() => closeWindow(win.id)}
         />
-        <div className="os-winbody">
-          {children}
-        </div>
-        {!isMax && (
-          <div className="os-resize" onMouseDown={handleResizeMouseDown} />
-        )}
+        <div className="os-winbody">{children}</div>
+        {!isMax && <div className="os-resize" onMouseDown={handleResizeMouseDown} />}
       </div>
     </div>
   );

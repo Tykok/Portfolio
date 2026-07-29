@@ -24,3 +24,4 @@ yarn-error.log*
 
 # agent scratch (holds git worktrees — must never be committed)
 /.claude
+/.superpowers

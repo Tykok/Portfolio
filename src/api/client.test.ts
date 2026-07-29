@@ -19,9 +19,7 @@ describe('apiFetch', () => {
   });
 
   it('throws ApiError with status on non-2xx', async () => {
-    vi.spyOn(global, 'fetch').mockResolvedValue(
-      new Response('nope', { status: 500 }),
-    );
+    vi.spyOn(global, 'fetch').mockResolvedValue(new Response('nope', { status: 500 }));
 
     await expect(apiFetch('/projects')).rejects.toBeInstanceOf(ApiError);
     await expect(apiFetch('/projects')).rejects.toMatchObject({ status: 500 });
