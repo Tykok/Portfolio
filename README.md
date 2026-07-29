@@ -17,16 +17,54 @@ npm run dev      # http://localhost:3000
 
 ## Scripts
 
-| Commande             | Effet                                            |
-| -------------------- | ------------------------------------------------ |
-| `npm run dev`        | serveur de dev avec HMR                          |
-| `npm run build`      | typecheck puis build de production dans `build/` |
-| `npm run preview`    | sert le build de production localement           |
-| `npm run typecheck`  | `tsc --noEmit`                                   |
-| `npm test`           | suite Vitest, une passe                          |
-| `npm run test:watch` | Vitest en watch                                  |
-| `npm run lint`       | ESLint sur `src`                                 |
-| `npm run lint:fix`   | ESLint avec `--fix`                              |
+| Commande               | Effet                                            |
+| ---------------------- | ------------------------------------------------ |
+| `npm run dev`          | serveur de dev avec HMR                          |
+| `npm run build`        | typecheck puis build de production dans `build/` |
+| `npm run preview`      | sert le build de production localement           |
+| `npm run typecheck`    | `tsc --noEmit`                                   |
+| `npm test`             | suite Vitest, une passe                          |
+| `npm run test:watch`   | Vitest en watch                                  |
+| `npm run lint`         | ESLint sur tout le dépôt                         |
+| `npm run lint:fix`     | ESLint avec `--fix`                              |
+| `npm run format`       | Prettier en écriture                             |
+| `npm run format:check` | Prettier en vérification, comme la CI            |
+| `npm run audit`        | `npm audit --audit-level=high`                   |
+
+## Flux de branches
+
+`develop` est la branche par défaut et la branche d'intégration. `main` reçoit
+uniquement ce qui est prêt à être publié.
+
+```
+feat/… ─┐
+fix/…  ─┼──► develop ──► main
+chore/…─┘        ▲
+                 └── release/… et hotfix/… peuvent aussi viser main
+```
+
+- Toute branche de travail part de `develop` et y retourne par pull request.
+- Seules `develop`, `release/*` et `hotfix/*` peuvent viser `main`. C'est
+  vérifié par le workflow `branch-policy`, parce que GitHub sait restreindre la
+  cible d'une pull request mais pas sa source.
+- `main` et `develop` sont protégées : pas de push direct, pas de force-push,
+  pas de suppression, et la CI doit être verte avant tout merge.
+
+```bash
+git switch develop && git pull
+git switch -c feat/mon-sujet
+# …
+gh pr create --base develop
+```
+
+## Intégration continue
+
+`.github/workflows/ci.yml` tourne sur chaque pull request et sur les pushs vers
+`main` et `develop` : format, lint, typecheck, tests, build, audit. Chaque étape
+s'exécute même si une précédente échoue, pour qu'un seul run rapporte tout.
+
+La version de Node vient de `.nvmrc`, donc la CI et le poste de dev ne peuvent
+pas diverger.
 
 ## Variables d'environnement
 
