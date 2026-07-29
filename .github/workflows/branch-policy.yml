@@ -1,0 +1,39 @@
+name: Branch policy
+
+# GitHub cannot restrict which branch a pull request comes *from*, only where
+# it can go. Branch protection therefore cannot express "only develop reaches
+# main" — this job does.
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  source-branch:
+    name: Only develop, release/* or hotfix/* may target main
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    steps:
+      - name: Check the source branch
+        env:
+          HEAD_BRANCH: ${{ github.head_ref }}
+        run: |
+          case "$HEAD_BRANCH" in
+            develop|release/*|hotfix/*)
+              echo "✓ '$HEAD_BRANCH' may target main."
+              ;;
+            *)
+              echo "✗ '$HEAD_BRANCH' cannot target main."
+              echo
+              echo "Feature work goes to develop, and develop is what reaches main."
+              echo "Only release/* and hotfix/* skip the queue, for shipping and"
+              echo "for production fixes that cannot wait."
+              echo
+              echo "Retarget this pull request:"
+              echo "  gh pr edit ${{ github.event.number }} --base develop"
+              exit 1
+              ;;
+          esac

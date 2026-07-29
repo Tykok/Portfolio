@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, develop]
 
 # A new push to the same branch makes the previous run obsolete.
 concurrency:
