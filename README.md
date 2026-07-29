@@ -1,46 +1,87 @@
-# Getting Started with Create React App
+# TicoqOS — portfolio d'Elie « Tykok » Treport
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Portfolio construit comme un OS rétro : gestionnaire de fenêtres maison, barre des
+tâches, menu Démarrer, terminal, navigateur, et une poignée d'easter eggs.
 
-## Available Scripts
+React + TypeScript, build Vite. Interface bilingue FR/EN.
 
-In the project directory, you can run:
+## Démarrer
 
-### `npm start`
+Node est épinglé par `.nvmrc` (voir aussi `engines` dans `package.json`).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```bash
+nvm use          # facultatif, aligne la version de Node
+npm ci
+npm run dev      # http://localhost:3000
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Scripts
 
-### `npm test`
+| Commande | Effet |
+|---|---|
+| `npm run dev` | serveur de dev avec HMR |
+| `npm run build` | typecheck puis build de production dans `build/` |
+| `npm run preview` | sert le build de production localement |
+| `npm run typecheck` | `tsc --noEmit` |
+| `npm test` | suite Vitest, une passe |
+| `npm run test:watch` | Vitest en watch |
+| `npm run lint` | ESLint sur `src` |
+| `npm run lint:fix` | ESLint avec `--fix` |
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Variables d'environnement
 
-### `npm run build`
+Copier `.env.example` en `.env.local` pour surcharger. Préfixe `VITE_` obligatoire
+pour qu'une variable soit exposée au client.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| Variable | Défaut | Effet |
+|---|---|---|
+| `VITE_USE_MOCK` | `true` | Sert les projets depuis `src/api/mock/`. À `false`, appelle l'API. |
+| `VITE_API_URL` | vide | URL de base de l'API projets. Lue seulement si `VITE_USE_MOCK=false`. |
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Organisation
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+src/
+  api/          client HTTP, accès projets, mock
+  components/
+    apps/       fenêtres applicatives (About, Cv, Projects, Terminal, Web…)
+    OS/         couches système (Boot, Login, Bsod, Mascot, KonamiRain…)
+    Desktop/    bureau, icônes, menu contextuel
+    TaskBar/    barre des tâches, zone de notification, calendrier
+    Window/     chrome de fenêtre, barre de titre
+  context/      Lang, OS, Window, Projects
+  data/         identité, projets, réseaux, badges techno
+  i18n/         fr.ts, en.ts, types.ts — source unique des libellés
+  styles/       design.css, os.css
+```
 
-### `npm run eject`
+## Internationalisation
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Tous les libellés d'interface vivent dans `src/i18n/{fr,en}.ts`, typés par
+l'interface `Translations`. Ajouter une clé, c'est l'ajouter aux trois fichiers —
+sinon TypeScript refuse de compiler.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```tsx
+const { t, lang } = useLang();
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+t('cv_exp')                      // string
+t('t_projects_l', { n: 6 })      // interpolation de {n}
+t('cal_months')                  // string[] — le type suit la clé
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Le contenu (identité, projets, CV) utilise un autre motif, `{ fr, en }` par champ,
+parce qu'il s'agit de données et non de libellés :
 
-## Learn More
+```ts
+title: { fr: 'Titre', en: 'Title' }
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Tests
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Vitest et Testing Library, en jsdom. Les tests couvrent la complétude des locales
+(parité des clés fr/en, longueurs des listes), le rendu des apps et le contrat des
+données.
+
+```bash
+npm test
+```

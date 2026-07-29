@@ -21,9 +21,10 @@ export function Mascot() {
   const dirRef     = useRef<1 | -1>(1);    // 1 = right, -1 = left
   const walkedRef  = useRef(0);            // px walked since last tip
   const pausedRef  = useRef(false);        // true while a tip is visible
-  const tipIdxRef  = useRef(0);            // cycling index in TIPS array
+  const tipIdxRef  = useRef(0);            // cycling index in the tips list
   const rafRef     = useRef(0);
-  const resumeRef  = useRef<ReturnType<typeof setTimeout>>();
+  // React 19 requires an explicit initial value, even when it is undefined
+  const resumeRef  = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   // React state — only what needs to trigger a re-render
   const [facingLeft, setFacingLeft] = useState(false);

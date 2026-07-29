@@ -34,8 +34,13 @@ it('uses gradient hero (no cover) — no img rendered', () => {
 });
 
 it('renders cover image when present', () => {
-  renderSlide({ ...base, cover: '/shot.png' });
-  expect(screen.getByRole('img')).toHaveAttribute('src', '/shot.png');
+  const { container } = renderSlide({ ...base, cover: '/shot.png' });
+  /* Queried by class, not by role: the cover carries alt="" because the
+     adjacent title already names the project, and an empty alt makes the
+     image presentational — it has no img role to query. */
+  const cover = container.querySelector('.deck-hero-img');
+  expect(cover).toHaveAttribute('src', '/shot.png');
+  expect(cover).toHaveAttribute('alt', '');
 });
 
 it('hides role line when role absent, shows it when present', () => {
