@@ -22,12 +22,18 @@ export function useIconPositions() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) return { ...buildDefaults(), ...JSON.parse(raw) };
-    } catch {}
+    } catch {
+      /* Unreadable or malformed storage — fall through to the defaults. */
+    }
     return buildDefaults();
   });
 
   useEffect(() => {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(positions)); } catch {}
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(positions));
+    } catch {
+      /* Private mode or quota exceeded — icon layout just won't persist. */
+    }
   }, [positions]);
 
   const moveIcon = (key: string, x: number, y: number) =>
@@ -36,7 +42,11 @@ export function useIconPositions() {
   const resetPositions = () => {
     const d = buildDefaults();
     setPositions(d);
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); } catch {}
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(d));
+    } catch {
+      /* Same as above: persistence is best-effort, the reset still applies. */
+    }
   };
 
   return { positions, moveIcon, resetPositions };
