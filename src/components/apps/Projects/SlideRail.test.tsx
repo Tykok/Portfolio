@@ -56,3 +56,17 @@ it('fires onSelect with the index when a thumbnail is clicked', () => {
   fireEvent.click(screen.getByText('Gamma'));
   expect(onSelect).toHaveBeenCalledWith(2);
 });
+
+it('shows the monogram even when the project has a cover', () => {
+  // Deliberate: .deck-thumb-ico is 34×26 px, where no real image is legible.
+  // Covers belong to the hero only. See the 2026-07-30 spec.
+  const withCover: Project = { ...mk('d', 'Delta'), cover: '/projects/delta.webp' };
+  const { container } = render(
+    <LangProvider>
+      <SlideRail projects={[withCover]} activeIndex={0} onSelect={() => {}} />
+    </LangProvider>,
+  );
+  const ico = container.querySelector('.deck-thumb-ico');
+  expect(ico).toHaveTextContent('D');
+  expect(ico?.getAttribute('style') ?? '').not.toContain('delta.webp');
+});
