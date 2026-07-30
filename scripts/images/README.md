@@ -13,7 +13,8 @@ python3 -m pip install --user 'Pillow>=8.1'
 ```
 
 The code avoids anything newer than 8.1: no `ImageDraw.rounded_rectangle` (8.2+),
-no `Image.Resampling` (10+). `Image.LANCZOS` is used instead and works up to 11.
+no `width=` on `ImageDraw.polygon` (9.4+), no `Image.Resampling` (10+).
+`Image.LANCZOS` is used instead and works up to 11.
 
 ## Commands
 
@@ -36,8 +37,9 @@ python3 scripts/images/make_og.py       # public/og-image.png
   tuple — not read from any project data at build time. No component actually
   renders `accent`; the rail's monogram tile gets its colour from `gradient` in
   the project data. If a banner is meant to match the rail, copy the value from
-  `gradient` (as `pictarine-tooling` does) — nothing keeps the two in sync
-  automatically, so re-check by eye after either one changes.
+  `gradient` (as `plant974` does, whose accent is that gradient's second stop) —
+  nothing keeps the two in sync automatically, so re-check by eye after either
+  one changes.
 - The bottom band is darkened by `add_scrim` because the component's white title sits
   there.
 
