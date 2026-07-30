@@ -80,6 +80,10 @@ places, and only one of them was rendered. `getBadge` already falls back to grey
 first two characters for an unknown name, so a stack entry never needs a registered badge
 to render.
 
+Two consumers, not one: `PortfolioPage.tsx:127` also reads `p.stack.slice(0, 2)` for the
+browser page's project table. An earlier revision of this section named `ProjectSlide` as
+the only reader; it is not, and the implementation plan carries both files.
+
 Both fields would otherwise have to be filled for five new projects, with nothing to show
 for it.
 
