@@ -10,12 +10,7 @@ export const mockProjects: Project[] = [
     title: { fr: 'TicoqOS — Portfolio', en: 'TicoqOS — Portfolio' },
     year: '2025',
     status: { label: { fr: 'En cours', en: 'In progress' }, type: 'in-progress' },
-    stack: [
-      { label: 'React', color: 'blue' },
-      { label: 'TypeScript', color: 'blue' },
-      { label: 'Vite', color: 'purple' },
-    ],
-    tags: ['React', 'TypeScript', 'Vite'],
+    stack: ['React', 'TypeScript', 'Vite'],
     desc: {
       fr: 'Portfolio façon OS rétro : fenêtres, taskbar, terminal et apps. Le site que vous parcourez.',
       en: 'A retro-OS style portfolio: windows, taskbar, terminal and apps. The site you are browsing.',
@@ -37,12 +32,7 @@ export const mockProjects: Project[] = [
     title: { fr: 'Tooling interne Pictarine', en: 'Pictarine Internal Tooling' },
     year: '2023',
     status: { label: { fr: 'En production', en: 'Live' }, type: 'live' },
-    stack: [
-      { label: 'Next.js', color: 'gray' },
-      { label: 'TypeScript', color: 'blue' },
-      { label: 'PostgreSQL', color: 'blue' },
-    ],
-    tags: ['Next.js', 'TypeScript', 'PostgreSQL'],
+    stack: ['Next.js', 'TypeScript', 'PostgreSQL'],
     desc: {
       fr: 'Outil interne (Next.js / TypeScript) utilisé par toutes les équipes : produit, design, data et front.',
       en: 'Internal tool (Next.js / TypeScript) used across all teams: product, design, data and front.',
@@ -64,13 +54,7 @@ export const mockProjects: Project[] = [
     title: { fr: 'Intégration paiement & compte client', en: 'Payments & Customer Accounts' },
     year: '2024',
     status: { label: { fr: 'En production', en: 'Live' }, type: 'live' },
-    stack: [
-      { label: 'Kotlin', color: 'purple' },
-      { label: 'Spring Boot', color: 'green' },
-      { label: 'PostgreSQL', color: 'blue' },
-      { label: 'Stripe', color: 'purple' },
-    ],
-    tags: ['Kotlin', 'Spring Boot', 'PostgreSQL', 'Stripe'],
+    stack: ['Kotlin', 'Spring Boot', 'PostgreSQL', 'Stripe'],
     desc: {
       fr: 'APIs Kotlin / Spring Boot pour le paiement (Stripe), la gestion de compte client et les services marketing (Klaviyo).',
       en: 'Kotlin / Spring Boot APIs for payments (Stripe), customer account management and marketing services (Klaviyo).',
@@ -92,12 +76,7 @@ export const mockProjects: Project[] = [
     title: { fr: 'Plateforme de ventes aux enchères', en: 'Auction Platform' },
     year: '2022',
     status: { label: { fr: 'Archivé', en: 'Archived' }, type: 'archived' },
-    stack: [
-      { label: 'TypeScript', color: 'blue' },
-      { label: 'PostgreSQL', color: 'blue' },
-      { label: 'Stripe', color: 'purple' },
-    ],
-    tags: ['TypeScript', 'PostgreSQL', 'Stripe', 'JWT'],
+    stack: ['TypeScript', 'PostgreSQL', 'Stripe'],
     desc: {
       fr: "Plateforme d'enchères & outils internes chez MecaLIFE : APIs REST, sécurité JWT et tarification dynamique.",
       en: 'Auction platform & internal tools at MecaLIFE: REST APIs, JWT security and dynamic pricing.',
@@ -119,11 +98,7 @@ export const mockProjects: Project[] = [
     title: { fr: 'Analyseur de Thread Dump Java', en: 'Java Thread Dump Analyzer' },
     year: '2019',
     status: { label: { fr: 'Archivé', en: 'Archived' }, type: 'archived' },
-    stack: [
-      { label: 'Java', color: 'red' },
-      { label: 'Angular', color: 'red' },
-    ],
-    tags: ['Java', 'JEE', 'Angular'],
+    stack: ['Java', 'Angular'],
     desc: {
       fr: "Outil d'analyse de thread dumps Java chez Cegid : API de traitement et interface de tri des threads.",
       en: 'Java thread dump analysis tool at Cegid: processing API and a thread-sorting UI.',
@@ -145,11 +120,7 @@ export const mockProjects: Project[] = [
     title: { fr: "Localisateur d'établissements", en: 'School Locator' },
     year: '2020',
     status: { label: { fr: 'Archivé', en: 'Archived' }, type: 'archived' },
-    stack: [
-      { label: 'MySQL', color: 'blue' },
-      { label: 'JavaScript', color: 'yellow' },
-    ],
-    tags: ['MySQL', 'JavaScript', 'PHP'],
+    stack: ['MySQL', 'JavaScript'],
     desc: {
       fr: 'Application web (Réseau Canopé) de localisation des établissements scolaires sur carte interactive.',
       en: 'Web app (Réseau Canopé) locating schools on an interactive map.',

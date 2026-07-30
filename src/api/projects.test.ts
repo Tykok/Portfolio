@@ -32,4 +32,20 @@ describe('mockProjects', () => {
       expect(p.role?.en.trim()).toBeTruthy();
     });
   });
+
+  it('carries a plain string stack — no per-entry colour to keep in sync', () => {
+    mockProjects.forEach((p) => {
+      expect(p.stack.length).toBeGreaterThan(0);
+      p.stack.forEach((s) => {
+        expect(typeof s).toBe('string');
+        expect(s.trim()).not.toBe('');
+      });
+    });
+  });
+
+  it('carries no tags — no component renders them', () => {
+    mockProjects.forEach((p) => {
+      expect(p).not.toHaveProperty('tags');
+    });
+  });
 });
