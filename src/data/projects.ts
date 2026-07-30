@@ -22,5 +22,7 @@ export interface Project {
   context?: LocalizedString;
   /** One sentence on what building it taught. */
   takeaway?: LocalizedString;
+  /** Why this project has no link, in its own words. Falls back to `p_no_public_code`. */
+  linkNote?: LocalizedString;
   role?: LocalizedString;
 }

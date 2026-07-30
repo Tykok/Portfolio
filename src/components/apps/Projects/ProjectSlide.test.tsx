@@ -62,24 +62,38 @@ it('hides role line when role absent, shows it when present', () => {
   expect(screen.getByText('Lead')).toBeInTheDocument();
 });
 
-it('states that the code is private when repo and demo are both "#"', () => {
+it('falls back to the generic private-code note when repo and demo are both "#"', () => {
   renderSlide(base);
   expect(
     screen.getByText((content, element) => {
-      return element?.className === 'deck-nolink' && content.includes("Projet d'entreprise — code non public");
+      return element?.className === 'deck-nolink' && content.includes('Code non public');
     }),
   ).toBeInTheDocument();
-  expect(screen.queryByText('liens placeholder')).toBeNull();
+});
+
+it("prefers the project's own note over the generic fallback", () => {
+  renderSlide({ ...base, linkNote: { fr: 'Vous êtes dedans.', en: 'You are inside it.' } });
+  expect(
+    screen.getByText((content, element) => {
+      return element?.className === 'deck-nolink' && content.includes('Vous êtes dedans.');
+    }),
+  ).toBeInTheDocument();
+  expect(screen.queryByText(/Code non public/)).toBeNull();
 });
 
 it('shows the repo button instead when a repo is set', () => {
   renderSlide({ ...base, repo: 'https://example.invalid/repo' });
   expect(screen.getByRole('link', { name: /Voir le repo/ })).toHaveAttribute('href', 'https://example.invalid/repo');
-  expect(
-    screen.queryByText((content, element) => {
-      return element?.className === 'deck-nolink' && content.includes("Projet d'entreprise — code non public");
-    }),
-  ).toBeNull();
+  expect(screen.queryByText(/Code non public/)).toBeNull();
+});
+
+it('shows no note at all when a repo is set, even with a linkNote', () => {
+  const { container } = renderSlide({
+    ...base,
+    repo: 'https://example.invalid/repo',
+    linkNote: { fr: 'Vous êtes dedans.', en: 'You are inside it.' },
+  });
+  expect(container.querySelector('.deck-nolink')).toBeNull();
 });
 
 it('renders the context paragraph when present', () => {
