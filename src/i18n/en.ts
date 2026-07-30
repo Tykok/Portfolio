@@ -151,7 +151,7 @@ const en: Translations = {
     ['Shell', 'ticoq-sh'],
     ['Resolution', 'nostalgia × pride'],
     ['CPU', 'Backend Core i∞'],
-    ['Memory', '6 projects / 1 developer'],
+    ['Memory', '8 projects / 1 developer'],
   ],
   t_coqsay_default: "Cock-a-doodle-doo! Type 'cowsay your message'.",
   t_theme_list: 'Themes: bliss · field · dusk · matrix · rose · next',
