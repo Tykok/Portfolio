@@ -25,7 +25,7 @@ export const identity: Identity = {
   initials: 'ET',
   role: { fr: 'Développeur Backend Kotlin', en: 'Kotlin Backend Developer' },
   location: { fr: 'Escalquens, Occitanie · Toulouse', en: 'Escalquens, Occitania · Toulouse' },
-  status: { fr: 'Ouvert aux opportunités', en: 'Open to opportunities' },
+  status: { fr: "À l'écoute, sans chercher", en: 'Not looking, but listening' },
   email: 'treportelie12@gmail.com',
   github: 'github.com/Tykok',
   githubUrl: 'https://github.com/Tykok',
