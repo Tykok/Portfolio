@@ -1,6 +1,6 @@
 # Image generators
 
-One-off tools, run by hand. **Never wired into CI or the deploy path**: six files
+One-off tools, run by hand. **Never wired into CI or the deploy path**: eight files
 that change almost never do not justify Python in the build.
 
 ## Prerequisites
@@ -32,8 +32,12 @@ python3 scripts/images/make_og.py       # public/og-image.png
 - **No text inside a banner.** The site is bilingual: baked-in words would be wrong
   in the other language, and no `grep`, type or `i18n` parity test can catch them.
   `ProjectSlide` overlays the title, year and status itself.
-- Each banner takes its colour from the project's `accent`, so the hero and the rail
-  monogram agree.
+- Each banner's colour is a hex copied by hand into `make_covers.py`'s `BANNERS`
+  tuple — not read from any project data at build time. No component actually
+  renders `accent`; the rail's monogram tile gets its colour from `gradient` in
+  the project data. If a banner is meant to match the rail, copy the value from
+  `gradient` (as `pictarine-tooling` does) — nothing keeps the two in sync
+  automatically, so re-check by eye after either one changes.
 - The bottom band is darkened by `add_scrim` because the component's white title sits
   there.
 
