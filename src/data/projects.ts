@@ -23,5 +23,7 @@ export interface Project {
   repo: string;
   demo: string;
   cover?: string;
+  /** The problem the project existed to solve. */
+  context?: LocalizedString;
   role?: LocalizedString;
 }
