@@ -90,7 +90,7 @@ export function ProjectSlide({ project }: { project: Project }) {
               ▶ {t('p_demo')}
             </a>
           )}
-          {noLinks && <span className="deck-nolink">🔒 {t('p_no_public_code')}</span>}
+          {noLinks && <span className="deck-nolink">🔒 {project.linkNote ? project.linkNote[lang] : t('p_no_public_code')}</span>}
         </div>
       </section>
     </article>
