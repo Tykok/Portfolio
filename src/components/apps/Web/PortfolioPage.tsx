@@ -124,9 +124,9 @@ export function PortfolioPage({ onNavigate }: Props) {
                 <span className="np-db-ico">{p.emoji}</span>
                 <span className="np-db-name">{p.title[lang]}</span>
                 <span className="np-db-tags np-hide-sm">
-                  {p.stack.slice(0, 2).map((s) => (
-                    <span key={s.label} className="np-tag">
-                      {s.label}
+                  {p.stack.slice(0, 2).map((tech) => (
+                    <span key={tech} className="np-tag">
+                      {tech}
                     </span>
                   ))}
                 </span>

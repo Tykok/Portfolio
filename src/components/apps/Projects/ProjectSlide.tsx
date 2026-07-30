@@ -53,10 +53,10 @@ export function ProjectSlide({ project }: { project: Project }) {
       {/* Stack & links */}
       <section className="deck-foot">
         <div className="deck-badges">
-          {project.stack.map((s) => {
-            const badge = getBadge(s.label);
+          {project.stack.map((tech) => {
+            const badge = getBadge(tech);
             return (
-              <div key={s.label} className="pj-chip">
+              <div key={tech} className="pj-chip">
                 <span
                   className="pj-bdg"
                   style={{
@@ -74,7 +74,7 @@ export function ProjectSlide({ project }: { project: Project }) {
                 >
                   {badge.monogram}
                 </span>
-                {s.label}
+                {tech}
               </div>
             );
           })}

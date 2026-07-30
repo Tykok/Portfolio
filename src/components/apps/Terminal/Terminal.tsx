@@ -115,7 +115,7 @@ export function Terminal() {
             { type: 'output', text: t('t_projects_l', { n: projects.length }) },
             ...projects.map((p) => ({
               type: 'output' as const,
-              text: `  ${p.emoji}  ${p.title[lang].padEnd(30)} [${p.stack.map((s) => s.label).join(', ')}]`,
+              text: `  ${p.emoji}  ${p.title[lang].padEnd(30)} [${p.stack.join(', ')}]`,
             })),
             { type: 'dim', text: t('t_open_hint') },
           );
