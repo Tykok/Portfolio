@@ -24,11 +24,8 @@ export function SlideRail({ projects, activeIndex, onSelect }: SlideRailProps) {
           aria-label={p.title[lang]}
         >
           <span className="deck-thumb-n">{i + 1}</span>
-          <span
-            className="deck-thumb-ico"
-            style={p.cover ? { backgroundImage: `url(${p.cover})`, backgroundSize: 'cover' } : { background: p.gradient }}
-          >
-            {!p.cover && p.monogram}
+          <span className="deck-thumb-ico" style={{ background: p.gradient }}>
+            {p.monogram}
           </span>
           <span className="deck-thumb-t">{p.title[lang]}</span>
         </button>
