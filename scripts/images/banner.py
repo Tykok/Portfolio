@@ -77,14 +77,22 @@ def save_png(img, path):
     exactly what PNG compresses best — a representative one is under 4 kB, an
     order of magnitude below the budget. The installed Pillow also has no WebP
     support, so WebP would have cost a dependency to produce a heavier file.
+
+    Written to a temporary path first and only `os.replace`d onto the target
+    once both checks pass. That keeps a rejected or interrupted write from
+    ever being visible at `path`: a size that misses budget never reaches the
+    target at all, and a crash mid-write leaves only the `.tmp` file behind.
     """
     if img.size != (WIDTH, HEIGHT):
         raise SystemExit(f'{path}: expected {WIDTH}x{HEIGHT}, got {img.width}x{img.height}')
     os.makedirs(os.path.dirname(path), exist_ok=True)
-    img.save(path, 'PNG', optimize=True)
-    size = os.path.getsize(path)
+    tmp_path = f'{path}.tmp'
+    img.save(tmp_path, 'PNG', optimize=True)
+    size = os.path.getsize(tmp_path)
     if size > MAX_BYTES:
+        os.remove(tmp_path)
         raise SystemExit(f'{path}: {size:,} bytes, over the {MAX_BYTES:,} budget')
+    os.replace(tmp_path, path)
     print(f'  {path}  {img.width}x{img.height}  {size:,} bytes')
 
 
