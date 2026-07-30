@@ -82,3 +82,17 @@ it('shows the repo button instead when a repo is set', () => {
     }),
   ).toBeNull();
 });
+
+it('renders the context paragraph when present', () => {
+  const { container } = renderSlide({
+    ...base,
+    context: { fr: 'Le problème à résoudre.', en: 'The problem to solve.' },
+  });
+  expect(screen.getByText('Le problème à résoudre.')).toBeInTheDocument();
+  expect(container.querySelector('.deck-context')).toBeTruthy();
+});
+
+it('omits the context paragraph when absent', () => {
+  const { container } = renderSlide(base);
+  expect(container.querySelector('.deck-context')).toBeNull();
+});

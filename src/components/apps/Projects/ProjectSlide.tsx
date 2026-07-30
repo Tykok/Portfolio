@@ -24,6 +24,7 @@ export function ProjectSlide({ project }: { project: Project }) {
       {/* Pitch */}
       <section className="deck-pitch">
         <p className="deck-desc">{project.desc[lang]}</p>
+        {project.context && <p className="deck-context">{project.context[lang]}</p>}
         {project.role && (
           <p className="deck-role">
             <span className="deck-role-l">{t('p_role')}</span>
