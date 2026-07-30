@@ -43,6 +43,13 @@ export function ProjectSlide({ project }: { project: Project }) {
         ))}
       </ul>
 
+      {project.takeaway && (
+        <section className="deck-takeaway">
+          <span className="deck-takeaway-l">{t('p_takeaway')}</span>
+          <p>{project.takeaway[lang]}</p>
+        </section>
+      )}
+
       {/* Stack & links */}
       <section className="deck-foot">
         <div className="deck-badges">
