@@ -42,9 +42,14 @@ def vertical_gradient(size, top, bottom):
 
 
 def new_banner(accent):
-    """A banner-sized canvas washed from a light tint of the accent to the accent."""
+    """A banner-sized canvas washed from a light tint of the accent to the accent.
+
+    The bottom stop is the accent itself, not a darkened version of it: add_scrim
+    is what darkens the bottom band for the overlaid title, and stacking a second
+    darkening here on top of that muddied the colour instead of deepening it.
+    """
     light = mix(accent, (255, 255, 255), 0.62)
-    deep = mix(accent, (0, 0, 0), 0.25)
+    deep = accent
     return vertical_gradient((WIDTH, HEIGHT), light, deep)
 
 

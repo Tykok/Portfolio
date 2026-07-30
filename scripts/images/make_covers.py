@@ -163,7 +163,7 @@ BANNERS = (
     ('pokeapi-kotlin', '#e8590c', pokeapi_kotlin),
     ('cedict', '#0e7490', cedict),
     ('payments', '#635bff', payments),
-    ('pictarine-tooling', '#2a2a2a', pictarine_tooling),
+    ('pictarine-tooling', '#485563', pictarine_tooling),
     ('auction', '#147a52', auction),
     ('threaddump', '#c3002f', threaddump),
     ('schools', '#b8860b', schools),
