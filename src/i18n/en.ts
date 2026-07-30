@@ -70,7 +70,7 @@ const en: Translations = {
   p_count_l: 'Projects',
   p_repo: 'View repo',
   p_demo: 'Demo',
-  p_no_public_code: 'Company project — code is not public',
+  p_no_public_code: 'Code is not public',
   p_takeaway: 'What I took from it',
   p_role: 'Role',
   p_prev: 'Previous project',
