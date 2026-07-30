@@ -151,7 +151,7 @@ const fr: Translations = {
     ['Shell', 'ticoq-sh'],
     ['Résolution', 'nostalgie × fierté'],
     ['CPU', 'Backend Core i∞'],
-    ['Mémoire', '6 projets / 1 développeur'],
+    ['Mémoire', '8 projets / 1 développeur'],
   ],
   t_coqsay_default: "Cocorico ! Tape 'cowsay ton message'.",
   t_theme_list: 'Thèmes : bliss · field · dusk · matrix · rose · next',
