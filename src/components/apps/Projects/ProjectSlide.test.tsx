@@ -96,3 +96,15 @@ it('omits the context paragraph when absent', () => {
   const { container } = renderSlide(base);
   expect(container.querySelector('.deck-context')).toBeNull();
 });
+
+it('renders the takeaway with its label when present', () => {
+  renderSlide({ ...base, takeaway: { fr: 'La leçon retenue.', en: 'The lesson learned.' } });
+  expect(screen.getByText("Ce que j'en retiens")).toBeInTheDocument();
+  expect(screen.getByText('La leçon retenue.')).toBeInTheDocument();
+});
+
+it('omits the takeaway block when absent', () => {
+  const { container } = renderSlide(base);
+  expect(container.querySelector('.deck-takeaway')).toBeNull();
+  expect(screen.queryByText("Ce que j'en retiens")).toBeNull();
+});
