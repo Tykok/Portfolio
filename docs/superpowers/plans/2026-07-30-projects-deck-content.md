@@ -691,7 +691,8 @@ def main():
         save_webp(motif(hex_to_rgb(accent)), str(OUT / f'{slug}.webp'))
 
 
-main()
+if __name__ == '__main__':
+    main()
 ```
 
 - [ ] **Step 4: Recover the sharing-card generator**
@@ -783,7 +784,8 @@ def main():
     print(f'  {OUT}  {img.width}x{img.height}  {OUT.stat().st_size:,} bytes')
 
 
-main()
+if __name__ == '__main__':
+    main()
 ```
 
 - [ ] **Step 5: Document the tooling**
