@@ -71,7 +71,7 @@ it('falls back to the generic private-code note when repo and demo are both "#"'
   ).toBeInTheDocument();
 });
 
-it("prefers the project's own note over the generic fallback", () => {
+it('prefers the project’s own note over the generic fallback', () => {
   renderSlide({ ...base, linkNote: { fr: 'Vous êtes dedans.', en: 'You are inside it.' } });
   expect(
     screen.getByText((content, element) => {
