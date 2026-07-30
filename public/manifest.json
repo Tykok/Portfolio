@@ -1,6 +1,8 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "TicoqOS",
+  "name": "Elie Treport — Développeur Backend Kotlin",
+  "description": "Portfolio d'Elie « Tykok » Treport, développeur backend Kotlin / Spring Boot, présenté comme un système d'exploitation rétro.",
+  "lang": "fr",
   "icons": [
     {
       "src": "favicon.ico",
@@ -16,10 +18,18 @@
       "src": "logo512.png",
       "type": "image/png",
       "sizes": "512x512"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "orientation": "any",
+  "theme_color": "#1a52d6",
+  "background_color": "#000000"
 }
