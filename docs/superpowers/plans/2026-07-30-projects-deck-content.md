@@ -16,8 +16,9 @@
 - **No invented metrics.** No latency, throughput, percentage or headcount figure that cannot be sourced from the LinkedIn profile.
 - **The `context` and `takeaway` strings are drafts written in Elie's voice, and he has to read them before they ship.** They describe problems and state lessons in the first person, which goes further than the LinkedIn profile documents. The profile supports what was built; the framing and the conclusions are an interpretation of it. Wrong-sounding sentences are a one-line fix, but only he can tell.
 - **New `Project` fields are optional.** An API that omits them must still render.
-- **Banners:** exactly 1200×340, WebP, under 80 000 bytes, at `public/projects/<id>.webp`, referenced as `/projects/<id>.webp`.
-- **Pillow floor is 8.1.** Do not use `ImageDraw.rounded_rectangle` (8.2+) or `Image.Resampling` (10+). `Image.LANCZOS` is fine.
+- **Banners:** exactly 1200×340, **PNG**, under 80 000 bytes, at `public/projects/<id>.png`, referenced as `/projects/<id>.png`. PNG, not WebP: measured at 3 691 bytes for a representative flat banner, and the installed Pillow 8.1.0 has no WebP support at all (`features.check('webp')` is false).
+- **Pillow floor is 8.1.** Do not use `ImageDraw.rounded_rectangle` (8.2+) or `Image.Resampling` (10+). `Image.LANCZOS` is fine. Do not require WebP.
+- **The deck has EIGHT projects.** `pokeapi-kotlin` and `cedict` join the original six; both carry a real repository and demo URL.
 - **Image generation never runs in CI.** No Python in the build or deploy path.
 - **Adding an i18n key means adding it to `src/i18n/types.ts`, `fr.ts` and `en.ts`.** Omitting one fails `tsc`.
 - **Prettier:** `semi: true`, `singleQuote: true`, `trailingComma: 'all'`, `printWidth: 140`, `arrowParens: 'always'`. `*.css` is in `.prettierignore`.
@@ -30,11 +31,11 @@
 | File | Responsibility |
 | --- | --- |
 | `scripts/images/palette.py` | The colours, once, mirroring `src/styles/design.css`. Plus `hex_to_rgb`, `mix`, `shade`. |
-| `scripts/images/banner.py` | Canvas primitives shared by every generator: gradients, the bottom scrim, and `save_webp` which enforces the size contract. |
-| `scripts/images/make_covers.py` | The six motifs and the project→motif registry. |
+| `scripts/images/banner.py` | Canvas primitives shared by every generator: gradients, the bottom scrim, and `save_png` which enforces the size contract. |
+| `scripts/images/make_covers.py` | The eight motifs and the project→motif registry. |
 | `scripts/images/make_og.py` | The sharing card, recovered from a scratch directory. |
 | `scripts/images/README.md` | Prerequisites, the command, and which images are placeholders. |
-| `public/projects/*.webp` | Six generated banners. |
+| `public/projects/*.png` | Eight generated banners. |
 
 **Modify**
 
@@ -45,7 +46,7 @@
 | `src/components/apps/Projects/ProjectSlide.tsx` | Render `context` and `takeaway`; new link note. |
 | `src/components/apps/Projects/SlideRail.tsx` | Remove the `cover` branch. |
 | `src/styles/os.css` | Add `.deck-takeaway`, `.deck-takeaway-l`, `.deck-nolink`. |
-| `src/api/mock/projects.mock.ts` | Fill `cover`, `context`, `takeaway`; fix the `ticoqos` links. |
+| `src/api/mock/projects.mock.ts` | Fill `cover`, `context`, `takeaway`; fix the `ticoqos` links; add the `pokeapi-kotlin` and `cedict` entries. |
 | `src/api/projects.test.ts` | Extend the contract block; assert the assets exist and fit the budget. |
 | `src/components/apps/Projects/ProjectSlide.test.tsx` | Update the link assertion; add four cases. |
 | `src/components/apps/Projects/SlideRail.test.tsx` | Lock in "monogram even with a cover". |
@@ -392,9 +393,9 @@ git commit -m "refactor(projects): keep monograms in the rail, covers are hero-o
 
 ---
 
-### Task 5: The banner generator and the six images
+### Task 5: The banner generator and the eight images
 
-No unit test drives this one: its output is judged by eye. The contract that *can* be enforced — dimensions and weight — is enforced inside `save_webp`, so the generator refuses to write a file that breaks it. Task 6 then asserts from the repository that the files exist.
+No unit test drives this one: its output is judged by eye. The contract that *can* be enforced — dimensions and weight — is enforced inside `save_png`, so the generator refuses to write a file that breaks it. Task 6 then asserts from the repository that the files exist.
 
 **Files:**
 
@@ -403,13 +404,13 @@ No unit test drives this one: its output is judged by eye. The contract that *ca
 - Create: `scripts/images/make_covers.py`
 - Create: `scripts/images/make_og.py`
 - Create: `scripts/images/README.md`
-- Create: `public/projects/{ticoqos,payments,pictarine-tooling,auction,threaddump,schools}.webp`
+- Create: `public/projects/{ticoqos,pokeapi-kotlin,cedict,payments,pictarine-tooling,auction,threaddump,schools}.png`
 
 **Interfaces:**
 
 - Consumes: the `accent` of each project, copied into `make_covers.py`:
-  `ticoqos #0a66c2`, `pictarine-tooling #2a2a2a`, `payments #635bff`, `auction #147a52`, `threaddump #c3002f`, `schools #b8860b`.
-- Produces: six files at `public/projects/<id>.webp`, referenced by Task 6.
+  `ticoqos #0a66c2`, `pokeapi-kotlin #e8590c`, `cedict #0e7490`, `pictarine-tooling #2a2a2a`, `payments #635bff`, `auction #147a52`, `threaddump #c3002f`, `schools #b8860b`.
+- Produces: eight files at `public/projects/<id>.png`, referenced by Task 6. The two new projects' accents: `pokeapi-kotlin #e8590c`, `cedict #0e7490`.
 
 - [ ] **Step 1: Write the palette**
 
@@ -526,18 +527,22 @@ def add_scrim(img, height=150, strength=0.68):
     return img
 
 
-def save_webp(img, path):
-    """Writes the file and refuses to break the contract from the spec."""
+def save_png(img, path):
+    """Writes the file and refuses to break the contract from the spec.
+
+    PNG rather than WebP: these banners are flat, few-colour graphics, which is
+    exactly what PNG compresses best — a representative one is under 4 kB, an
+    order of magnitude below the budget. The installed Pillow also has no WebP
+    support, so WebP would have cost a dependency to produce a heavier file.
+    """
     if img.size != (WIDTH, HEIGHT):
         raise SystemExit(f'{path}: expected {WIDTH}x{HEIGHT}, got {img.width}x{img.height}')
     os.makedirs(os.path.dirname(path), exist_ok=True)
-    for quality in (86, 78, 70, 62, 54):
-        img.save(path, 'WEBP', quality=quality, method=6)
-        size = os.path.getsize(path)
-        if size <= MAX_BYTES:
-            print(f'  {path}  {img.width}x{img.height}  {size:,} bytes  q={quality}')
-            return
-    raise SystemExit(f'{path}: {os.path.getsize(path):,} bytes, over the {MAX_BYTES:,} budget')
+    img.save(path, 'PNG', optimize=True)
+    size = os.path.getsize(path)
+    if size > MAX_BYTES:
+        raise SystemExit(f'{path}: {size:,} bytes, over the {MAX_BYTES:,} budget')
+    print(f'  {path}  {img.width}x{img.height}  {size:,} bytes')
 
 
 def draw(img):
@@ -563,7 +568,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 
-from banner import HEIGHT, WIDTH, add_scrim, draw, load_font, new_banner, save_webp  # noqa: E402
+from banner import HEIGHT, WIDTH, add_scrim, draw, load_font, new_banner, save_png  # noqa: E402
 from palette import hex_to_rgb, mix, shade  # noqa: E402
 
 OUT = Path('public/projects')
@@ -652,6 +657,42 @@ def schools(accent):
     return add_scrim(img)
 
 
+def pokeapi_kotlin(accent):
+    """Concentric wrapper plates with one typed call passing straight through."""
+    img = new_banner(accent)
+    d = draw(img)
+    cx, cy = 420, 148
+    for i, r in enumerate((152, 112, 72)):
+        d.ellipse([cx - r, cy - r * 0.62, cx + r, cy + r * 0.62], outline=(255, 255, 255, 88 + i * 46), width=5)
+    d.line([88, cy, WIDTH - 156, cy], fill=(255, 255, 255, 225), width=8)
+    d.polygon([(WIDTH - 156, cy - 22), (WIDTH - 100, cy), (WIDTH - 156, cy + 22)], fill=(255, 255, 255, 235))
+    for i in range(4):
+        x = 748 + i * 86
+        d.rectangle([x, cy - 58, x + 58, cy - 28], fill=(255, 255, 255, 108))
+    return add_scrim(img)
+
+
+def cedict(accent):
+    """Columns of dictionary entries under a lens.
+
+    No Chinese glyphs, deliberately: the fallback fonts on a bare Linux box carry
+    no CJK, so PIL would draw .notdef boxes — the same failure that made the
+    sharing card unusable before it moved to Tahoma.
+    """
+    img = new_banner(accent)
+    d = draw(img)
+    for col in range(6):
+        x = 108 + col * 168
+        for row in range(7):
+            y = 40 + row * 34
+            w = 94 if (col + row) % 3 else 130
+            d.rectangle([x, y, x + w, y + 13], fill=(255, 255, 255, 60 + (row % 3) * 34))
+    lx, ly, lr = 884, 148, 90
+    d.ellipse([lx - lr, ly - lr, lx + lr, ly + lr], outline=(255, 255, 255, 240), width=9)
+    d.line([lx + 64, ly + 64, lx + 134, ly + 134], fill=(255, 255, 255, 240), width=14)
+    return add_scrim(img)
+
+
 def placeholder(accent):
     """Impossible to mistake for finished work. The one banner allowed words."""
     img = new_banner(shade(accent, 0.7))
@@ -662,7 +703,7 @@ def placeholder(accent):
     d.text((WIDTH // 2, 152), 'À REMPLACER', font=load_font(46), fill=(255, 255, 255), anchor='mm')
     d.text(
         (WIDTH // 2, 204),
-        'capture reelle attendue - public/projects/ticoqos.webp',
+        'capture reelle attendue - public/projects/ticoqos.png',
         font=load_font(21),
         fill=(255, 235, 160),
         anchor='mm',
@@ -675,6 +716,8 @@ def placeholder(accent):
 
 BANNERS = (
     ('ticoqos', '#0a66c2', placeholder),
+    ('pokeapi-kotlin', '#e8590c', pokeapi_kotlin),
+    ('cedict', '#0e7490', cedict),
     ('payments', '#635bff', payments),
     ('pictarine-tooling', '#2a2a2a', pictarine_tooling),
     ('auction', '#147a52', auction),
@@ -688,7 +731,7 @@ def main():
         raise SystemExit('Run this from the repository root.')
     print(f'Writing {len(BANNERS)} banners to {OUT}/')
     for slug, accent, motif in BANNERS:
-        save_webp(motif(hex_to_rgb(accent)), str(OUT / f'{slug}.webp'))
+        save_png(motif(hex_to_rgb(accent)), str(OUT / f'{slug}.png'))
 
 
 if __name__ == '__main__':
@@ -815,12 +858,12 @@ no `Image.Resampling` (10+). `Image.LANCZOS` is used instead and works up to 11.
 From the repository root:
 
 ```bash
-python3 scripts/images/make_covers.py   # public/projects/*.webp
+python3 scripts/images/make_covers.py   # public/projects/*.png
 python3 scripts/images/make_og.py       # public/og-image.png
 ```
 
-`save_webp` refuses to write a banner that is not exactly 1200×340 or that exceeds
-80 000 bytes, dropping quality in steps before giving up.
+`save_png` refuses to write a banner that is not exactly 1200×340 or that exceeds
+80 000 bytes.
 
 ## Rules
 
@@ -836,7 +879,7 @@ python3 scripts/images/make_og.py       # public/og-image.png
 
 | File | Wanted |
 | --- | --- |
-| `public/projects/ticoqos.webp` | a real screenshot of the deployed portfolio |
+| `public/projects/ticoqos.png` | a real screenshot of the deployed portfolio |
 
 Placeholders carry `À REMPLACER` across the middle. That is the one exception to the
 no-text rule: it addresses whoever owns the repository, not a visitor, and it is
@@ -852,16 +895,16 @@ python3 scripts/images/make_covers.py
 python3 scripts/images/make_og.py
 ```
 
-Expected: seven lines of output, each reporting `1200x340` (or `1200x630` for the
+Expected: nine lines of output, each reporting `1200x340` (or `1200x630` for the
 card) and a byte count under the budget. A `SystemExit` about dimensions or budget
 means a motif changed the canvas size — fix the motif, not the check.
 
 - [ ] **Step 7: Look at them**
 
-Open all six and judge them by eye. Confirm specifically:
+Open all eight and judge them by eye. Confirm specifically:
 
 - the bottom-left is dark enough that white text over it would read
-- no banner contains a word, other than `ticoqos.webp`
+- no banner contains a word, other than `ticoqos.png`
 - the placeholder is impossible to mistake for finished work
 
 Regenerate after any adjustment. No automated test replaces this step.
@@ -870,7 +913,7 @@ Regenerate after any adjustment. No automated test replaces this step.
 
 ```bash
 git add scripts/images public/projects public/og-image.png
-git commit -m "feat(images): commit the banner generator and the six project banners"
+git commit -m "feat(images): commit the banner generator and the eight project banners"
 ```
 
 ---
@@ -908,9 +951,9 @@ it('gives every project a context and a takeaway, in both languages', () => {
   });
 });
 
-it('points every cover at a WebP under /projects/', () => {
+it('points every cover at a PNG under /projects/', () => {
   mockProjects.forEach((p) => {
-    expect(p.cover).toMatch(/^\/projects\/[a-z0-9-]+\.webp$/);
+    expect(p.cover).toMatch(/^\/projects\/[a-z0-9-]+\.png$/);
   });
 });
 
@@ -947,7 +990,7 @@ In `src/api/mock/projects.mock.ts`, add `cover`, `context` and `takeaway` to eac
 `ticoqos`:
 
 ```ts
-    cover: '/projects/ticoqos.webp',
+    cover: '/projects/ticoqos.png',
     context: {
       fr: "Un CV en PDF ne montre pas comment quelqu'un construit. Ce portfolio est l'inverse d'une plaquette : un système d'exploitation jouable, où chaque fenêtre est une app réelle avec son état, son clavier et ses cas limites.",
       en: 'A PDF résumé shows nothing about how someone builds. This portfolio is the opposite of a brochure: a playable operating system where every window is a real app with its own state, keyboard handling and edge cases.',
@@ -961,7 +1004,7 @@ In `src/api/mock/projects.mock.ts`, add `cover`, `context` and `takeaway` to eac
 `pictarine-tooling`:
 
 ```ts
-    cover: '/projects/pictarine-tooling.webp',
+    cover: '/projects/pictarine-tooling.png',
     context: {
       fr: 'Les équipes produit, design, data et front avaient chacune leurs manipulations manuelles pour interroger et corriger les données. Le même besoin, résolu six fois, jamais documenté.',
       en: 'Product, design, data and front teams each had their own manual routines to inspect and fix data. The same need, solved six times over, never written down.',
@@ -975,7 +1018,7 @@ In `src/api/mock/projects.mock.ts`, add `cover`, `context` and `takeaway` to eac
 `payments`:
 
 ```ts
-    cover: '/projects/payments.webp',
+    cover: '/projects/payments.png',
     context: {
       fr: "Le paiement et la gestion de compte touchent à la fois l'application, la facturation et les outils marketing. Chaque évolution devait traverser ces trois domaines sans casser les commandes en cours.",
       en: 'Payments and account management touch the app, the billing side and the marketing tools at once. Every change had to cross all three without breaking orders already in flight.',
@@ -989,7 +1032,7 @@ In `src/api/mock/projects.mock.ts`, add `cover`, `context` and `takeaway` to eac
 `auction`:
 
 ```ts
-    cover: '/projects/auction.webp',
+    cover: '/projects/auction.png',
     context: {
       fr: 'Une vente aux enchères a une contrainte que les autres applications web ignorent : à la seconde de clôture, un seul ordre est valide, et il doit le rester même si deux personnes cliquent en même temps.',
       en: 'An auction has a constraint most web applications never face: at the closing second exactly one bid is valid, and it has to stay valid even when two people click at once.',
@@ -1003,7 +1046,7 @@ In `src/api/mock/projects.mock.ts`, add `cover`, `context` and `takeaway` to eac
 `threaddump`:
 
 ```ts
-    cover: '/projects/threaddump.webp',
+    cover: '/projects/threaddump.png',
     context: {
       fr: "Diagnostiquer un blocage en production revenait à lire des milliers de lignes de thread dump à l'œil, dans l'urgence, sans savoir quels threads comptaient.",
       en: 'Diagnosing a production stall meant reading thousands of lines of thread dump by eye, under pressure, with no idea which threads mattered.',
@@ -1017,7 +1060,7 @@ In `src/api/mock/projects.mock.ts`, add `cover`, `context` and `takeaway` to eac
 `schools`:
 
 ```ts
-    cover: '/projects/schools.webp',
+    cover: '/projects/schools.png',
     context: {
       fr: "Les établissements d'un territoire étaient répartis dans des fichiers sans référentiel commun. La demande était une carte ; le travail réel était de définir ce qu'était un établissement.",
       en: 'The schools of a territory were spread across files with no shared reference. The request was a map; the real work was defining what a school was.',
@@ -1026,6 +1069,83 @@ In `src/api/mock/projects.mock.ts`, add `cover`, `context` and `takeaway` to eac
       fr: "Ma première mission où la modélisation a pris plus de temps que le code. Le recueil des besoins n'était pas une formalité avant le développement : c'était le développement.",
       en: 'My first assignment where modelling took longer than coding. Requirements gathering was not a formality before the build: it was the build.',
     },
+```
+
+- [ ] **Step 3b: Add the two public projects**
+
+Still in `src/api/mock/projects.mock.ts`, insert these two entries directly after
+`ticoqos`, so the three projects that carry real links sit together at the front.
+
+Every factual claim below was verified against the registries, not inferred:
+`fr.tykok:pokeapi` 1.0.0 exists on Maven Central, `@tykok/cedict-dictionary` is at
+2.7.14 with eleven published versions on npm, and the cedict repository carries
+`cron.yml` among its workflows.
+
+```ts
+  {
+    id: 'pokeapi-kotlin',
+    emoji: '📦',
+    monogram: 'PK',
+    accent: '#e8590c',
+    gradient: 'linear-gradient(135deg,#f97316,#c2410c)',
+    cover: '/projects/pokeapi-kotlin.png',
+    title: { fr: 'PokeAPI-Kotlin — bibliothèque', en: 'PokeAPI-Kotlin — library' },
+    year: '2023',
+    status: { label: { fr: 'Publiée', en: 'Published' }, type: 'open-source' },
+    stack: [
+      { label: 'Kotlin', color: 'purple' },
+      { label: 'Gradle', color: 'green' },
+      { label: 'JUnit', color: 'red' },
+    ],
+    tags: ['Kotlin', 'Gradle', 'Maven Central', 'MIT'],
+    desc: {
+      fr: 'Bibliothèque Kotlin publiée sur Maven Central, qui expose la PokéAPI en un appel typé.',
+      en: 'Kotlin library published to Maven Central, exposing the PokéAPI through one typed call.',
+    },
+    context: {
+      fr: "La PokéAPI renvoie du JSON profondément imbriqué où chaque ressource référence les autres par URL. L'exploiter depuis Kotlin voulait dire réécrire les mêmes classes de données et la même désérialisation à chaque projet.",
+      en: 'The PokéAPI returns deeply nested JSON where every resource points at the others by URL. Using it from Kotlin meant rewriting the same data classes and the same deserialisation in every project.',
+    },
+    takeaway: {
+      fr: "Publier sur Maven Central a été plus instructif que le code : signature, staging Sonatype, javadoc obligatoire. Une bibliothèque n'existe vraiment qu'au moment où quelqu'un d'autre peut l'ajouter en une ligne.",
+      en: 'Publishing to Maven Central taught me more than the code did: signing, Sonatype staging, mandatory javadoc. A library only really exists once someone else can add it in one line.',
+    },
+    role: { fr: 'Projet personnel — conception, publication, documentation', en: 'Personal project — design, release, documentation' },
+    repo: 'https://github.com/Tykok/PokeAPI-Kotlin',
+    demo: 'https://tykok.github.io/PokeAPI-Kotlin/',
+  },
+  {
+    id: 'cedict',
+    emoji: '📖',
+    monogram: 'CD',
+    accent: '#0e7490',
+    gradient: 'linear-gradient(135deg,#0891b2,#155e75)',
+    cover: '/projects/cedict.png',
+    title: { fr: 'Cedict — dictionnaire chinois', en: 'Cedict — Chinese dictionary' },
+    year: '2022',
+    status: { label: { fr: 'Publié', en: 'Published' }, type: 'open-source' },
+    stack: [
+      { label: 'TypeScript', color: 'blue' },
+      { label: 'Node.js', color: 'green' },
+      { label: 'Jest', color: 'red' },
+    ],
+    tags: ['TypeScript', 'npm', 'CLI', 'MIT'],
+    desc: {
+      fr: 'Bibliothèque et CLI TypeScript publiées sur npm pour interroger le dictionnaire chinois CEDICT.',
+      en: 'TypeScript library and CLI published to npm for querying the CEDICT Chinese dictionary.',
+    },
+    context: {
+      fr: "Le CEDICT est distribué comme une archive texte que chacun re-parse à sa façon. Le rendre utilisable en TypeScript demandait moins un parseur qu'une chaîne qui reste à jour quand le dictionnaire amont bouge.",
+      en: 'CEDICT ships as a text archive that everyone re-parses their own way. Making it usable from TypeScript needed less a parser than a pipeline that stays current when the upstream dictionary moves.',
+    },
+    takeaway: {
+      fr: "Le parseur a pris un après-midi, l'automatisation de la publication tout le reste. Un workflow qui récupère la nouvelle version, la teste et la publie fait plus pour la durée de vie du projet que n'importe quelle fonctionnalité.",
+      en: 'The parser took an afternoon; automating releases took everything else. A workflow that fetches the new upstream version, tests it and publishes does more for a project\'s lifespan than any feature.',
+    },
+    role: { fr: 'Projet personnel — parseur, CLI, chaîne de publication', en: 'Personal project — parser, CLI, release pipeline' },
+    repo: 'https://github.com/Tykok/cedict-chinese-transformation',
+    demo: 'https://tykok.github.io/cedict-chinese-transformation/',
+  },
 ```
 
 - [ ] **Step 4: Fix the `ticoqos` links**
@@ -1040,7 +1160,7 @@ Still in `src/api/mock/projects.mock.ts`, `ticoqos` points at the GitHub *profil
 - [ ] **Step 5: Run the tests**
 
 Run: `npx vitest run src/api/projects.test.ts`
-Expected: PASS, including the twelve generated file assertions.
+Expected: PASS, including the sixteen generated file assertions (eight projects × two).
 
 - [ ] **Step 6: Run every gate**
 
@@ -1049,10 +1169,10 @@ Expected: all pass.
 
 - [ ] **Step 7: See it in the real app**
 
-Run: `npm run dev`, open the Projects app, and step through all six slides.
+Run: `npm run dev`, open the Projects app, and step through all eight slides.
 Confirm: each hero shows its banner, the white title reads against it, `context` and
-the takeaway block appear, five slides state that the code is private, and `ticoqos`
-shows two working buttons.
+the takeaway block appear, five slides state that the code is private, and `ticoqos`,
+`pokeapi-kotlin` and `cedict` each show two working buttons.
 
 - [ ] **Step 8: Commit**
 
@@ -1072,8 +1192,9 @@ npm ci
 npm run format:check && npm run lint && npm run typecheck && npm test && npm run build && npm run audit
 ```
 
-Expected: all six pass. Test count rises from 74 to roughly 92: two per new rendering
-case, one for the rail, and fourteen in `projects.test.ts`.
+Expected: all six pass. On this branch the suite starts at 57 (it forks `develop`,
+which lacks the `head.test.ts` added by PR #11). Tasks 1 to 4 took it to 63; Task 6
+adds two contract assertions plus sixteen generated file assertions, landing near 81.
 
 ## Out of scope
 

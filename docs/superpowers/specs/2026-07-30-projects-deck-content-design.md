@@ -15,6 +15,24 @@ Five of six projects show *placeholder links* where a repository would go.
 A reader learns which technologies were involved and nothing about what problem was
 solved. This adds that, and gives each slide an image.
 
+### Two real projects were missing entirely
+
+The deck showed six entries, five of them employer work with no public link, while
+two of the owner's strongest public artifacts were absent:
+
+- **`fr.tykok:pokeapi` 1.0.0 on Maven Central** — a Kotlin library wrapping the
+  PokéAPI, MIT, with MkDocs documentation on GitHub Pages, a javadoc.io listing, a
+  CHANGELOG and a CONTRIBUTING guide.
+- **`@tykok/cedict-dictionary` 2.7.14 on npm**, eleven published versions — a
+  TypeScript Chinese-dictionary library and CLI, MIT, 12 stars, whose repository
+  carries a cron workflow that re-fetches the upstream CEDICT whenever a new release
+  appears.
+
+Both were verified against the registries, not inferred from the repository. For a
+backend portfolio, *publishes a Kotlin library to Maven Central* outranks anything an
+illustration can say. They join the deck, taking it to eight projects — three of
+which now carry a real repository and a real demo, against one before.
+
 ## Non-goals
 
 - **No architecture diagrams.** They were wanted, and they do not fit the hero. See
@@ -74,10 +92,20 @@ code than before.
 
 ## Assets
 
-**Format:** 1200×340 WebP — the hero's true ratio, measured from
+**Format:** 1200×340 PNG — the hero's true ratio, measured from
 `.deck-hero { min-height: 168px }` at full slide width. A 1200×630 image would be
-cropped hard by `object-fit: cover`. WebP because the content is flat and graphic:
-20–40 kB where a PNG would take 150.
+cropped hard by `object-fit: cover`.
+
+An earlier revision of this spec mandated WebP "because the content is flat and
+graphic: 20–40 kB where a PNG would take 150". That premise was wrong, and measuring
+it settled the question: a representative flat banner is **3 691 bytes as 24-bit
+PNG** — an order of magnitude below the WebP target it was supposed to beat. Flat,
+few-colour graphics are what PNG compresses best.
+
+WebP also cost a dependency for nothing: the installed Pillow is 8.1.0 with
+`features.check('webp')` false, so saving raised `KeyError: 'WEBP'`. Honouring the
+old text meant asking the owner to install Pillow 11 in order to produce heavier
+files. PNG needs nothing and wins on the one axis WebP was chosen for.
 
 **No text inside the images.** Three reasons, in order of importance:
 
@@ -97,6 +125,8 @@ sits.
 | Project             | Visual             | Motif                                                     | Why                                          |
 | ------------------- | ------------------ | --------------------------------------------------------- | -------------------------------------------- |
 | `ticoqos`           | marked placeholder | —                                                         | public and ours; a real screenshot is better |
+| `pokeapi-kotlin`    | illustrated banner | concentric wrapper plates with one call passing through     | published library, no interface to screenshot |
+| `cedict`            | illustrated banner | columns of dictionary entries under a lens                 | a CLI and a package; nothing visual to capture |
 | `payments`          | illustrated banner | card silhouettes over a ledger grid, one row highlighted   | Pictarine, not publishable                   |
 | `pictarine-tooling` | illustrated banner | stacked window frames sharing one toolbar                  | internal tool, not publishable               |
 | `auction`           | illustrated banner | ascending bid bars closing on a gavel mark                 | MecaLIFE, not publishable                    |
@@ -116,7 +146,7 @@ is a one-line change.
 **Files**
 
 ```
-public/projects/<id>.webp        referenced as cover: '/projects/payments.webp'
+public/projects/<id>.png         referenced as cover: '/projects/payments.png'
 
 scripts/images/
   palette.py       the colours, in one place, mirroring design.css
@@ -180,7 +210,7 @@ so no new test is needed for that.
 - Every `cover` path resolves to a file that exists in `public/`. This is the most
   valuable assertion here: a typo or a forgotten export produces a broken hero in
   production and nothing else notices. Same disk-reading approach as `head.test.ts`.
-- Every banner is under 80 kB, which catches an oversized PNG renamed to `.webp`.
+- Every banner is under 80 kB, which catches an image accidentally saved uncompressed or at the wrong size.
 
 **Added — rendering, in `ProjectSlide.test.tsx`**
 
@@ -196,9 +226,10 @@ so no new test is needed for that.
 
 **Not covered, deliberately**
 
-- **Image dimensions.** Parsing a WebP header by hand is possible and brittle across
-  encoders. 1200×340 is guaranteed by the generator, which is the only thing that
-  produces these files. That is the right division of labour, not a gap.
+- **Image dimensions.** 1200×340 is guaranteed by `save_png`, which refuses to write
+  a canvas of any other size, and the generator is the only thing that produces these
+  files. Asserting it again from the repository would duplicate a check that cannot
+  be bypassed. That is the right division of labour, not a gap.
 - **Visual regression.** No test here shows the banners look good. They will be
   reviewed by eye before being committed.
 
