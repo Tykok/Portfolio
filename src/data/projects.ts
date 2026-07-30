@@ -25,5 +25,7 @@ export interface Project {
   cover?: string;
   /** The problem the project existed to solve. */
   context?: LocalizedString;
+  /** One sentence on what building it taught. */
+  takeaway?: LocalizedString;
   role?: LocalizedString;
 }

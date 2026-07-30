@@ -484,6 +484,10 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-f
 .deck-bul { list-style: none; margin: 10px 0; padding: 0 20px; display: flex; flex-direction: column; gap: 7px; }
 .deck-bul li { display: flex; gap: 9px; align-items: flex-start; font-size: 12.5px; color: #3a414d; line-height: 1.4; }
 
+.deck-takeaway { margin: 4px 20px 10px; padding: 11px 14px; border-left: 3px solid #cfe0ff; background: #f7f9fd; border-radius: 0 8px 8px 0; }
+.deck-takeaway-l { display: block; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; font-size: 10px; color: #9aa3b2; margin-bottom: 5px; }
+.deck-takeaway p { margin: 0; font-size: 12.5px; line-height: 1.55; color: #3a414d; text-wrap: pretty; }
+
 .deck-foot { padding: 6px 20px 22px; }
 .deck-badges { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
 .deck-acts { display: flex; gap: 9px; }
