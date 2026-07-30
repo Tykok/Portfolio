@@ -486,6 +486,7 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-f
 .deck-foot { padding: 6px 20px 22px; }
 .deck-badges { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
 .deck-acts { display: flex; gap: 9px; }
+.deck-nolink { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: var(--ink-dim); }
 
 .deck-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 34px; height: 34px; border-radius: 50%; border: 1px solid #d4dcea; background: rgba(255,255,255,.9); color: #2f3742; font-size: 18px; line-height: 1; cursor: pointer; box-shadow: 0 2px 8px rgba(20,30,60,.14); z-index: 2; }
 .deck-nav:hover:not(:disabled) { background: #fff; }

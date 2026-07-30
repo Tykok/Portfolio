@@ -82,7 +82,7 @@ export function ProjectSlide({ project }: { project: Project }) {
               ▶ {t('p_demo')}
             </a>
           )}
-          {noLinks && <span style={{ fontSize: 12, color: 'var(--ink-dim)', fontStyle: 'italic' }}>{t('p_links_ph')}</span>}
+          {noLinks && <span className="deck-nolink">🔒 {t('p_no_public_code')}</span>}
         </div>
       </section>
     </article>

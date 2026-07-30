@@ -65,7 +65,8 @@ export interface Translations {
   p_count_l: string;
   p_repo: string;
   p_demo: string;
-  p_links_ph: string;
+  p_no_public_code: string;
+  p_takeaway: string;
   p_role: string;
   p_prev: string;
   p_next: string;
