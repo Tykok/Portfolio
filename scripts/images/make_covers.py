@@ -18,89 +18,6 @@ from palette import hex_to_rgb, mix, shade  # noqa: E402
 OUT = Path('public/projects')
 
 
-def payments(accent):
-    """Card silhouettes over a ledger grid, one row picked out."""
-    img = new_banner(accent)
-    d = draw(img)
-    for y in range(60, HEIGHT - 40, 34):
-        d.line([70, y, WIDTH - 70, y], fill=(255, 255, 255, 46), width=2)
-    d.rectangle([70, 162, WIDTH - 70, 194], fill=(255, 255, 255, 70))
-    for i, x in enumerate((150, 250, 350)):
-        top = 92 + i * 16
-        card = mix(accent, (255, 255, 255), 0.30 + i * 0.16)
-        d.rectangle([x, top, x + 190, top + 116], fill=card + (232,))
-        d.rectangle([x + 14, top + 26, x + 74, top + 42], fill=(255, 255, 255, 150))
-        d.line([x + 14, top + 88, x + 130, top + 88], fill=(255, 255, 255, 120), width=3)
-    return add_scrim(img)
-
-
-def pictarine_tooling(accent):
-    """Three window frames stacked behind one shared toolbar."""
-    img = new_banner(accent)
-    d = draw(img)
-    for i in range(3):
-        x, y = 140 + i * 54, 66 + i * 26
-        w, h = 620, 190
-        d.rectangle([x, y, x + w, y + h], fill=mix(accent, (255, 255, 255), 0.82) + (238,))
-        d.rectangle([x, y, x + w, y + 26], fill=shade(accent, 0.85) + (255,))
-        for b in range(3):
-            cx = x + w - 22 - b * 20
-            d.ellipse([cx - 5, y + 8, cx + 5, y + 18], fill=(255, 255, 255, 190))
-        if i == 2:
-            for r in range(4):
-                ly = y + 50 + r * 26
-                d.line([x + 24, ly, x + 24 + (300 if r % 2 else 420), ly], fill=(255, 255, 255, 170), width=6)
-    return add_scrim(img)
-
-
-def auction(accent):
-    """Ascending bids closing on a gavel mark."""
-    img = new_banner(accent)
-    d = draw(img)
-    for i in range(9):
-        x = 120 + i * 74
-        h = 40 + i * 22
-        d.rectangle([x, HEIGHT - 90 - h, x + 44, HEIGHT - 90], fill=(255, 255, 255, 70 + i * 14))
-    cx, cy = WIDTH - 250, 120
-    d.line([cx - 70, cy + 70, cx + 60, cy - 60], fill=(255, 255, 255, 230), width=16)
-    d.ellipse([cx + 30, cy - 96, cx + 104, cy - 22], fill=(255, 255, 255, 240))
-    d.line([cx - 96, cy + 96, cx - 20, cy + 96], fill=(255, 255, 255, 200), width=12)
-    return add_scrim(img)
-
-
-def threaddump(accent):
-    """Parallel threads: some running, some stalled."""
-    img = new_banner(accent)
-    d = draw(img)
-    stalled = {1, 4, 5, 8}
-    for i in range(11):
-        y = 46 + i * 24
-        if i in stalled:
-            x = 90
-            while x < WIDTH - 90:
-                d.line([x, y, x + 16, y], fill=(255, 255, 255, 96), width=7)
-                x += 30
-            d.ellipse([WIDTH - 118, y - 9, WIDTH - 100, y + 9], fill=(255, 255, 255, 210))
-        else:
-            d.line([90, y, WIDTH - 130, y], fill=(255, 255, 255, 178), width=7)
-    return add_scrim(img)
-
-
-def schools(accent):
-    """An abstract territory with located points."""
-    img = new_banner(accent)
-    d = draw(img)
-    d.polygon(
-        [(150, 250), (240, 120), (420, 74), (610, 118), (760, 86), (900, 150), (1010, 268), (820, 300), (520, 272), (300, 300)],
-        fill=(255, 255, 255, 58),
-    )
-    for x, y in ((330, 190), (520, 150), (700, 196), (860, 214)):
-        d.ellipse([x - 20, y - 20, x + 20, y + 20], fill=(255, 255, 255, 235))
-        d.polygon([(x - 12, y + 14), (x + 12, y + 14), (x, y + 44)], fill=(255, 255, 255, 235))
-        d.ellipse([x - 7, y - 7, x + 7, y + 7], fill=shade(accent, 0.8) + (255,))
-    return add_scrim(img)
-
-
 def pokeapi_kotlin(accent):
     """Concentric wrapper plates with one typed call passing straight through."""
     img = new_banner(accent)
@@ -137,6 +54,109 @@ def cedict(accent):
     return add_scrim(img)
 
 
+def homelab(accent):
+    """Rack units wired to one upstream point, with a shield standing over them."""
+    img = new_banner(accent)
+    d = draw(img)
+    for rx in (132, 330):
+        for u in range(6):
+            y = 72 + u * 34
+            d.rectangle([rx, y, rx + 150, y + 24], fill=mix(accent, (255, 255, 255), 0.78) + (232,))
+            d.ellipse([rx + 132, y + 8, rx + 142, y + 18], fill=shade(accent, 0.7) + (255,))
+    hub_x, hub_y = 700, 150
+    for y in (96, 164, 232):
+        d.line([492, y, 600, y], fill=(255, 255, 255, 150), width=5)
+        d.line([600, y, 600, hub_y], fill=(255, 255, 255, 150), width=5)
+    d.line([600, hub_y, hub_x, hub_y], fill=(255, 255, 255, 205), width=7)
+    d.ellipse([hub_x - 13, hub_y - 13, hub_x + 13, hub_y + 13], fill=(255, 255, 255, 235))
+    # A shield: what Fail2Ban is there for. Polygon takes no width= before Pillow 9.4.
+    sx, sy = 940, 78
+    d.polygon(
+        [(sx, sy), (sx + 118, sy), (sx + 118, sy + 96), (sx + 59, sy + 164), (sx, sy + 96)],
+        fill=(255, 255, 255, 52),
+        outline=(255, 255, 255, 235),
+    )
+    d.line([sx + 30, sy + 78, sx + 54, sy + 104], fill=(255, 255, 255, 240), width=9)
+    d.line([sx + 54, sy + 104, sx + 92, sy + 46], fill=(255, 255, 255, 240), width=9)
+    return add_scrim(img)
+
+
+def ramassali(accent):
+    """Scattered reports over a territory, one zone already cleared."""
+    img = new_banner(accent)
+    d = draw(img)
+    d.polygon(
+        [(140, 262), (232, 122), (410, 70), (612, 112), (782, 78), (930, 146), (1046, 258), (846, 296), (520, 274), (300, 300)],
+        fill=(255, 255, 255, 52),
+    )
+    scattered = ((236, 196), (300, 132), (372, 226), (452, 158), (516, 232), (596, 176), (664, 236))
+    for i, (x, y) in enumerate(scattered):
+        d.ellipse([x - 11, y - 11, x + 11, y + 11], fill=(255, 255, 255, 96 + i * 18))
+    cx, cy, cr = 872, 176, 78
+    d.ellipse([cx - cr, cy - cr, cx + cr, cy + cr], outline=(255, 255, 255, 240), width=7)
+    d.line([cx - 34, cy + 4, cx - 8, cy + 32], fill=(255, 255, 255, 240), width=11)
+    d.line([cx - 8, cy + 32, cx + 40, cy - 30], fill=(255, 255, 255, 240), width=11)
+    return add_scrim(img)
+
+
+def plant974(accent):
+    """Fronds fanning out over a faint grid — a catalogue, not a landscape."""
+    img = new_banner(accent)
+    d = draw(img)
+    for x in range(96, WIDTH - 60, 58):
+        d.line([x, 40, x, HEIGHT - 60], fill=(255, 255, 255, 30), width=2)
+    for y in range(46, HEIGHT - 60, 46):
+        d.line([80, y, WIDTH - 60, y], fill=(255, 255, 255, 30), width=2)
+    for i, bx in enumerate((240, 520, 800)):
+        base_x, base_y = bx, HEIGHT - 92
+        tip_x, tip_y = bx + 96, 56 + i * 14
+        d.line([base_x, base_y, tip_x, tip_y], fill=(255, 255, 255, 210), width=7)
+        for k in range(1, 8):
+            t = k / 8
+            mx = round(base_x + (tip_x - base_x) * t)
+            my = round(base_y + (tip_y - base_y) * t)
+            span = round(86 * (1 - t) + 20)
+            d.line([mx, my, mx - span, my - round(span * 0.42)], fill=(255, 255, 255, 150), width=5)
+            d.line([mx, my, mx + span, my - round(span * 0.42)], fill=(255, 255, 255, 150), width=5)
+    return add_scrim(img)
+
+
+def meyiv(accent):
+    """A staircase climbing over accumulating blocks: progression that keeps going."""
+    img = new_banner(accent)
+    d = draw(img)
+    for i in range(9):
+        x = 118 + i * 76
+        h = 26 + i * 24
+        d.rectangle([x, HEIGHT - 96 - h, x + 52, HEIGHT - 96], fill=(255, 255, 255, 58 + i * 16))
+    x, y = 118, HEIGHT - 112
+    for _ in range(9):
+        nx, ny = x + 76, y - 22
+        d.line([x, y, nx, y], fill=(255, 255, 255, 230), width=7)
+        d.line([nx, y, nx, ny], fill=(255, 255, 255, 230), width=7)
+        x, y = nx, ny
+    d.ellipse([x - 14, y - 14, x + 14, y + 14], fill=(255, 255, 255, 240))
+    return add_scrim(img)
+
+
+def ipi_calendar(accent):
+    """A week grid of blocks, with one export leaving it."""
+    img = new_banner(accent)
+    d = draw(img)
+    left, top, colw, rowh = 108, 52, 96, 34
+    d.rectangle([left, 30, left + 6 * colw - 18, 44], fill=(255, 255, 255, 150))
+    for c in range(6):
+        for r in range(6):
+            if (c * 7 + r * 3) % 5 == 0:
+                continue
+            x, y = left + c * colw, top + r * rowh
+            d.rectangle([x, y, x + colw - 18, y + rowh - 12], fill=(255, 255, 255, 62 + ((c + r) % 3) * 40))
+    ax = left + 6 * colw + 16
+    d.line([ax, 150, ax + 128, 150], fill=(255, 255, 255, 235), width=9)
+    d.polygon([(ax + 128, 122), (ax + 190, 150), (ax + 128, 178)], fill=(255, 255, 255, 240))
+    return add_scrim(img)
+
+
 def placeholder(accent):
     """Impossible to mistake for finished work. The one banner allowed words.
 
@@ -170,13 +190,13 @@ def placeholder(accent):
 
 BANNERS = (
     ('ticoqos', '#0a66c2', placeholder),
+    ('homelab', '#475569', homelab),
+    ('ramassali', '#2f9e44', ramassali),
+    ('plant974', '#5c940d', plant974),
     ('pokeapi-kotlin', '#e8590c', pokeapi_kotlin),
     ('cedict', '#0e7490', cedict),
-    ('payments', '#635bff', payments),
-    ('pictarine-tooling', '#485563', pictarine_tooling),
-    ('auction', '#147a52', auction),
-    ('threaddump', '#c3002f', threaddump),
-    ('schools', '#b8860b', schools),
+    ('meyiv', '#7048e8', meyiv),
+    ('ipi-calendar', '#c2255c', ipi_calendar),
 )
 
 

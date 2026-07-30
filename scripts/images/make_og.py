@@ -68,7 +68,7 @@ def main():
     d.line([tx + r, py, tx + pill_w - r, py], fill=EDGE_DARK)
     d.line([tx + r, py + pill_h, tx + pill_w - r, py + pill_h], fill=EDGE_DARK)
     d.ellipse([tx + 15, py + 15, tx + 25, py + 25], fill=GREEN)
-    d.text((tx + 36, py + pill_h // 2), 'Ouvert aux opportunités', font=load_font(21), fill=INK, anchor='lm')
+    d.text((tx + 36, py + pill_h // 2), "À l'écoute, sans chercher", font=load_font(21), fill=INK, anchor='lm')
 
     tbar_h = 52
     img.paste(vertical_gradient((W, tbar_h), (60, 128, 240), (12, 52, 160)), (0, H - tbar_h))
