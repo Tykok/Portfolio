@@ -1,4 +1,4 @@
-"""Draws the six project banners into public/projects/.
+"""Draws the eight project banners into public/projects/.
 
 Run from the repository root:  python3 scripts/images/make_covers.py
 
@@ -138,7 +138,17 @@ def cedict(accent):
 
 
 def placeholder(accent):
-    """Impossible to mistake for finished work. The one banner allowed words."""
+    """Impossible to mistake for finished work. The one banner allowed words.
+
+    Ends with add_scrim like every other motif: ProjectSlide overlays the
+    white title at the bottom-left of this banner too, so it needs the same
+    guarantee. The text box above already darkens rows 116-236 on its own
+    (fill alpha 150); add_scrim's curve only reaches noticeable strength past
+    ~y=230 (its band starts at y=190 and ramps with an easing power, so the
+    first 40px contribute very little), so the overlap stays mild rather than
+    stacking into the mud finding 3 fixed elsewhere - confirmed by eye after
+    regenerating.
+    """
     img = new_banner(shade(accent, 0.7))
     d = draw(img)
     for x in range(-HEIGHT, WIDTH + HEIGHT, 46):
@@ -152,7 +162,7 @@ def placeholder(accent):
         fill=(255, 235, 160),
         anchor='mm',
     )
-    return img
+    return add_scrim(img)
 
 
 # ASCII only in the second placeholder line: the fallback fonts on a bare Linux
