@@ -1,0 +1,55 @@
+name: Deploy script
+
+# The deploy script has real logic — checksum verification, atomic swap, pruning
+# — and none of it is covered by the app's test suite. Two bugs were found by
+# running it rather than reading it: a failed extraction left an empty release
+# directory behind, and per-location add_header in the vhost silently dropped
+# every security header. This keeps both fixed.
+on:
+  pull_request:
+    paths:
+      - 'deploy/**'
+      - '.github/workflows/deploy-script.yml'
+  push:
+    branches: [main, develop]
+    paths:
+      - 'deploy/**'
+      - '.github/workflows/deploy-script.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  script:
+    name: deploy-portfolio.sh behaviour
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Debian rather than the runner directly: the script targets the homelab's
+      # Debian, and relies on GNU find -printf, flock and sha256sum.
+      - name: Run the behaviour suite
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}:/work:ro" \
+            -v "${{ github.workspace }}/deploy/test/deploy-portfolio.test.sh:/test.sh:ro" \
+            debian:stable-slim bash /test.sh
+
+  vhost:
+    name: Nginx vhost behaviour
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate the configuration
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/deploy/nginx/tykok.fr.conf:/etc/nginx/conf.d/default.conf:ro" \
+            nginx:stable-alpine nginx -t
+
+      - name: Check routing, caching and security headers
+        run: bash deploy/test/vhost.test.sh

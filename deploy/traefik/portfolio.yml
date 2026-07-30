@@ -1,0 +1,61 @@
+# Traefik dynamic configuration for the portfolio.
+#
+# Drop this into whatever directory your file provider watches, for example
+# /etc/traefik/dynamic/portfolio.yml. Traefik picks it up without a restart.
+#
+# Two values to adjust before use:
+#   - the Nginx host address under http.services (marked below)
+#   - certResolver, if yours is not named "letsencrypt"
+
+http:
+  routers:
+    portfolio:
+      rule: 'Host(`tykok.fr`) || Host(`www.tykok.fr`)'
+      entryPoints:
+        - websecure
+      service: portfolio
+      middlewares:
+        - portfolio-redirect-www
+        - portfolio-headers
+      tls:
+        certResolver: letsencrypt
+
+    # Plain HTTP exists only to send visitors to HTTPS.
+    portfolio-insecure:
+      rule: 'Host(`tykok.fr`) || Host(`www.tykok.fr`)'
+      entryPoints:
+        - web
+      service: portfolio
+      middlewares:
+        - portfolio-to-https
+
+  middlewares:
+    portfolio-to-https:
+      redirectScheme:
+        scheme: https
+        permanent: true
+
+    # One canonical hostname, so the canonical tag and the served URL agree.
+    portfolio-redirect-www:
+      redirectRegex:
+        regex: '^https://www\.tykok\.fr/(.*)'
+        replacement: 'https://tykok.fr/$1'
+        permanent: true
+
+    portfolio-headers:
+      headers:
+        # Only set once the domain is confirmed working over HTTPS: browsers
+        # remember HSTS, and a premature max-age is painful to undo.
+        stsSeconds: 31536000
+        stsIncludeSubdomains: false
+        stsPreload: false
+        customRequestHeaders:
+          X-Forwarded-Proto: https
+
+  services:
+    portfolio:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          # ADJUST: private address of the Nginx machine.
+          - url: 'http://10.0.0.10:80'
