@@ -7,17 +7,17 @@ export function Bsod() {
     <div className="os-bsod" onClick={clearBsod}>
       <div className="bsod-inner">
         <div className="bsod-h">A problem has been detected</div>
-        <p className="bsod-stop">RECURSIVE_HIRE_LOOP_IN_BACKEND_DEVELOPER</p>
+        <p className="bsod-stop">KERNEL_PANIC_IN_COCORICO_MODULE</p>
         <p>
-          If this is the first time you&aposve seen this Stop error screen, restart your computer. If this screen appears again, follow
+          If this is the first time you&apos;ve seen this Stop error screen, restart your computer. If this screen appears again, follow
           these steps:
         </p>
         <p>
-          Check to make sure your budget is sufficient for hiring.
+          Check to make sure your coffee supply is sufficient.
           <br />
-          If the hiring process is complete, run the candidate evaluation
+          If the mascot is still crowing, run the window manager
           <br />
-          to make sure any new recruiters are properly configured.
+          to make sure any new themes are properly configured.
         </p>
         <p>
           If problems continue, disable or remove any newly installed
