@@ -16,7 +16,6 @@ const mk = (id: string, title: string): Project => ({
   year: '2024',
   status: { label: { fr: 'x', en: 'x' }, type: 'live' },
   stack: [],
-  tags: [],
   desc: { fr: '', en: '' },
   bullets: { fr: [], en: [] },
   repo: '#',

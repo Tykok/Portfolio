@@ -2,11 +2,6 @@ import type { LocalizedString, LocalizedStringArray } from '../types/lang';
 
 export type ProjectStatus = 'live' | 'maintained' | 'archived' | 'in-progress' | 'open-source';
 
-export interface StackItem {
-  label: string;
-  color: string;
-}
-
 export interface Project {
   id: string;
   emoji: string;
@@ -16,8 +11,8 @@ export interface Project {
   title: LocalizedString;
   year: string;
   status: { label: LocalizedString; type: ProjectStatus };
-  stack: StackItem[];
-  tags: string[];
+  /** Technology labels. Rendered through `getBadge`, which owns the colour. */
+  stack: string[];
   desc: LocalizedString;
   bullets: LocalizedStringArray;
   repo: string;
