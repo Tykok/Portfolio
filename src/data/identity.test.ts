@@ -19,6 +19,13 @@ describe('identity', () => {
     expect(identity.interests.fr).toHaveLength(identity.interests.en.length);
     expect(identity.interests.fr.length).toBeGreaterThan(0);
   });
+
+  it('does not advertise a job search — Elie is employed and not looking', () => {
+    const serialized = JSON.stringify(identity).toLowerCase();
+    expect(serialized).not.toMatch(/opportunit/);
+    expect(identity.status.fr).toBe("À l'écoute, sans chercher");
+    expect(identity.status.en).toBe('Not looking, but listening');
+  });
 });
 
 describe('socials', () => {
