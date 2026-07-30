@@ -1,0 +1,118 @@
+name: Deploy
+
+# Production only. develop is verified by CI and previewed locally.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# One deploy at a time, and never cancel one halfway through.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: write # needed to publish the release the homelab downloads
+
+env:
+  SITE_URL: https://tykok.fr
+  ARTIFACT: site.tar.gz
+
+jobs:
+  deploy:
+    name: Build, publish, notify
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      # An empty SITE_URL would ship a canonical and an og:url pointing at
+      # localhost. Verification builds tolerate that; production must not.
+      - name: Require a site URL
+        run: |
+          if [ -z "${SITE_URL}" ]; then
+            echo "SITE_URL is empty — refusing to build production." >&2
+            exit 1
+          fi
+          echo "Building for ${SITE_URL}"
+
+      - name: Build
+        env:
+          VITE_SITE_URL: ${{ env.SITE_URL }}
+        run: npm run build
+
+      # Sanity check on the artifact rather than trusting the build silently.
+      - name: Verify the built output
+        run: |
+          test -f build/index.html || { echo "no index.html" >&2; exit 1; }
+          test -f build/og-image.png || { echo "no og-image.png" >&2; exit 1; }
+          if grep -q '__SITE_URL__' build/index.html; then
+            echo "unresolved __SITE_URL__ token in index.html" >&2
+            exit 1
+          fi
+          if ! grep -q "${SITE_URL}" build/index.html; then
+            echo "index.html does not reference ${SITE_URL}" >&2
+            exit 1
+          fi
+          # Source maps are useful in CI artifacts, not on a public site.
+          find build -name '*.map' -delete
+          echo "Built files:"
+          find build -type f | sed 's/^/  /'
+
+      - name: Package
+        run: |
+          tar -czf "${ARTIFACT}" -C build .
+          sha256sum "${ARTIFACT}" > "${ARTIFACT}.sha256"
+          cat "${ARTIFACT}.sha256"
+
+      # A release per run, so `releases/latest/download/site.tar.gz` is a stable
+      # URL and older builds stay available to roll back to.
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ github.run_number }}
+          name: build-${{ github.run_number }}
+          body: |
+            Automated production build of ${{ github.sha }}.
+
+            Served at ${{ env.SITE_URL }}.
+          files: |
+            ${{ env.ARTIFACT }}
+            ${{ env.ARTIFACT }}.sha256
+          make_latest: true
+
+      # n8n is the only thing reachable from outside; it relays into the private
+      # network. The payload is informational — the deploy script derives what to
+      # download on its own, so a forged call cannot redirect it elsewhere.
+      - name: Notify n8n
+        env:
+          WEBHOOK_URL: ${{ secrets.N8N_DEPLOY_URL }}
+          WEBHOOK_TOKEN: ${{ secrets.N8N_DEPLOY_TOKEN }}
+        run: |
+          if [ -z "${WEBHOOK_URL}" ]; then
+            echo "::warning::N8N_DEPLOY_URL is not set — release published, homelab not notified."
+            exit 0
+          fi
+          code=$(curl --silent --show-error --output /tmp/n8n-response.txt \
+            --write-out '%{http_code}' \
+            --max-time 30 --retry 3 --retry-connrefused \
+            --request POST "${WEBHOOK_URL}" \
+            --header "X-Deploy-Token: ${WEBHOOK_TOKEN}" \
+            --header 'Content-Type: application/json' \
+            --data "$(printf '{"tag":"build-%s","sha":"%s","ref":"%s"}' \
+              "${{ github.run_number }}" "${{ github.sha }}" "${{ github.ref_name }}")")
+          echo "n8n responded ${code}"
+          sed 's/^/  /' /tmp/n8n-response.txt || true
+          case "${code}" in
+            2*) ;;
+            *) echo "n8n rejected the notification" >&2; exit 1 ;;
+          esac
