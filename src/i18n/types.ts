@@ -79,6 +79,7 @@ export interface Translations {
   cv_soft: string;
   cv_lang: string;
   cv_interests: string;
+  cv_wants: string;
   // Contact app
   c_greet: string;
   c_auto: string;

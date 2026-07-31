@@ -26,6 +26,16 @@ describe('identity', () => {
     expect(identity.status.fr).toBe("À l'écoute, sans chercher");
     expect(identity.status.en).toBe('Not looking, but listening');
   });
+
+  it('carries a three-paragraph bio, the third one personal', () => {
+    (['fr', 'en'] as const).forEach((lang) => {
+      const paragraphs = identity.bio[lang].split('\n\n');
+      expect(paragraphs).toHaveLength(3);
+      paragraphs.forEach((p) => expect(p.trim().length).toBeGreaterThan(0));
+    });
+    expect(identity.bio.fr).toMatch(/La Réunion/);
+    expect(identity.bio.en).toMatch(/Réunion/);
+  });
 });
 
 describe('socials', () => {
