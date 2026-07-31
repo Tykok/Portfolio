@@ -22,24 +22,32 @@ export function Projects() {
     );
   }
 
-  if (error || projects.length === 0) {
-    return (
-      <div className="pj-state">
-        <p>{t('projects_error')}</p>
-      </div>
-    );
-  }
-
+  // Companies are static module data with no API in front of them: a
+  // transient projects failure must not take the company cards down with it.
+  // The deck still renders — with the personal group dropped, per SlideRail's
+  // empty-group rule — and the failure becomes a notice above it, not a
+  // replacement for it.
+  const projectsUnavailable = error || projects.length === 0;
   const entries: DeckEntry[] = [
-    ...projects.map((project) => ({ kind: 'personal' as const, project })),
+    ...(projectsUnavailable ? [] : projects.map((project) => ({ kind: 'personal' as const, project }))),
     ...companies.map((company) => ({ kind: 'company' as const, company })),
   ];
   const safeIndex = Math.min(activeIndex, entries.length - 1);
 
   return (
-    <div className="deck-B">
-      <SlideRail entries={entries} activeIndex={safeIndex} onSelect={setActiveIndex} />
-      <SlideStage entries={entries} activeIndex={safeIndex} onSelect={setActiveIndex} />
-    </div>
+    <>
+      {projectsUnavailable && (
+        // .pj-state normally fills the whole window as the loading/error state
+        // on its own; here it sits above a deck that still renders, so its
+        // height is overridden to fit the message rather than the window.
+        <div className="pj-state" style={{ height: 'auto' }}>
+          <p>{t('projects_error')}</p>
+        </div>
+      )}
+      <div className="deck-B">
+        <SlideRail entries={entries} activeIndex={safeIndex} onSelect={setActiveIndex} />
+        <SlideStage entries={entries} activeIndex={safeIndex} onSelect={setActiveIndex} />
+      </div>
+    </>
   );
 }

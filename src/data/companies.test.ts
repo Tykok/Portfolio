@@ -39,8 +39,10 @@ describe('companies', () => {
 
   it('names no partner — Elie chose not to cite them', () => {
     // A decision that lives only in a spec is one edit away from being undone.
-    const serialized = JSON.stringify(companies);
-    ['Walgreens', 'CVS', 'Fuji', 'Fujifilm'].forEach((partner) => {
+    // Lowercased on both sides so a careless 'walgreens' cannot slip past, and
+    // 'Fujifilm' is dropped because the shorter 'Fuji' already covers it.
+    const serialized = JSON.stringify(companies).toLowerCase();
+    ['walgreens', 'cvs', 'fuji'].forEach((partner) => {
       expect(serialized).not.toContain(partner);
     });
   });
