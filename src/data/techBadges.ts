@@ -6,7 +6,9 @@ export interface TechBadge {
 export const techBadges: Record<string, TechBadge> = {
   Go: { color: '#00add8', monogram: 'Go' },
   TypeScript: { color: '#3178c6', monogram: 'TS' },
+  JavaScript: { color: '#c9a227', monogram: 'JS' },
   Python: { color: '#3776ab', monogram: 'Py' },
+  PHP: { color: '#777bb4', monogram: 'Ph' },
   'Node.js': { color: '#5fa04e', monogram: 'N' },
   Kotlin: { color: '#7f52ff', monogram: 'Kt' },
   Java: { color: '#e76f00', monogram: 'Ja' },
@@ -14,6 +16,7 @@ export const techBadges: Record<string, TechBadge> = {
   Gradle: { color: '#02303a', monogram: 'Gr' },
   Spring: { color: '#5a9e30', monogram: 'Sp' },
   'Spring Boot': { color: '#5a9e30', monogram: 'SB' },
+  Laravel: { color: '#ff2d20', monogram: 'Lv' },
   JUnit: { color: '#25a162', monogram: 'JU' },
   'Next.js': { color: '#2a2a2a', monogram: 'Nx' },
   React: { color: '#149eca', monogram: 'Re' },
