@@ -1254,15 +1254,15 @@ In `src/components/apps/Cv/Cv.tsx`, add this constant after `LANGUAGES` (line 18
 const WANTS: { lead: LocalizedString; rest: LocalizedString }[] = [
   {
     lead: { fr: "Le back, l'infra et les bases de données.", en: 'Backend, infrastructure and databases.' },
-    rest: { fr: 'C’est là que je veux rester.', en: 'That is where I want to stay.' },
+    rest: { fr: "C'est là que je veux rester.", en: 'That is where I want to stay.' },
   },
   {
     lead: { fr: 'Un endroit où on apprend.', en: 'A place where you learn.' },
-    rest: { fr: 'C’est ma seule condition non négociable.', en: 'That is my one non-negotiable.' },
+    rest: { fr: "C'est ma seule condition non négociable.", en: 'That is my one non-negotiable.' },
   },
   {
     lead: { fr: 'Construire quelque chose de vraiment utile,', en: 'Building something genuinely useful,' },
-    rest: { fr: 'qui ait du sens — c’est ce que je vise à trois ans.', en: 'with real meaning — that is my three-year aim.' },
+    rest: { fr: "qui ait du sens — c'est ce que je vise à trois ans.", en: 'with real meaning — that is my three-year aim.' },
   },
 ];
 ```

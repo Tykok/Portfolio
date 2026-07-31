@@ -1,5 +1,10 @@
 # Projects Deck Content and Visuals Implementation Plan
 
+> **Superseded by [`docs/superpowers/specs/2026-07-30-personal-projects-and-expectations-design.md`](../specs/2026-07-30-personal-projects-and-expectations-design.md).**
+> This plan's Task 6 was never executed, and its "six projects" / "Six 1200×340 WebP banners"
+> claims below are stale — the deck shipped eight PNG banners with employer work removed
+> entirely. Read the newer spec instead.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Give each of the six projects a narrative (`context`, `takeaway`) and a hero banner, and replace the "placeholder links" note with a deliberate statement.
