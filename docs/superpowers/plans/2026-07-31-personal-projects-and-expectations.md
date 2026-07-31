@@ -829,8 +829,8 @@ export const mockProjects: Project[] = [
       en: 'The first system I ever got my hands on was for school presentations in primary school. Rebuilding that desktop was a pleasure first and a pretext second: writing a real window manager rather than one more page. A PDF résumé shows nothing about how someone builds — this one you can operate.',
     },
     takeaway: {
-      fr: "Le drag, le z-index et le focus clavier m'ont pris du temps, mais ils ont une fin. Ce qui n'en a pas, c'est la cohérence : deux langues, cinq thèmes et une douzaine d'apps qui doivent rester d'accord sans qu'une seule chaîne soit écrite deux fois.",
-      en: 'Dragging, z-index and keyboard focus took time, but they end. Consistency does not: two languages, five themes and a dozen apps that have to agree without a single string being written twice.',
+      fr: "Le drag, le z-index et le focus clavier m'ont pris du temps, mais ils ont une fin. Ce qui n'en a pas, c'est la cohérence : deux langues, cinq thèmes et sept apps qui doivent rester d'accord sans qu'une seule chaîne soit écrite deux fois.",
+      en: 'Dragging, z-index and keyboard focus took time, but they end. Consistency does not: two languages, five themes and seven apps that have to agree without a single string being written twice.',
     },
     bullets: {
       fr: ['Gestionnaire de fenêtres & taskbar maison', 'i18n FR/EN, thèmes et easter eggs', 'API projets dynamique'],
