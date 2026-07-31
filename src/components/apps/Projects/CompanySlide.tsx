@@ -10,8 +10,9 @@ import { StackBadges } from './StackBadges';
  * repository, no demo and no lesson, and the hero shows a period where a
  * project shows a year and a status. It shares `StackBadges` with
  * `ProjectSlide` for the stack chip row, since that block is identical logic
- * for both; every other class here is one `ProjectSlide` already uses, so the
- * two stay visually identical.
+ * for both. Every class here is one `ProjectSlide` already uses, except
+ * `.deck-work-l` — the label above the work list, which has no counterpart on
+ * a project slide.
  */
 export function CompanySlide({ company }: { company: Company }) {
   const { lang, t } = useLang();
@@ -42,8 +43,8 @@ export function CompanySlide({ company }: { company: Company }) {
 
       <span className="deck-work-l">{t('co_work')}</span>
       <ul className="deck-bul">
-        {company.work[lang].map((line) => (
-          <li key={line}>
+        {company.work[lang].map((line, i) => (
+          <li key={i}>
             <span className="ck">✓</span>
             {line}
           </li>

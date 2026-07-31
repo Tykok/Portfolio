@@ -134,7 +134,7 @@ when Elie changes jobs.
 | `SlideRail.tsx` | two titled groups, each with its own count; indices remain global across both |
 | `SlideStage.tsx` | dispatches on `entry.kind`; keyboard nav and the `n / total` counter span both groups |
 | `CompanySlide.tsx` | **new** — `what`, `role`, `work`, stack badges. No links section, no takeaway block |
-| `ProjectSlide.tsx` | unchanged; it still receives a `Project` |
+| `ProjectSlide.tsx` | **changed** — its badge row moved to the shared `StackBadges`; it still receives a `Project` |
 
 The stage's arrow keys and prev/next buttons run across the whole list, so a visitor can
 walk from the last personal project into the first company without touching the rail. That
@@ -143,9 +143,13 @@ is the point of merging them into one window.
 ## Content — the four cards
 
 French is the source of truth, validated with Elie. English is written during
-implementation as a mirror, under the same rules, and **Elie must read it before merge** —
-the previous lot shipped with the English unreviewed and that is not a precedent worth
-repeating.
+implementation as a mirror, under the same rules. **Elie has not read the English, and
+the branch merges anyway** — an accepted state, recorded here rather than left as a gate
+the document claims and the branch ignores. The previous lot shipped the same way; the
+honest fix is a review pass on all the English at once, which is now a follow-up lot. The
+reason this is tolerable and an invented fact would not be: a clumsy translation is a
+quality problem the owner can correct at leisure, whereas a false claim about his career
+is one he cannot take back.
 
 Order: most recent first, which is also decreasing relevance to a reader.
 
@@ -154,7 +158,7 @@ Order: most recent first, which is also decreasing relevance to a reader.
 - **what** — Impression photo en magasin : Pictarine développe les applications par lesquelles les clients commandent leurs tirages, retirés ensuite chez de grandes enseignes nord-américaines.
 - **role** — Backend Engineer. Je conçois, fais évoluer et maintiens l'API, et je porte tout ce qui touche à la base PostgreSQL. Je travaille aussi sur GCP : Cloud Functions, Cloud Scheduler, Cloud Run.
 - **work** — Paiement Stripe et gestion de compte client · Services tiers pour le marketing (Klaviyo) · Première version du catalogue produit · Tooling interne en Next.js, adopté par toutes les équipes
-- **stack** — Kotlin, Spring Boot, PostgreSQL, GCP, Next.js, Python
+- **stack** — Kotlin, Spring Boot, PostgreSQL, GCP, Next.js, Node.js, Python
 
 *grandes enseignes nord-américaines* is the scale statement agreed in place of the partner
 names. It is true and it names nobody.
@@ -162,7 +166,7 @@ names. It is true and it names nobody.
 ### 2. MecaLIFE Group · Toulouse · mars 2021 → sept. 2022
 
 - **what** — Rapports détaillés de véhicules : les équipements et options d'un modèle donné, à partir de sa marque, son année et sa version.
-- **role** — Full Stack Developer, en alternance puis en poste. Front, back, base de données, et l'administration des serveurs Debian avec leur chaîne de déploiement.
+- **role** — Full Stack Developer, en stage puis en poste. Front, back, base de données, et l'administration des serveurs Debian avec leur chaîne de déploiement.
 - **work** — La plateforme de rapports véhicules · Une plateforme de ventes aux enchères en fin d'alternance, avec paiement Stripe et tarification dynamique selon le type de véhicule · Un outil interne d'aide à la conception de rapports · CI/CD, Apache et Docker sur Debian
 - **stack** — PHP, Laravel, React, Node.js, PostgreSQL, Docker
 
@@ -188,7 +192,12 @@ currently has it.
 ## The CV corrections
 
 `EXPERIENCE` in `Cv.tsx` holds six positions. Two need correcting, and the corrections are
-additive — no existing bullet is wrong, they are incomplete.
+additive with one exception, and no existing bullet is wrong.
+
+The exception: `TypeScript` was **removed** from the MecaLIFE tags. What Elie named
+there was PHP Laravel, Angular (legacy), MySQL then PostgreSQL, Node/Express, React,
+on Debian with Apache and Docker. `TypeScript` was in the tag list without a source,
+which is the same defect as an invented metric wearing a different hat.
 
 **Both Pictarine positions** gain the cloud work. The current-role entry gains a bullet on
 designing and maintaining Cloud Functions, Cloud Scheduler and Cloud Run on GCP, and its
@@ -198,7 +207,8 @@ designing and maintaining Cloud Functions, Cloud Scheduler and Cloud Run on GCP,
 demoting the auction platform to what it was: the end of the role. Its `tags` gain `Laravel`
 and `React`.
 
-`HARD_SKILLS` gains `GCP` and `Laravel`.
+`HARD_SKILLS` gains `GCP`, `Laravel` and `PHP` — `PHP` because it is in three of the
+four companies' stacks and was missing for exactly the reason `GCP` was.
 
 **Three badges are missing, not one.** An earlier revision of this section asserted that
 only `Laravel` needed registering. Checking the file rather than trusting the sentence
@@ -215,7 +225,11 @@ caught for Proxmox and Traefik on the infrastructure slide.
 
 `JavaScript` is a darkened gold rather than the brand's `#f7df1e`: `ProjectSlide` hard-codes
 the monogram in white, and white on that yellow is illegible. The darkened value sits at the
-same contrast as `Grafana`'s orange, already in the file.
+lowest white-on-colour contrast in the file — about **2.42:1**, against `Grafana`'s
+`#f46800` at about **3.07:1**. An earlier revision of this paragraph claimed the two
+sat at the same contrast; they do not, and the new gold is the lighter of the pair.
+Darkening away from `#f7df1e` was still right, since white on that is unreadable —
+only the comparison defending it was false.
 
 ## i18n
 
@@ -223,8 +237,15 @@ same contrast as `Grafana`'s orange, already in the file.
 | --- | --- | --- |
 | `p_group_personal` | added | rail group heading — *Persos* / *Personal* |
 | `p_group_company` | added | rail group heading — *Pro* / *Professional* |
-| `c_what` | added | card label — *L'entreprise* / *The company* |
-| `c_work` | added | card label — *Ce que j'y ai fait* / *What I did there* |
+| `co_what` | added | card label — *L'entreprise* / *The company* |
+| `co_work` | added | card label — *Ce que j'y ai fait* / *What I did there* |
+| `p_rail` | added | the rail's `aria-label`, *Parcours* / *Work* |
+
+The prefix is `co_`, not the `c_` an earlier revision of this table proposed: `c_*`
+already belongs to the Contact app (`c_greet`, `c_auto`, `c_online`, `c_ph`, `c_send`).
+`p_rail` was not foreseen here at all — the rail's label was `p_count_l`, which
+`PortfolioPage` shares, so renaming the window forced a dedicated key. `np_open_projects`,
+`p_prev` and `p_next` were reworded for the same reason.
 | `p_count_l` | kept | still the rail's `aria-label` and `PortfolioPage`'s table heading |
 | `sub_projects` | kept | reads correctly for both groups |
 
@@ -286,10 +307,16 @@ replaces them.
 
 Unchanged from the previous spec, minus this one:
 
-1. **Architecture diagrams** — a `deck-arch` section, enlargeable.
-2. **A print stylesheet**, or an honest relabelling of the CV's *Imprimer* button.
-3. **A real TicoqOS screenshot**, replacing the `À REMPLACER` placeholder on slide 1.
-4. **Dropping `accent`** — required by `Project`, rendered by no component, duplicated into
+1. **A review pass on all the English**, across the personal projects and the company
+   cards at once — two lots have now shipped with it written by an agent and unread.
+2. **Decoupling the deck's group order from the rail's** — `Projects.tsx` concatenates
+   personal-then-companies and `SlideRail.tsx` independently hardcodes the same order, so a
+   change to either would put the *Persos* heading above thumbnails numbered 5–12 with no
+   test to catch it.
+3. **Architecture diagrams** — a `deck-arch` section, enlargeable.
+4. **A print stylesheet**, or an honest relabelling of the CV's *Imprimer* button.
+5. **A real TicoqOS screenshot**, replacing the `À REMPLACER` placeholder on slide 1.
+6. **Dropping `accent`** — required by `Project`, rendered by no component, duplicated into
    `make_covers.py`.
-5. **An IHDR dimension assertion** for a hand-dropped banner that never passes through
+7. **An IHDR dimension assertion** for a hand-dropped banner that never passes through
    `save_png`.

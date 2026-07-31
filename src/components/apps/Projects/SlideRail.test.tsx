@@ -44,7 +44,7 @@ const mkCompany = (id: string, name: string): DeckEntry => ({
 
 const entries = [mkProject('a', 'Alpha'), mkProject('b', 'Beta'), mkCompany('cx', 'Contoso')];
 
-it('renders one thumbnail per project', () => {
+it('renders one thumbnail per entry', () => {
   render(
     <LangProvider>
       <SlideRail entries={entries} activeIndex={0} onSelect={() => {}} />
@@ -114,4 +114,26 @@ it('reports a global index when a company thumbnail is clicked, not its index wi
   );
   fireEvent.click(screen.getByText('Contoso'));
   expect(onSelect).toHaveBeenCalledWith(2);
+});
+
+it('keeps thumbnails as direct children of the rail, which the mobile layout depends on', () => {
+  // .deck-rail is a flex column that becomes a row with overflow-x below 720px,
+  // and .deck-thumb's flex: 0 0 auto only applies to a direct flex child. A
+  // wrapper element per group silently turns the strip into stacked columns.
+  const { container } = render(
+    <LangProvider>
+      <SlideRail entries={entries} activeIndex={0} onSelect={() => {}} />
+    </LangProvider>,
+  );
+  const rail = container.querySelector('.deck-rail');
+  expect(rail?.querySelectorAll(':scope > .deck-thumb')).toHaveLength(entries.length);
+});
+
+it('renders one heading when a group is empty, not an empty group', () => {
+  const { container } = render(
+    <LangProvider>
+      <SlideRail entries={[mkCompany('cx', 'Contoso')]} activeIndex={0} onSelect={() => {}} />
+    </LangProvider>,
+  );
+  expect(container.querySelectorAll('.deck-rail .hd')).toHaveLength(1);
 });

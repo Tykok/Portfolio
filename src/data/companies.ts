@@ -47,7 +47,7 @@ export const companies: Company[] = [
         'Internal tooling in Next.js, adopted by every team',
       ],
     },
-    stack: ['Kotlin', 'Spring Boot', 'PostgreSQL', 'GCP', 'Next.js', 'Python'],
+    stack: ['Kotlin', 'Spring Boot', 'PostgreSQL', 'GCP', 'Next.js', 'Node.js', 'Python'],
   },
   {
     id: 'mecalife',
@@ -61,19 +61,19 @@ export const companies: Company[] = [
       en: 'Detailed vehicle reports: the equipment and options of a given model, from its make, year and trim.',
     },
     role: {
-      fr: "Full Stack Developer, en alternance puis en poste. Front, back, base de données, et l'administration des serveurs Debian avec leur chaîne de déploiement.",
-      en: 'Full Stack Developer, first as an apprentice then on staff. Front, back, database, and the administration of the Debian servers along with their deployment chain.',
+      fr: "Full Stack Developer, en stage puis en poste. Front, back, base de données, et l'administration des serveurs Debian avec leur chaîne de déploiement.",
+      en: 'Full Stack Developer, first as an intern then on staff. Front, back, database, and the administration of the Debian servers along with their deployment chain.',
     },
     work: {
       fr: [
         'La plateforme de rapports véhicules',
-        "Une plateforme de ventes aux enchères en fin d'alternance, avec paiement Stripe et tarification dynamique selon le type de véhicule",
+        'Une plateforme de ventes aux enchères en fin de poste, avec paiement Stripe et tarification dynamique selon le type de véhicule',
         "Un outil interne d'aide à la conception de rapports",
         'CI/CD, Apache et Docker sur Debian',
       ],
       en: [
         'The vehicle report platform',
-        'An auction platform at the end of the apprenticeship, with Stripe payments and pricing that varied by vehicle type',
+        'An auction platform at the end of the role, with Stripe payments and pricing that varied by vehicle type',
         'An internal tool to help design reports',
         'CI/CD, Apache and Docker on Debian',
       ],

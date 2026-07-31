@@ -28,7 +28,7 @@ const EXPERIENCE = [
         'Full cycle: design, build, release, impact analysis — Docker & monitoring',
       ],
     },
-    tags: ['Kotlin', 'Spring Boot', 'PostgreSQL', 'GCP', 'Stripe', 'Docker', 'Python'],
+    tags: ['Kotlin', 'Spring Boot', 'PostgreSQL', 'GCP', 'Node.js', 'Stripe', 'Docker', 'Python'],
   },
   {
     org: { fr: 'Pictarine · Toulouse', en: 'Pictarine · Toulouse' },
@@ -52,7 +52,7 @@ const EXPERIENCE = [
         'Agile environment alongside Product and Engineering teams',
       ],
     },
-    tags: ['Kotlin', 'Spring Boot', 'PostgreSQL', 'Next.js', 'TypeScript', 'Python'],
+    tags: ['Kotlin', 'Spring Boot', 'PostgreSQL', 'Next.js', 'Node.js', 'TypeScript', 'Python'],
   },
   {
     org: { fr: 'MecaLIFE Group · Toulouse', en: 'MecaLIFE Group · Toulouse' },
