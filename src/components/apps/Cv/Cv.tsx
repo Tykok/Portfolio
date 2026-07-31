@@ -11,6 +11,7 @@ const EXPERIENCE = [
     bullets: {
       fr: [
         'APIs backend en Kotlin / Spring Boot, données sur PostgreSQL',
+        'Services serverless sur GCP : Cloud Functions, Cloud Scheduler et Cloud Run',
         'Intégrations de paiement (Stripe) et de services tiers (Klaviyo pour le marketing)',
         'Intégration et gestion de compte client',
         'Maintenance et évolution du tooling interne utilisé par toutes les équipes',
@@ -19,6 +20,7 @@ const EXPERIENCE = [
       ],
       en: [
         'Backend APIs in Kotlin / Spring Boot, data on PostgreSQL',
+        'Serverless services on GCP: Cloud Functions, Cloud Scheduler and Cloud Run',
         'Payment integrations (Stripe) and third-party services (Klaviyo for marketing)',
         'Customer account onboarding and management',
         'Maintenance and evolution of the internal tooling used by every team',
@@ -26,7 +28,7 @@ const EXPERIENCE = [
         'Full cycle: design, build, release, impact analysis — Docker & monitoring',
       ],
     },
-    tags: ['Kotlin', 'Spring Boot', 'PostgreSQL', 'Stripe', 'Docker'],
+    tags: ['Kotlin', 'Spring Boot', 'PostgreSQL', 'GCP', 'Stripe', 'Docker', 'Python'],
   },
   {
     org: { fr: 'Pictarine · Toulouse', en: 'Pictarine · Toulouse' },
@@ -50,7 +52,7 @@ const EXPERIENCE = [
         'Agile environment alongside Product and Engineering teams',
       ],
     },
-    tags: ['Kotlin', 'Spring Boot', 'PostgreSQL', 'Next.js', 'TypeScript'],
+    tags: ['Kotlin', 'Spring Boot', 'PostgreSQL', 'Next.js', 'TypeScript', 'Python'],
   },
   {
     org: { fr: 'MecaLIFE Group · Toulouse', en: 'MecaLIFE Group · Toulouse' },
@@ -58,19 +60,21 @@ const EXPERIENCE = [
     when: { fr: 'sept. 2021 – sept. 2022', en: 'Sep 2021 – Sep 2022' },
     bullets: {
       fr: [
-        'Plateforme de ventes aux enchères & outils internes : APIs REST, modélisation de bases de données',
+        'Plateforme de rapports détaillés de véhicules : équipements et options par marque, année et version',
+        'Plateforme de ventes aux enchères en fin de poste, et outils internes : APIs REST, modélisation de bases de données',
         'Sécurisation des accès (JWT, droits utilisateurs), paiement Stripe, tarification dynamique',
         'Administration serveur (Apache, PostgreSQL, SSH), automatisation (Python / Bash / cron)',
         'Qualité logicielle & déploiement : tests, CI/CD, GitFlow',
       ],
       en: [
-        'Auction platform & internal tools: REST APIs, database modeling',
+        'Platform for detailed vehicle reports: equipment and options by make, year and trim',
+        'An auction platform at the end of the role, plus internal tools: REST APIs, database modeling',
         'Access security (JWT, user rights), Stripe payments, dynamic pricing',
         'Server administration (Apache, PostgreSQL, SSH), automation (Python / Bash / cron)',
         'Software quality & delivery: tests, CI/CD, GitFlow',
       ],
     },
-    tags: ['TypeScript', 'PostgreSQL', 'Stripe', 'Python', 'Bash'],
+    tags: ['PHP', 'Laravel', 'React', 'PostgreSQL', 'Stripe', 'Python', 'Bash'],
   },
   {
     org: { fr: 'MecaLIFE Group · Toulouse', en: 'MecaLIFE Group · Toulouse' },
@@ -169,9 +173,12 @@ const HARD_SKILLS = [
   'Java',
   'TypeScript',
   'Next.js',
+  'PHP',
+  'Laravel',
   'PostgreSQL',
   'MySQL',
   'Docker',
+  'GCP',
   'Stripe',
   'Python',
   'Bash',
