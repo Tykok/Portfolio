@@ -55,4 +55,23 @@ describe('Cv app', () => {
     const { container } = renderCv();
     expect(container.textContent).not.toMatch(/\b0\d(?:[\s.-]?\d{2}){4}\b/);
   });
+
+  it('states what Elie wants to work on', () => {
+    renderCv();
+    expect(screen.getByText(fr.cv_wants)).toBeInTheDocument();
+    expect(document.querySelectorAll('.cv2-want p')).toHaveLength(3);
+    expect(screen.getByText("Le back, l'infra et les bases de données.")).toBeInTheDocument();
+    expect(screen.getByText('Un endroit où on apprend.')).toBeInTheDocument();
+  });
+
+  it('fills all three lines of the block, lead and rest', () => {
+    const { container } = renderCv();
+    const lines = container.querySelectorAll('.cv2-want p');
+    expect(lines).toHaveLength(3);
+    lines.forEach((line) => {
+      const lead = line.querySelector('b');
+      expect(lead?.textContent?.trim()).toBeTruthy();
+      expect(line.textContent?.replace(lead?.textContent ?? '', '').trim()).toBeTruthy();
+    });
+  });
 });

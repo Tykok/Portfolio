@@ -83,6 +83,7 @@ const en: Translations = {
   cv_soft: 'Soft skills',
   cv_lang: 'Languages',
   cv_interests: 'Interests',
+  cv_wants: 'What I want to work on',
   c_greet: 'Hi 👋 This is TicoqOS messenger. Write to me, or click a contact on the left!',
   c_auto: 'Thanks for your message! (auto-reply) — for real, email treportelie12@gmail.com.',
   c_online: 'Online',

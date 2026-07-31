@@ -1,7 +1,7 @@
 import { useLang } from 'context/LangContext';
 import { identity } from 'data/identity';
 import { getBadge } from 'data/techBadges';
-import type { LocalizedStringArray } from 'types/lang';
+import type { LocalizedString, LocalizedStringArray } from 'types/lang';
 
 const EXPERIENCE = [
   {
@@ -187,6 +187,21 @@ const LANGUAGES: LocalizedStringArray = {
   en: ['French — native', 'English — professional working'],
 };
 
+const WANTS: { lead: LocalizedString; rest: LocalizedString }[] = [
+  {
+    lead: { fr: "Le back, l'infra et les bases de données.", en: 'Backend, infrastructure and databases.' },
+    rest: { fr: 'C’est là que je veux rester.', en: 'That is where I want to stay.' },
+  },
+  {
+    lead: { fr: 'Un endroit où on apprend.', en: 'A place where you learn.' },
+    rest: { fr: 'C’est ma seule condition non négociable.', en: 'That is my one non-negotiable.' },
+  },
+  {
+    lead: { fr: 'Construire quelque chose de vraiment utile,', en: 'Building something genuinely useful,' },
+    rest: { fr: 'qui ait du sens — c’est ce que je vise à trois ans.', en: 'with real meaning — that is my three-year aim.' },
+  },
+];
+
 export function Cv() {
   const { lang, t } = useLang();
 
@@ -300,6 +315,17 @@ export function Cv() {
                   <span key={l} style={{ fontSize: 12, color: 'var(--ink)' }}>
                     {l}
                   </span>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3>{t('cv_wants')}</h3>
+              <div className="cv2-want">
+                {WANTS.map((w) => (
+                  <p key={w.lead.fr}>
+                    <b>{w.lead[lang]}</b> {w.rest[lang]}
+                  </p>
                 ))}
               </div>
             </div>

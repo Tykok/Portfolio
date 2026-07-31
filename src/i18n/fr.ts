@@ -83,6 +83,7 @@ const fr: Translations = {
   cv_soft: 'Soft skills',
   cv_lang: 'Langues',
   cv_interests: "Centres d'intérêt",
+  cv_wants: "Ce qui m'intéresse",
   c_greet: 'Salut 👋 Ici la messagerie de TicoqOS. Écris-moi, ou clique un contact à gauche !',
   c_auto: 'Merci pour ton message ! (réponse automatique) — pour de vrai, écris à treportelie12@gmail.com.',
   c_online: 'En ligne',
