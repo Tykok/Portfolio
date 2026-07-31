@@ -530,6 +530,15 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-f
   height: 100%;
 }
 
+/* Coque du deck : l'avis d'erreur prend sa hauteur, le deck prend le reste.
+   Sans elle, .deck-B (height: 100%) et un frère non nul dépassent .os-winbody,
+   qui est un conteneur bloc en overflow:auto — le deck partait sous la ligne
+   de flottaison au lieu de tenir dans la fenêtre. */
+.deck-shell { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+.deck-shell > .deck-B { flex: 1 1 auto; height: auto; min-height: 0; }
+.pj-notice { flex: 0 0 auto; padding: 9px 14px; background: #fff5f4; border-bottom: 1px solid #f2d6d3; color: #9d3a2f; font-size: 12px; }
+.pj-notice p { margin: 0; }
+
 /* CV — direction A (deux colonnes, moderne) ------------------------------- */
 .cv2 { --cv-font: "Segoe UI", "Segoe UI Variable", Tahoma, Verdana, sans-serif; font-family: var(--cv-font); color: #21252c; background: #f6f7f9; }
 .cv2-tb { display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: var(--face-light); border-bottom: 1px solid var(--edge-soft); flex: 0 0 auto; }
