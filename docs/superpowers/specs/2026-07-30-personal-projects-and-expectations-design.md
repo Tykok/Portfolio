@@ -154,7 +154,14 @@ the lesson has not arrived yet.
 
 - **desc** — Portfolio façon OS rétro : fenêtres, taskbar, terminal et apps. Le site que vous parcourez.
 - **context** — Le premier système que j'ai eu entre les mains, c'était pour faire des exposés en primaire. Reconstruire ce bureau-là était d'abord un plaisir, et un prétexte : écrire un vrai gestionnaire de fenêtres plutôt qu'une page de plus. Un CV en PDF ne montre pas comment quelqu'un construit — celui-ci se manipule.
-- **takeaway** — Le drag, le z-index et le focus clavier m'ont pris du temps, mais ils ont une fin. Ce qui n'en a pas, c'est la cohérence : deux langues, cinq thèmes et une douzaine d'apps qui doivent rester d'accord sans qu'une seule chaîne soit écrite deux fois.
+- **takeaway** — Le drag, le z-index et le focus clavier m'ont pris du temps, mais ils ont une fin. Ce qui n'en a pas, c'est la cohérence : deux langues, cinq thèmes et sept apps qui doivent rester d'accord sans qu'une seule chaîne soit écrite deux fois.
+
+An earlier revision of this sentence said *une douzaine d'apps*. A review checked it against
+the code: `AppKey` in `src/types/app.ts` and the registry in `src/data/apps.ts` hold exactly
+seven apps, and `OSContext.tsx:6` exactly five themes. Two of the three figures were right
+and the app count was not. Elie chose the exact number over the figure of speech, which is
+what the no-invented-metrics rule demanded of a sentence that is trivially checkable by
+anyone who opens the repository.
 - **bullets** — Gestionnaire de fenêtres & taskbar maison · i18n FR/EN, thèmes et easter eggs · API projets dynamique
 - **role** — Projet personnel — conception, design et développement
 - **stack** — React, TypeScript, Vite
