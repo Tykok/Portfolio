@@ -75,6 +75,8 @@ const fr: Translations = {
   p_takeaway: "Ce que j'en retiens",
   co_what: "L'entreprise",
   co_work: "Ce que j'y ai fait",
+  p_group_personal: 'Persos',
+  p_group_company: 'Pro',
   p_role: 'Rôle',
   p_prev: 'Projet précédent',
   p_next: 'Projet suivant',

@@ -3,10 +3,11 @@ import { mockProjects } from 'api/mock/projects.mock';
 
 import LangProvider from 'context/LangContext';
 import { ProjectsProvider } from 'context/ProjectsContext';
+import { companies } from 'data/companies';
 
 import { Projects } from './Projects';
 
-const total = mockProjects.length;
+const total = mockProjects.length + companies.length;
 
 function renderApp() {
   return render(
