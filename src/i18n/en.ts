@@ -73,6 +73,8 @@ const en: Translations = {
   p_demo: 'Demo',
   p_no_public_code: 'Code is not public',
   p_takeaway: 'What I took from it',
+  co_what: 'The company',
+  co_work: 'What I did there',
   p_role: 'Role',
   p_prev: 'Previous project',
   p_next: 'Next project',

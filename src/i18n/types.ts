@@ -68,6 +68,8 @@ export interface Translations {
   p_demo: string;
   p_no_public_code: string;
   p_takeaway: string;
+  co_what: string;
+  co_work: string;
   p_role: string;
   p_prev: string;
   p_next: string;
