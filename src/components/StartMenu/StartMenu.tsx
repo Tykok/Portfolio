@@ -29,7 +29,7 @@ const SUB_KEY: Record<AppKey, StringKey> = {
 export function StartMenu({ onClose, onShutdown, onLogoff }: Props) {
   const { lang, t } = useLang();
   const { openApp } = useWindowContext();
-  const { openAbout } = useOS();
+  const { openAbout, openTips } = useOS();
 
   const handleOpen = (key: AppKey) => {
     openApp(key);
@@ -38,6 +38,11 @@ export function StartMenu({ onClose, onShutdown, onLogoff }: Props) {
 
   const handleAbout = () => {
     openAbout();
+    onClose();
+  };
+
+  const handleTips = () => {
+    openTips();
     onClose();
   };
 
@@ -97,6 +102,10 @@ export function StartMenu({ onClose, onShutdown, onLogoff }: Props) {
             {t('sub_media')}
           </div>
           <div className="os-sep blue" />
+          <div className="os-place" onClick={handleTips}>
+            <span className="os-place-ic gly">💡</span>
+            {t('m_tips')}
+          </div>
           <div className="os-place" onClick={handleAbout}>
             <span className="os-place-ic gly">ℹ️</span>
             {t('m_about_os')}

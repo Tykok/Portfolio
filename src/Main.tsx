@@ -14,8 +14,8 @@ import { Boot } from 'components/OS/Boot/Boot';
 import { Bsod } from 'components/OS/Bsod/Bsod';
 import { KonamiRain } from 'components/OS/KonamiRain/KonamiRain';
 import { Login } from 'components/OS/Login/Login';
-import { Mascot } from 'components/OS/Mascot/Mascot';
 import { Off } from 'components/OS/Off/Off';
+import { TipsDialog } from 'components/OS/TipsDialog/TipsDialog';
 import { TaskBar } from 'components/TaskBar/TaskBar';
 import { Window } from 'components/Window/Window';
 import { LangProvider } from 'context/LangContext';
@@ -52,7 +52,7 @@ function AppContent({ appKey }: { appKey: AppKey }): JSX.Element | null {
 
 function OS() {
   const { windows } = useWindowContext();
-  const { bsod, konamiRain, triggerRain, aboutOpen, closeAbout, theme } = useOS();
+  const { bsod, konamiRain, triggerRain, aboutOpen, closeAbout, tipsOpen, closeTips, theme } = useOS();
   const [phase, setPhase] = useState<Phase>('boot');
   const konamiSeq = useRef<string[]>([]);
 
@@ -75,15 +75,17 @@ function OS() {
     return () => document.removeEventListener('keydown', onKey);
   }, [triggerRain]);
 
-  /* Escape closes About dialog */
+  /* Escape closes whichever dialog is open */
   useEffect(() => {
-    if (!aboutOpen) return;
+    if (!aboutOpen && !tipsOpen) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeAbout();
+      if (e.key !== 'Escape') return;
+      if (aboutOpen) closeAbout();
+      if (tipsOpen) closeTips();
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [aboutOpen, closeAbout]);
+  }, [aboutOpen, closeAbout, tipsOpen, closeTips]);
 
   const themeClass = phase === 'desktop' && theme !== 'bliss' ? ` theme-${theme}` : '';
 
@@ -103,10 +105,10 @@ function OS() {
             </Window>
           ))}
           <TaskBar onShutdown={() => setPhase('off')} onLogoff={() => setPhase('login')} />
-          <Mascot />
           {bsod && <Bsod />}
           {konamiRain && <KonamiRain />}
           {aboutOpen && <AboutDialog />}
+          {tipsOpen && <TipsDialog />}
         </>
       )}
     </div>

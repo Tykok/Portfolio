@@ -15,7 +15,7 @@ export function Bsod() {
         <p>
           Check to make sure your coffee supply is sufficient.
           <br />
-          If the mascot is still crowing, run the window manager
+          If the desktop is still unresponsive, run the window manager
           <br />
           to make sure any new themes are properly configured.
         </p>

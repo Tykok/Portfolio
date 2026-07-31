@@ -34,7 +34,7 @@ describe('locale completeness', () => {
   });
 
   it('keeps list-valued keys the same length across locales', () => {
-    const lists = ['cal_days', 'cal_months', 'mascot_tips', 't_fortunes', 't_neofetch'] as const;
+    const lists = ['cal_days', 'cal_months', 'os_tips', 't_fortunes', 't_neofetch'] as const;
     lists.forEach((k) => {
       expect(en[k]).toHaveLength(fr[k].length);
       expect(fr[k].length).toBeGreaterThan(0);
