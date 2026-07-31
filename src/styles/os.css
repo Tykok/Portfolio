@@ -561,6 +561,9 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-f
 .cv2-skill { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: #343a44; background: #fff; border: 1px solid #e3e6ec; border-radius: 9px; padding: 5px 11px 5px 5px; line-height: 1; }
 .cvb { border-radius: 6px; color: #fff; display: inline-flex; align-items: center; justify-content: center; width: 19px; height: 19px; font-family: var(--font-mono); font-size: 8.5px; font-weight: 700; box-shadow: inset 0 1px 0 rgba(255,255,255,.22); }
 .cv2-soft { font-size: 12px; color: #2e6a3f; background: #eaf6ee; border: 1px solid #cde9d6; border-radius: 999px; padding: 4px 11px; }
+.cv2-want { display: flex; flex-direction: column; gap: 9px; }
+.cv2-want p { margin: 0; font-size: 12px; line-height: 1.5; color: var(--ink); text-wrap: pretty; }
+.cv2-want b { color: #1a52d6; }
 @media (max-width: 640px) {
   .cv2-cols { grid-template-columns: 1fr; }
   .cv2-side { flex-direction: row; flex-wrap: wrap; }
