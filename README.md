@@ -102,7 +102,7 @@ src/
   api/          client HTTP, accès projets, mock
   components/
     apps/       fenêtres applicatives (About, Cv, Projects, Terminal, Web…)
-    OS/         couches système (Boot, Login, Bsod, Mascot, KonamiRain…)
+    OS/         couches système (Boot, Login, Bsod, TipsDialog, KonamiRain…)
     Desktop/    bureau, icônes, menu contextuel
     TaskBar/    barre des tâches, zone de notification, calendrier
     Window/     chrome de fenêtre, barre de titre

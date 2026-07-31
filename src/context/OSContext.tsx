@@ -14,12 +14,12 @@ interface OSContextValue {
   clearRain: () => void;
   theme: DesktopTheme;
   setTheme: (t: DesktopTheme | 'next') => void;
-  mascot: { visible: boolean; msg: string };
-  showMascot: (msg: string) => void;
-  hideMascot: () => void;
   aboutOpen: boolean;
   openAbout: () => void;
   closeAbout: () => void;
+  tipsOpen: boolean;
+  openTips: () => void;
+  closeTips: () => void;
 }
 
 const OSContext = createContext<OSContextValue>({
@@ -31,20 +31,20 @@ const OSContext = createContext<OSContextValue>({
   clearRain: () => {},
   theme: 'bliss',
   setTheme: () => {},
-  mascot: { visible: false, msg: '' },
-  showMascot: () => {},
-  hideMascot: () => {},
   aboutOpen: false,
   openAbout: () => {},
   closeAbout: () => {},
+  tipsOpen: false,
+  openTips: () => {},
+  closeTips: () => {},
 });
 
 export function OSProvider({ children }: { children: ReactNode }) {
   const [bsod, setBsod] = useState(false);
   const [konamiRain, setKonamiRain] = useState(false);
   const [theme, setThemeState] = useState<DesktopTheme>('bliss');
-  const [mascot, setMascot] = useState<{ visible: boolean; msg: string }>({ visible: false, msg: '' });
   const [aboutOpen, setAboutOpen] = useState(false);
+  const [tipsOpen, setTipsOpen] = useState(false);
 
   const triggerBsod = useCallback(() => setBsod(true), []);
   const clearBsod = useCallback(() => setBsod(false), []);
@@ -62,10 +62,10 @@ export function OSProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const showMascot = useCallback((msg: string) => setMascot({ visible: true, msg }), []);
-  const hideMascot = useCallback(() => setMascot((m) => ({ ...m, visible: false })), []);
   const openAbout = useCallback(() => setAboutOpen(true), []);
   const closeAbout = useCallback(() => setAboutOpen(false), []);
+  const openTips = useCallback(() => setTipsOpen(true), []);
+  const closeTips = useCallback(() => setTipsOpen(false), []);
 
   return (
     <OSContext.Provider
@@ -78,12 +78,12 @@ export function OSProvider({ children }: { children: ReactNode }) {
         clearRain,
         theme,
         setTheme,
-        mascot,
-        showMascot,
-        hideMascot,
         aboutOpen,
         openAbout,
         closeAbout,
+        tipsOpen,
+        openTips,
+        closeTips,
       }}
     >
       {children}

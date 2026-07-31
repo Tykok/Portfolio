@@ -32,7 +32,7 @@ const fr: Translations = {
   tip_start: 'Cliquez ici pour commencer.',
   tip_show_desktop: 'Afficher le Bureau',
   tip_calendar: 'Cliquer pour afficher le calendrier',
-  mascot_tips: [
+  os_tips: [
     "Double-clique sur une icône pour l'ouvrir !",
     'Tu peux glisser les icônes du bureau où tu veux.',
     'Essaie le Konami Code : ↑↑↓↓←→←→BA 🤫',
@@ -40,7 +40,6 @@ const fr: Translations = {
     'Le terminal connaît `neofetch`, `cowsay` et `easter`…',
     'Elie héberge ses projets sur son propre serveur.',
     "Clique sur l'horloge pour voir le calendrier.",
-    'Je suis Cocorico, mascotte de TicoqOS 🐓',
     'Les fenêtres se redimensionnent par le coin bas-droit.',
     'Double-clique sur la barre de titre pour maximiser.',
     'Ouvre TicoqExplorer pour voir le portfolio complet.',
@@ -67,6 +66,7 @@ const fr: Translations = {
   sub_web: 'Mon portfolio en ligne',
   sm_allprogs: 'Tous les programmes',
   m_about_os: 'À propos de TicoqOS',
+  m_tips: 'Astuces de TicoqOS',
   about_skills: 'Stack & compétences',
   p_count_l: 'Projets',
   p_repo: 'Voir le repo',
