@@ -53,7 +53,7 @@ it('renders cover image when present', () => {
 
 it('hides role line when role absent, shows it when present', () => {
   const { rerender } = renderSlide(base);
-  expect(screen.queryByText(/Role/i)).toBeNull();
+  expect(screen.queryByText(/Rôle/)).toBeNull();
   rerender(
     <LangProvider>
       <ProjectSlide project={{ ...base, role: { fr: 'Lead', en: 'Lead' } }} />

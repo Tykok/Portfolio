@@ -165,9 +165,8 @@ def placeholder(accent):
     guarantee. The text box above already darkens rows 116-236 on its own
     (fill alpha 150); add_scrim's curve only reaches noticeable strength past
     ~y=230 (its band starts at y=190 and ramps with an easing power, so the
-    first 40px contribute very little), so the overlap stays mild rather than
-    stacking into the mud finding 3 fixed elsewhere - confirmed by eye after
-    regenerating.
+    first 40px contribute very little), so the two darkenings do not compound
+    into mud where they overlap - confirmed by eye after regenerating.
     """
     img = new_banner(shade(accent, 0.7))
     d = draw(img)
