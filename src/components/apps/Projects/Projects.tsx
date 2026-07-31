@@ -35,12 +35,12 @@ export function Projects() {
   const safeIndex = Math.min(activeIndex, entries.length - 1);
 
   return (
-    <>
+    // .deck-shell is a flex column so the notice takes its own height and the
+    // deck takes the rest. Without it, .deck-B's height: 100% plus a non-zero
+    // sibling overflows .os-winbody and pushes the deck below the fold.
+    <div className="deck-shell">
       {projectsUnavailable && (
-        // .pj-state normally fills the whole window as the loading/error state
-        // on its own; here it sits above a deck that still renders, so its
-        // height is overridden to fit the message rather than the window.
-        <div className="pj-state" style={{ height: 'auto' }}>
+        <div className="pj-notice">
           <p>{t('projects_error')}</p>
         </div>
       )}
@@ -48,6 +48,6 @@ export function Projects() {
         <SlideRail entries={entries} activeIndex={safeIndex} onSelect={setActiveIndex} />
         <SlideStage entries={entries} activeIndex={safeIndex} onSelect={setActiveIndex} />
       </div>
-    </>
+    </div>
   );
 }
