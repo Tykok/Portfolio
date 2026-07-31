@@ -46,9 +46,9 @@ it('renders the active slide and the counter', () => {
 
 it('next button advances, prev button goes back', () => {
   const { onSelect } = renderStage(1);
-  fireEvent.click(screen.getByRole('button', { name: 'Next project' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Next' }));
   expect(onSelect).toHaveBeenCalledWith(2);
-  fireEvent.click(screen.getByRole('button', { name: 'Previous project' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Previous' }));
   expect(onSelect).toHaveBeenCalledWith(0);
 });
 
@@ -59,13 +59,13 @@ it('prev is disabled on first slide, next disabled on last', () => {
       <SlideStage entries={entries} activeIndex={0} onSelect={vi.fn()} />
     </LangProvider>,
   );
-  expect(screen.getByRole('button', { name: 'Previous project' })).toBeDisabled();
+  expect(screen.getByRole('button', { name: 'Previous' })).toBeDisabled();
   rerender(
     <LangProvider>
       <SlideStage entries={entries} activeIndex={2} onSelect={vi.fn()} />
     </LangProvider>,
   );
-  expect(screen.getByRole('button', { name: 'Next project' })).toBeDisabled();
+  expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled();
 });
 
 it('arrow keys navigate', () => {

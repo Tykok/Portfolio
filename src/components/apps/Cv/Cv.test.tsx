@@ -100,4 +100,15 @@ describe('Cv app', () => {
       expect(skills.some((label) => label.includes(tech))).toBe(true);
     });
   });
+
+  it('names no partner — the constraint covers the CV, not only the company cards', () => {
+    // companies.test.ts guards the card data. The CV describes the same four
+    // employers, so it is the other place a partner name could land, and
+    // EXPERIENCE is module-private — the rendered document is the way in.
+    const { container } = renderCv();
+    const rendered = (container.textContent ?? '').toLowerCase();
+    ['walgreens', 'cvs', 'fuji'].forEach((partner) => {
+      expect(rendered).not.toContain(partner);
+    });
+  });
 });

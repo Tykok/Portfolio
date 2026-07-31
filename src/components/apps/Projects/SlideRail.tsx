@@ -1,3 +1,5 @@
+import { Fragment } from 'react';
+
 import { useLang } from 'context/LangContext';
 import type { DeckEntry } from 'data/deck';
 import { toRailItem } from 'data/deck';
@@ -21,9 +23,9 @@ export function SlideRail({ entries, activeIndex, onSelect }: SlideRailProps) {
   ].filter((group) => group.items.length > 0);
 
   return (
-    <nav className="deck-rail" aria-label={t('p_count_l')}>
+    <nav className="deck-rail" aria-label={t('p_rail')}>
       {groups.map((group) => (
-        <div key={group.key}>
+        <Fragment key={group.key}>
           <div className="hd">
             {group.label} ({group.items.length})
           </div>
@@ -45,7 +47,7 @@ export function SlideRail({ entries, activeIndex, onSelect }: SlideRailProps) {
               </button>
             );
           })}
-        </div>
+        </Fragment>
       ))}
     </nav>
   );

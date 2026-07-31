@@ -64,6 +64,7 @@ export interface Translations {
   about_skills: string;
   // Projects app
   p_count_l: string;
+  p_rail: string;
   p_repo: string;
   p_demo: string;
   p_no_public_code: string;
