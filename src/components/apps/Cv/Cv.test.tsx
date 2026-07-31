@@ -74,4 +74,30 @@ describe('Cv app', () => {
       expect(line.textContent?.replace(lead?.textContent ?? '', '').trim()).toBeTruthy();
     });
   });
+
+  it('states the GCP work, which the CV was omitting entirely', () => {
+    renderCv();
+    expect(screen.getByText(/Cloud Functions, Cloud Scheduler et Cloud Run/)).toBeInTheDocument();
+  });
+
+  it('names the MecaLIFE vehicle-report platform before the auction one', () => {
+    const { container } = renderCv();
+    const text = container.textContent ?? '';
+    const reports = text.indexOf('rapports détaillés de véhicules');
+    const auction = text.indexOf('ventes aux enchères');
+    expect(reports).toBeGreaterThan(-1);
+    expect(auction).toBeGreaterThan(-1);
+    expect(reports).toBeLessThan(auction);
+  });
+
+  it('lists PHP, Laravel and GCP among the hard skills', () => {
+    // Scoped to .cv2-skill on purpose: these labels also appear as per-role
+    // .cv2-tag chips, so an unscoped getByText would match several nodes and
+    // Testing Library throws on that.
+    const { container } = renderCv();
+    const skills = Array.from(container.querySelectorAll('.cv2-skill')).map((s) => s.textContent ?? '');
+    ['PHP', 'Laravel', 'GCP'].forEach((tech) => {
+      expect(skills.some((label) => label.includes(tech))).toBe(true);
+    });
+  });
 });
