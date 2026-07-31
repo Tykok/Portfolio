@@ -38,7 +38,7 @@ const en: Translations = {
     'Try the Konami Code: ↑↑↓↓←→←→BA 🤫',
     'Right-click the desktop to switch themes.',
     'The terminal knows `neofetch`, `cowsay` & `easter`…',
-    'Elie hosts this portfolio on his own server.',
+    'Elie hosts his projects on his own server.',
     'Click the clock to view the calendar.',
     "I'm Cocorico, the TicoqOS mascot 🐓",
     'Resize windows from the bottom-right corner.',
@@ -55,6 +55,7 @@ const en: Translations = {
   aos_ver: 'Version 5.1 (build 2003)',
   aos_copy: '© Elie "Tykok" Treport. All rights reserved.',
   aos_legal: 'A portfolio operating system. This is a homage recreation — no affiliation with any real vendor.',
+  // Figure tracks mockProjects.length ("eight") — update together if the count changes.
   aos_mem: 'Available memory: enough for eight personal projects.',
   aos_ok: 'OK',
   sub_about: 'Who I am',
