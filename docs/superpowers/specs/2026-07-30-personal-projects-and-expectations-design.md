@@ -80,9 +80,13 @@ places, and only one of them was rendered. `getBadge` already falls back to grey
 first two characters for an unknown name, so a stack entry never needs a registered badge
 to render.
 
-Two consumers, not one: `PortfolioPage.tsx:127` also reads `p.stack.slice(0, 2)` for the
-browser page's project table. An earlier revision of this section named `ProjectSlide` as
-the only reader; it is not, and the implementation plan carries both files.
+Three consumers, not one — and not two either: `ProjectSlide.tsx:56`, `PortfolioPage.tsx:127`
+and `Terminal.tsx:118` all read `Project.stack`, plus three test fixtures. An earlier revision
+of this section named `ProjectSlide` as the only reader. The next revision corrected that to
+two, adding `PortfolioPage.tsx:127` but missing `Terminal.tsx`, which builds its `skills`
+output from `p.stack.join(', ')`. The count was wrong twice in successive revisions before
+landing on three, which is why the implementation plan is the source of truth for which files
+a `Project` field touches, not this paragraph.
 
 Both fields would otherwise have to be filled for five new projects, with nothing to show
 for it.
@@ -286,10 +290,15 @@ Five further pieces of copy are written for a job hunt and go with it:
 | Location            | Today                                            | Becomes                                                          |
 | ------------------- | ------------------------------------------------ | ---------------------------------------------------------------- |
 | `fr/en.ts:41`       | mascot tip: *Elie est ouvert aux opportunités !* | *Elie héberge ce portfolio sur son propre serveur.*              |
-| `fr/en.ts:58`       | *Mémoire : suffisante pour recruter ce développeur* | *Mémoire disponible : assez pour huit projets et un homelab.* |
+| `fr/en.ts:58`       | *Mémoire : suffisante pour recruter ce développeur* | *Mémoire disponible : assez pour huit projets persos.* |
 | `Bsod.tsx:10`       | `RECURSIVE_HIRE_LOOP_IN_BACKEND_DEVELOPER`       | `KERNEL_PANIC_IN_COCORICO_MODULE`                                |
 | `Bsod.tsx:16,18,20` | budget *sufficient for hiring*, *hiring process*, *new recruiters* | the same three lines, aimed at the OS (see below) |
 | `make_og.py:71`     | pill reading *Ouvert aux opportunités*, baked in | regenerated with the new status                                  |
+
+The `aos_mem` row above was corrected from an earlier draft that read *assez pour huit
+projets et un homelab*. That double-counts: the homelab is one of the eight projects, not
+an extra one alongside them, so the shipped string — *huit projets persos* — is the
+accurate count.
 
 The BSOD parody keeps its Windows cadence and drops the recruitment framing. The middle
 paragraph becomes:
@@ -327,7 +336,14 @@ rather than the position removes the tension and keeps the block out of cover-le
 register.
 
 Rendered as three short paragraphs, not as chips: `cv2-soft` chips hold two or three words,
-and these are sentences. They print with the rest of the CV, which is intended.
+and these are sentences.
+
+**Correction:** this section originally claimed the block "prints with the rest of the CV,
+which is intended." That was false and is struck. There is no `@media print` or `@page` rule
+anywhere in the project, and `os.css` sets `overflow: hidden` on `html, body`, so printing
+today emits one page of wallpaper and taskbar with the whole CV — this block included —
+clipped out of view. The site owner ruled that `cv_print`'s button stays as it is regardless,
+and that a working print stylesheet becomes its own lot. See Follow-up lots below.
 
 ### Bio
 
@@ -433,3 +449,14 @@ Recorded because they are Elie's and were left open on purpose:
    the Create React App default, and the title is *Tykok Portfolio*. Out of scope here;
    `feat/site-identity` is where head metadata lives.
 5. **Regenerate `og-image.png` on `feat/site-identity`** with the new status pill.
+6. **A working print stylesheet.** `cv_print`'s "Imprimer" button stays as-is by owner
+   decision; add `@media print` (or `@page`) rules so printing the CV does not clip it behind
+   `os.css`'s `overflow: hidden` on `html, body`.
+7. **Drop the `accent` field.** Required by the `Project` type, rendered by no component, and
+   duplicated by hand into `make_covers.py`'s `BANNERS` tuple — one more place to keep in sync
+   for no reader.
+8. **An IHDR dimension assertion for `ticoqos.png`.** The hand-dropped placeholder banner
+   never passes through `save_png`, so nothing enforces its 1200×340 canvas the way it does
+   for every generated motif.
+9. **Widen the OG sharing-card pill to about 330px, on `feat/site-identity`.** The new status
+   string measures 259px against a 300px pill and overlaps its right cap.
