@@ -1,6 +1,8 @@
 export { appsMeta, getAppMeta } from './apps';
 export type { Company } from './companies';
 export { companies } from './companies';
+export type { DeckEntry } from './deck';
+export { toRailItem } from './deck';
 export type { Identity } from './identity';
 export { identity } from './identity';
 export type { Project, ProjectStatus } from './projects';
