@@ -33,8 +33,8 @@ export interface Translations {
   tip_start: string;
   tip_show_desktop: string;
   tip_calendar: string;
-  // Mascot — the walking rooster's rotating hints
-  mascot_tips: string[];
+  // Desktop tips — listed by the Start menu's tips dialog
+  os_tips: string[];
   // Konami rain overlay
   konami_banner: string;
   // Calendar
@@ -59,6 +59,7 @@ export interface Translations {
   sub_web: string;
   sm_allprogs: string;
   m_about_os: string;
+  m_tips: string;
   // About app
   about_skills: string;
   // Projects app

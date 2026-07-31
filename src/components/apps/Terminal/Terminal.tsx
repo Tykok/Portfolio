@@ -41,7 +41,7 @@ export function Terminal() {
   const { lang, t } = useLang();
   const { data: projects, loading, error } = useProjects();
   const { openApp } = useWindowContext();
-  const { triggerBsod, setTheme, showMascot } = useOS();
+  const { triggerBsod, setTheme } = useOS();
   const [lines, setLines] = useState<Line[]>([
     { type: 'output', text: t('t_b1') },
     { type: 'output', text: t('t_b2') },
@@ -191,13 +191,12 @@ export function Terminal() {
 
       case 'cowsay': {
         const msg = arg || t('t_coqsay_default');
-        showMascot(msg);
         push(
           { type: 'output', text: `  ${'-'.repeat(msg.length + 2)}` },
           { type: 'output', text: `< ${msg} >` },
           { type: 'output', text: `  ${'-'.repeat(msg.length + 2)}` },
           { type: 'output', text: '     \\   🐓' },
-          { type: 'output', text: '      \\  (mascotte activée)' },
+          { type: 'output', text: '      \\      ^^' },
         );
         break;
       }
