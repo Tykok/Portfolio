@@ -73,9 +73,9 @@ describe('mockProjects', () => {
     });
   });
 
-  it('points every cover at a PNG under /projects/', () => {
+  it('names every cover after its own project', () => {
     mockProjects.forEach((p) => {
-      expect(p.cover).toMatch(/^\/projects\/[a-z0-9-]+\.png$/);
+      expect(p.cover).toBe(`/projects/${p.id}.png`);
     });
   });
 

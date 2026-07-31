@@ -38,7 +38,7 @@ const fr: Translations = {
     'Essaie le Konami Code : ↑↑↓↓←→←→BA 🤫',
     'Clic droit sur le bureau pour changer de thème.',
     'Le terminal connaît `neofetch`, `cowsay` et `easter`…',
-    'Elie héberge ce portfolio sur son propre serveur.',
+    'Elie héberge ses projets sur son propre serveur.',
     "Clique sur l'horloge pour voir le calendrier.",
     'Je suis Cocorico, mascotte de TicoqOS 🐓',
     'Les fenêtres se redimensionnent par le coin bas-droit.',
@@ -55,6 +55,7 @@ const fr: Translations = {
   aos_ver: 'Version 5.1 (build 2003)',
   aos_copy: '© Elie « Tykok » Treport. Tous droits réservés.',
   aos_legal: "Système d'exploitation de portfolio. Ceci est une recréation hommage — aucune affiliation avec un éditeur réel.",
+  // Figure tracks mockProjects.length ("huit") — update together if the count changes.
   aos_mem: 'Mémoire disponible : assez pour huit projets persos.',
   aos_ok: 'OK',
   sub_about: 'Qui je suis',

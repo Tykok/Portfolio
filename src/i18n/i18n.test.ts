@@ -1,3 +1,5 @@
+import { mockProjects } from 'api/mock/projects.mock';
+
 import en from './en';
 import fr from './fr';
 import { interpolate, t } from './index';
@@ -49,6 +51,13 @@ describe('locale completeness', () => {
       expect(locale.cal_days).toHaveLength(7);
       expect(locale.cal_weekstart).toBeGreaterThanOrEqual(0);
       expect(locale.cal_weekstart).toBeLessThanOrEqual(6);
+    });
+  });
+
+  it('states the real project count in neofetch', () => {
+    [fr, en].forEach((l) => {
+      const mem = l.t_neofetch.find((row) => /Mémoire|Memory/.test(row[0]));
+      expect(mem?.[1]).toContain(String(mockProjects.length));
     });
   });
 });
