@@ -70,6 +70,8 @@ export interface Translations {
   p_takeaway: string;
   co_what: string;
   co_work: string;
+  p_group_personal: string;
+  p_group_company: string;
   p_role: string;
   p_prev: string;
   p_next: string;

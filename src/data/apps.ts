@@ -22,8 +22,8 @@ export const appsMeta: AppMeta[] = [
     icon: 'folder',
     defaultWidth: 620,
     defaultHeight: 470,
-    title: { fr: 'Projets', en: 'Projects' },
-    short: { fr: 'Projets', en: 'Projects' },
+    title: { fr: 'Parcours', en: 'Work' },
+    short: { fr: 'Parcours', en: 'Work' },
   },
   {
     key: 'cv',

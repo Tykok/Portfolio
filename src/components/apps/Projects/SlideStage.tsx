@@ -1,19 +1,21 @@
 import { useLang } from 'context/LangContext';
-import type { Project } from 'data/projects';
+import type { DeckEntry } from 'data/deck';
 
+import { CompanySlide } from './CompanySlide';
 import { ProjectSlide } from './ProjectSlide';
 
 interface SlideStageProps {
-  projects: Project[];
+  entries: DeckEntry[];
   activeIndex: number;
   onSelect: (i: number) => void;
 }
 
-export function SlideStage({ projects, activeIndex, onSelect }: SlideStageProps) {
+export function SlideStage({ entries, activeIndex, onSelect }: SlideStageProps) {
   const { t } = useLang();
-  const total = projects.length;
+  const total = entries.length;
   const atStart = activeIndex <= 0;
   const atEnd = activeIndex >= total - 1;
+  const active = entries[activeIndex];
 
   const go = (i: number) => {
     if (i >= 0 && i < total) onSelect(i);
@@ -27,7 +29,8 @@ export function SlideStage({ projects, activeIndex, onSelect }: SlideStageProps)
   return (
     <div className="deck-stage" tabIndex={0} onKeyDown={onKeyDown}>
       <div className="deck-scroll" key={activeIndex}>
-        {projects[activeIndex] && <ProjectSlide project={projects[activeIndex]} />}
+        {active?.kind === 'personal' && <ProjectSlide project={active.project} />}
+        {active?.kind === 'company' && <CompanySlide company={active.company} />}
       </div>
 
       <button type="button" className="deck-nav prev" aria-label={t('p_prev')} disabled={atStart} onClick={() => go(activeIndex - 1)}>
