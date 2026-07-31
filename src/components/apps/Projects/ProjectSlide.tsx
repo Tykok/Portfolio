@@ -1,6 +1,7 @@
 import { useLang } from 'context/LangContext';
 import type { Project } from 'data/projects';
-import { getBadge } from 'data/techBadges';
+
+import { StackBadges } from './StackBadges';
 
 export function ProjectSlide({ project }: { project: Project }) {
   const { lang, t } = useLang();
@@ -52,33 +53,7 @@ export function ProjectSlide({ project }: { project: Project }) {
 
       {/* Stack & links */}
       <section className="deck-foot">
-        <div className="deck-badges">
-          {project.stack.map((tech) => {
-            const badge = getBadge(tech);
-            return (
-              <div key={tech} className="pj-chip">
-                <span
-                  className="pj-bdg"
-                  style={{
-                    background: badge.color,
-                    width: 17,
-                    height: 17,
-                    borderRadius: 5,
-                    fontSize: 8,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontWeight: 700,
-                    color: '#fff',
-                  }}
-                >
-                  {badge.monogram}
-                </span>
-                {tech}
-              </div>
-            );
-          })}
-        </div>
+        <StackBadges stack={project.stack} />
         <div className="deck-acts">
           {project.repo !== '#' && (
             <a href={project.repo} target="_blank" rel="noreferrer" className="pj-btn">
