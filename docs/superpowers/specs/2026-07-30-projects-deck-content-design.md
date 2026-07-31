@@ -1,5 +1,9 @@
 # Projects Deck — Content and Visuals — Design
 
+> **Superseded by [`2026-07-30-personal-projects-and-expectations-design.md`](./2026-07-30-personal-projects-and-expectations-design.md).**
+> This spec's Task 6 (narrating employer projects in the first person) was never
+> implemented. Employer work has since left the deck entirely — read the newer spec instead.
+
 **Date:** 2026-07-30
 **Status:** Approved
 **Scope:** Fill the Projects deck with narrative copy and a hero banner per project.
