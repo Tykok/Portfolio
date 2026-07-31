@@ -107,8 +107,12 @@ In `src/data/identity.ts`, replace line 28:
 In `src/i18n/fr.ts`, replace the mascot tip on line 41:
 
 ```ts
-    'Elie héberge ce portfolio sur son propre serveur.',
+    'Elie héberge ses projets sur son propre serveur.',
 ```
+
+*ses projets*, not *ce portfolio*: the final review caught this tip claiming the portfolio is
+already self-hosted while Task 5's `homelab` bullet says *ce portfolio bientôt*. There is no
+deploy workflow in the repository, so the bullet is the sourceable claim.
 
 and line 58:
 
@@ -119,7 +123,7 @@ and line 58:
 In `src/i18n/en.ts`, replace line 41:
 
 ```ts
-    'Elie hosts this portfolio on his own server.',
+    'Elie hosts his projects on his own server.',
 ```
 
 and line 58:
@@ -751,9 +755,9 @@ Then extend the `describe('mockProjects', …)` block:
     });
   });
 
-  it('points every cover at a PNG under /projects/', () => {
+  it('names every cover after its own project', () => {
     mockProjects.forEach((p) => {
-      expect(p.cover).toMatch(/^\/projects\/[a-z0-9-]+\.png$/);
+      expect(p.cover).toBe(`/projects/${p.id}.png`);
     });
   });
 
