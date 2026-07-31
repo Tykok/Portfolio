@@ -289,7 +289,7 @@ Five further pieces of copy are written for a job hunt and go with it:
 
 | Location            | Today                                            | Becomes                                                          |
 | ------------------- | ------------------------------------------------ | ---------------------------------------------------------------- |
-| `fr/en.ts:41`       | mascot tip: *Elie est ouvert aux opportunités !* | *Elie héberge ce portfolio sur son propre serveur.*              |
+| `fr/en.ts:41`       | mascot tip: *Elie est ouvert aux opportunités !* | *Elie héberge ses projets sur son propre serveur.*               |
 | `fr/en.ts:58`       | *Mémoire : suffisante pour recruter ce développeur* | *Mémoire disponible : assez pour huit projets persos.* |
 | `Bsod.tsx:10`       | `RECURSIVE_HIRE_LOOP_IN_BACKEND_DEVELOPER`       | `KERNEL_PANIC_IN_COCORICO_MODULE`                                |
 | `Bsod.tsx:16,18,20` | budget *sufficient for hiring*, *hiring process*, *new recruiters* | the same three lines, aimed at the OS (see below) |
@@ -404,10 +404,16 @@ those fields costs it nothing — only `tsc` and the mock change.
 **Added**
 
 - `api/projects.test.ts` — `cover`, `context` and `takeaway` set on all eight projects in
-  both languages, following the existing `role` assertion's shape; every `cover` matches
-  `/^\/projects\/[a-z0-9-]+\.png$/`; every cover resolves to a file that exists under
+  both languages, following the existing `role` assertion's shape; every `cover` equals
+  `` `/projects/${p.id}.png` ``; every cover resolves to a file that exists under
   `public/` and stays under 80 kB. The disk check is the most valuable assertion of the lot:
   a typo produces a broken hero in production and nothing else notices.
+
+  An earlier revision of this line specified only a shape check,
+  `/^\/projects\/[a-z0-9-]+\.png$/`. The final review pointed out that a shape check passes
+  when one project's `cover` points at another project's banner — the wrong hero, silently,
+  in production. Equality against the project's own `id` is strictly stronger and costs the
+  same.
 - `api/projects.test.ts` — every `repo` and `demo` is either `'#'` or an absolute `https://`
   URL. This is the cheap half of the link check; the expensive half was done by hand against
   the GitHub API and is recorded above rather than repeated in CI, which must not depend on
