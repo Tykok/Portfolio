@@ -88,6 +88,23 @@ describe('Projects deck', () => {
     expect(screen.getAllByText(companies[0].name).length).toBeGreaterThan(0);
   });
 
+  it('keeps the deck a direct child of the shell, which the notice layout depends on', async () => {
+    // .deck-shell is a flex column; .deck-shell > .deck-B overrides .deck-B's
+    // height: 100% so the deck flexes instead of adding its full height to the
+    // notice's. An intervening element, or the shell being dropped, silently
+    // pushes the deck below the fold inside .os-winbody.
+    getProjectsMock.mockRejectedValue(new Error('network down'));
+    renderApp();
+
+    await waitFor(() => {
+      expect(screen.getByText(fr.projects_error)).toBeInTheDocument();
+    });
+    const shell = document.querySelector('.deck-shell');
+    expect(shell?.querySelectorAll(':scope > .deck-B')).toHaveLength(1);
+    expect(shell?.querySelectorAll(':scope > .pj-notice')).toHaveLength(1);
+    expect(shell?.firstElementChild).toHaveClass('pj-notice');
+  });
+
   it('shows only the Pro group when the projects request fails', async () => {
     getProjectsMock.mockRejectedValue(new Error('network down'));
     renderApp();
