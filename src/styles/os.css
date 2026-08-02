@@ -1181,3 +1181,61 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-f
   .ar-when { flex-basis: 100%; }
   .ar-arr { display: none; }
 }
+
+/* ============================================================================
+   IMPRESSION — le CV seul, sur A4
+   ----------------------------------------------------------------------------
+   « Imprimer » sortait le bureau entier : fond d'écran, barre des tâches et
+   toutes les fenêtres ouvertes. Ici la page devient le CV et rien d'autre.
+
+   La fenêtre à garder est désignée par son contenu (`:has(.cv2)`) plutôt que
+   par une classe posée en JS au moment du clic : le CV reste imprimable par
+   Ctrl+P, qui ne passe par aucun de nos gestionnaires.
+   ============================================================================ */
+@media print {
+  @page { size: A4 portrait; margin: 11mm 12mm; }
+
+  html, body, #root { height: auto; overflow: visible; background: #fff; }
+
+  /* Le chrome de l'OS ne s'imprime pas. */
+  .os-desktop, .os-taskbar, .os-startmenu, .os-ctxmenu, .os-tooltip,
+  .os-calpop, .os-bsod, .os-rain, .os-modal-scrim { display: none !important; }
+
+  /* Une seule fenêtre survit : celle qui contient le CV. */
+  .os-window:not(:has(.cv2)) { display: none !important; }
+  .os-window:has(.cv2) {
+    position: static !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; z-index: auto !important;
+    animation: none !important; transform: none !important; opacity: 1 !important;
+    visibility: visible !important; box-shadow: none !important; border: 0 !important;
+  }
+  .os-window:has(.cv2) .os-winflex { height: auto; border: 0; box-shadow: none; }
+  .os-window:has(.cv2) .tq-titlebar,
+  .os-window:has(.cv2) .os-resize,
+  .cv2-tb { display: none !important; }
+  .os-window:has(.cv2) .os-winbody { overflow: visible !important; height: auto !important; }
+
+  /* Les aplats et les pastilles portent l'information : sans cette règle, le
+     navigateur les retire et les badges de stack sortent blancs sur blanc. */
+  .cv2, .cv2 * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  .cv2 { background: #fff; }
+  .cv2-body { overflow: visible !important; height: auto !important; }
+  .cv2-head { padding: 0 0 10px; background: none; }
+  .cv2-nm { font-size: 24px; }
+  .cv2-role { font-size: 12.5px; }
+  .cv2-profile { padding: 9px 0 0; font-size: 10.5px; line-height: 1.45; }
+  .cv2-cols { padding: 12px 0 0; gap: 16px; grid-template-columns: 1fr 190px; }
+  .cv2-sec h2 { font-size: 12px; margin-bottom: 8px; }
+  .cv2-xp { margin-bottom: 11px; }
+  .cv2-xp li, .cv2-tag, .cv2-skill, .cv2-soft, .cv2-want p { font-size: 9.5px; }
+  .cv2-xp .org { font-size: 11.5px; }
+  .cv2-xp .pos, .cv2-xp .when { font-size: 10px; }
+  .cv2-edu .ti { font-size: 10.5px; }
+  .cv2-edu .sc, .cv2-edu .yr { font-size: 9.5px; }
+  .cv2-side h3 { font-size: 9.5px; margin-bottom: 6px; }
+
+  /* Une expérience ou un diplôme ne se coupe pas en deux entre deux pages. */
+  .cv2-xp, .cv2-edu, .cv2-side > div { break-inside: avoid; page-break-inside: avoid; }
+  .cv2-sec h2 { break-after: avoid; page-break-after: avoid; }
+}
