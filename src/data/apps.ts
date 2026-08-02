@@ -50,12 +50,12 @@ export const appsMeta: AppMeta[] = [
     short: { fr: 'Terminal', en: 'Terminal' },
   },
   {
-    key: 'media',
-    icon: 'media',
-    defaultWidth: 360,
-    defaultHeight: 460,
-    title: { fr: 'Lecteur média', en: 'Media player' },
-    short: { fr: 'Lecteur média', en: 'Media player' },
+    key: 'articles',
+    icon: 'news',
+    defaultWidth: 620,
+    defaultHeight: 520,
+    title: { fr: 'Articles', en: 'Articles' },
+    short: { fr: 'Articles', en: 'Articles' },
   },
 ];
 

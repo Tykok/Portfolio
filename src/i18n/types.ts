@@ -35,6 +35,12 @@ export interface Translations {
   tip_calendar: string;
   // Desktop tips — listed by the Start menu's tips dialog
   os_tips: string[];
+  // Accessibility landmarks and the keyboard shortcut sheet
+  a11y_desktop: string;
+  a11y_taskbar: string;
+  sc_title: string;
+  /** [keys, what they do] — rendered as a two-column list. */
+  os_shortcuts: [string, string][];
   // Konami rain overlay
   konami_banner: string;
   // Calendar
@@ -55,7 +61,7 @@ export interface Translations {
   sub_cv: string;
   sub_contact: string;
   sub_terminal: string;
-  sub_media: string;
+  sub_articles: string;
   sub_web: string;
   sm_allprogs: string;
   m_about_os: string;
@@ -92,8 +98,16 @@ export interface Translations {
   c_online: string;
   c_ph: string;
   c_send: string;
-  // Media app
-  m_demo: string;
+  // Articles app
+  ar_title: string;
+  ar_sub: string;
+  ar_profile: string;
+  ar_min: string;
+  ar_reactions: string;
+  ar_comments: string;
+  ar_loading: string;
+  ar_error: string;
+  ar_empty: string;
   // Browser
   br_back: string;
   br_fwd: string;

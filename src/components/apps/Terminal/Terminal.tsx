@@ -21,7 +21,7 @@ const APP_MAP: Record<string, AppKey> = {
   projects: 'projects',
   cv: 'cv',
   contact: 'contact',
-  media: 'media',
+  articles: 'articles',
   web: 'web',
   terminal: 'terminal',
 };

@@ -3,13 +3,11 @@ import { useLang } from 'context/LangContext';
 import { useProjects } from 'context/ProjectsContext';
 import { useWindowContext } from 'context/WindowContext';
 import { identity } from 'data/identity';
+import { socials } from 'data/socials';
 
-const EXT_LINKS = [
-  { label: 'GitHub', url: 'https://github.com/Tykok', color: '#24292f', mono: 'GH' },
-  { label: 'LinkedIn', url: 'https://linkedin.com/in/elie-treport', color: '#0a66c2', mono: 'in' },
-  { label: 'Dev.to', url: 'https://dev.to/tykok', color: '#0a0a0a', mono: 'D' },
-  { label: 'Medium', url: 'https://medium.com/@tykok', color: '#191919', mono: 'M' },
-];
+/* Read from `socials` rather than redeclared here: the LinkedIn URL used to be
+   written in both places, and the two had already drifted apart. */
+const EXT_LINKS = socials.filter((s) => s.key !== 'email');
 
 interface Props {
   onNavigate: (url: string) => void;
@@ -71,9 +69,9 @@ export function PortfolioPage({ onNavigate }: Props) {
               <span className="np-pico">✉️</span>
               {t('np_email')}
             </span>
-            <span className="np-pv np-link-val" onClick={() => {}}>
+            <a className="np-pv np-link-val" href={`mailto:${identity.email}`}>
               {identity.email}
-            </span>
+            </a>
           </div>
           <div className="np-prop">
             <span className="np-pk">
@@ -145,9 +143,9 @@ export function PortfolioPage({ onNavigate }: Props) {
         </div>
         <div className="np-linklist">
           {EXT_LINKS.map((l) => (
-            <div key={l.label} className="np-extlink" onClick={() => onNavigate(l.url)}>
+            <div key={l.key} className="np-extlink" onClick={() => onNavigate(l.href)}>
               <span className="np-extlink-dot" style={{ background: l.color }}>
-                {l.mono}
+                {l.monogram}
               </span>
               <span className="np-extlink-name">{l.label}</span>
               <span className="np-extlink-arr">↗</span>

@@ -269,6 +269,23 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-f
 }
 
 /* items programmes (gauche) */
+/* Ces trois rangées sont des <button> depuis qu'il faut pouvoir les atteindre
+   au clavier ; on neutralise le style natif du bouton pour que le rendu ne
+   bouge pas d'un pixel. */
+.os-startitem, .os-place, .os-allprogs {
+  width: 100%; text-align: left; background: none; border: 0; margin: 0;
+  font: inherit; color: inherit; -webkit-appearance: none; appearance: none;
+}
+.os-startitem .os-si-tx { display: block; }
+.os-startitem .sub { display: block; }
+.os-startitem:focus-visible, .os-place:focus-visible, .os-allprogs:focus-visible,
+.os-deskicon:focus-visible, .tq-task:focus-visible, .tq-tb-btn:focus-visible,
+.deck-thumb:focus-visible, .deck-nav:focus-visible {
+  outline: 2px solid #ffd23a; outline-offset: -2px;
+}
+/* Le bureau est sombre et changeant : le liseré jaune y ressort partout. */
+.os-deskicon:focus-visible { outline-offset: 1px; }
+
 .os-startitem { display: flex; align-items: center; gap: 10px; padding: 6px 8px; border-radius: 3px; cursor: pointer; color: var(--ink); }
 .os-startitem .os-si-ic { width: 32px; display: flex; justify-content: center; flex: 0 0 auto; }
 .os-startitem .os-si-tx b { font-weight: 700; font-size: 12.5px; }
@@ -613,26 +630,6 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-f
 .os-term-row { display: flex; gap: 6px; }
 .os-term-row input { flex: 1 1 auto; background: transparent; border: none; outline: none; color: #d6f0d6; font: inherit; }
 
-/* Lecteur média */
-.media { display: flex; flex-direction: column; height: 100%; background: linear-gradient(180deg,#1d3057,#0c1530); color: #cfe0ff; }
-.media-screen { flex: 1 1 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 16px; min-height: 0; }
-.media-viz { display: flex; align-items: flex-end; gap: 4px; height: 80px; }
-.media-viz i { width: 7px; background: linear-gradient(180deg,#6aa0ff,#2f6ff2); border-radius: 2px 2px 0 0; animation: viz 1s ease-in-out infinite; }
-.media.paused .media-viz i { animation-play-state: paused; }
-@keyframes viz { 0%,100% { height: 14px; } 50% { height: 70px; } }
-.media-title { font-family: var(--font-title); font-weight: 700; font-size: 16px; }
-.media-sub { font-size: 12px; color: #8fb0e0; }
-.media-bar { height: 5px; background: rgba(255,255,255,.18); border-radius: 3px; width: 80%; overflow: hidden; }
-.media-bar i { display: block; height: 100%; background: #6aa0ff; }
-.media-ctrl { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 12px; background: rgba(0,0,0,.25); border-top: 1px solid rgba(255,255,255,.1); }
-.media-btn { width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(255,255,255,.25); background: linear-gradient(180deg,#3f6bc0,#22407e); color: #fff; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
-.media-btn.big { width: 48px; height: 48px; font-size: 18px; }
-.media-btn:hover { filter: brightness(1.12); }
-.media-list { background: rgba(0,0,0,.22); border-top: 1px solid rgba(255,255,255,.1); max-height: 38%; overflow: auto; }
-.media-track { display: flex; justify-content: space-between; padding: 7px 14px; font-size: 12px; cursor: pointer; }
-.media-track:hover { background: rgba(255,255,255,.08); }
-.media-track.on { background: rgba(47,111,242,.35); }
-
 @keyframes osfade { from { opacity: 0; } to { opacity: 1; } }
 
 /* ============================================================================
@@ -715,9 +712,6 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-f
   }
   .msn-side .msn-contact { flex: 0 0 auto; }
   .msn-side > div:last-child { display: none; } /* badge « placeholder » masqué pour gagner de la place */
-
-  /* --- Lecteur média : un peu plus compact --- */
-  .media-list { max-height: 30%; }
 }
 
 /* respect des préférences système : pas d'animation si l'utilisateur le demande */
@@ -1091,60 +1085,8 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-f
 }
 
 /* ============================================================================
-   FINITIONS FUN — Démineur, Solitaire, Livre d'or, écran bleu
+   FINITIONS FUN — écran bleu, thèmes de bureau, pluie de coqs
    ============================================================================ */
-
-/* ---- menu Démarrer : libellé de groupe (Jeux) ---- */
-.os-sm-grouplbl { font-size: 10px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; color: #9aa0ab; padding: 5px 14px 2px; }
-
-/* ---- DÉMINEUR ---- */
-.ms-wrap { height: 100%; display: flex; flex-direction: column; align-items: center; gap: 9px; padding: 12px; background: #c0c0c0; }
-.ms-frame { background: #c0c0c0; border: 3px solid; border-color: #fff #808080 #808080 #fff; padding: 7px; }
-.ms-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; border: 2px solid; border-color: #808080 #fff #fff #808080; padding: 5px 7px; margin-bottom: 7px; }
-.ms-led { background: #000; color: #ff2d2d; font: 700 21px/1 "Lucida Console", monospace; padding: 3px 6px; letter-spacing: 2px; border: 1px solid #4a4a4a; }
-.ms-face { width: 30px; height: 30px; font-size: 17px; line-height: 1; background: #c0c0c0; border: 2px solid; border-color: #fff #808080 #808080 #fff; cursor: pointer; padding: 0; }
-.ms-face:active { border-color: #808080 #fff #fff #808080; }
-.ms-grid { display: grid; gap: 0; border: 3px solid; border-color: #808080 #fff #fff #808080; }
-.ms-cell { box-sizing: border-box; width: 22px; height: 22px; padding: 0; font: 700 13px/1 "Lucida Console", monospace; display: flex; align-items: center; justify-content: center; cursor: pointer; background: #c0c0c0; border: 2px solid; border-color: #fff #808080 #808080 #fff; }
-.ms-cell.rev { border: 1px solid #9a9a9a; background: #bdbdbd; }
-.ms-cell.hit { background: #e23b2c; border-color: #b02517; }
-.ms-hint { font-size: 11px; color: #2a2a2a; text-align: center; max-width: 220px; }
-
-/* ---- SOLITAIRE ---- */
-.sol-wrap { height: 100%; display: flex; flex-direction: column; gap: 8px; padding: 10px; background: linear-gradient(180deg, #1f7a44, #145e35); color: #fff; }
-.sol-top { display: flex; justify-content: space-between; gap: 8px; }
-.sol-piles { display: flex; gap: 8px; }
-.sol-slot { width: 58px; height: 82px; border-radius: 6px; border: 1.5px dashed rgba(255,255,255,.45); display: flex; align-items: center; justify-content: center; position: relative; flex: 0 0 auto; }
-.sol-slot.empty { position: absolute; inset: 0; margin: 0; }
-.sol-fsuit { font-size: 26px; color: rgba(255,255,255,.32); }
-.sol-recycle { font-size: 26px; color: rgba(255,255,255,.6); }
-.sol-tableau { flex: 1 1 auto; display: flex; gap: 8px; min-height: 0; }
-.sol-col { flex: 1 1 0; position: relative; min-height: 320px; }
-.sol-card { position: absolute; left: 0; top: 0; width: 58px; height: 82px; border-radius: 6px; background: #fff; border: 1px solid #b9b9c4; box-shadow: 0 1px 2px rgba(0,0,0,.28); cursor: pointer; }
-.sol-card.down { background: repeating-linear-gradient(45deg, #3f73c8 0 5px, #2f5aa8 5px 10px); border-color: #23408a; }
-.sol-card.red { color: #d62b2b; } .sol-card.black { color: #1a1a1a; }
-.sol-card.sel { outline: 2px solid #ffd23a; box-shadow: 0 0 0 2px #ffd23a, 0 2px 8px rgba(0,0,0,.35); z-index: 60; }
-.sc-tl { position: absolute; top: 4px; left: 6px; font: 700 13px/1 Georgia, "Times New Roman", serif; }
-.sc-mid { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 27px; }
-.sol-bar { display: flex; align-items: center; gap: 12px; flex: 0 0 auto; }
-.sol-stat { font-size: 12px; color: #eaffea; }
-
-/* ---- LIVRE D'OR ---- */
-.gb { height: 100%; display: flex; flex-direction: column; background: #fbfaf4; }
-.gb-head { display: flex; align-items: center; gap: 11px; padding: 12px 14px; background: linear-gradient(180deg, #eaf1fb, #dbe7f8); border-bottom: 1px solid var(--edge-soft); }
-.gb-title { font-size: 15px; font-weight: 700; color: var(--ink); }
-.gb-sub { font-size: 11px; color: var(--ink-dim); }
-.gb-form { padding: 11px 14px; display: flex; flex-direction: column; gap: 7px; border-bottom: 1px solid var(--edge-soft); }
-.gb-row { display: flex; gap: 7px; }
-.gb-row .grow { flex: 1 1 auto; }
-.gb-list { flex: 1 1 auto; overflow: auto; padding: 9px 14px; display: flex; flex-direction: column; gap: 8px; }
-.gb-entry { display: flex; gap: 9px; }
-.gb-ava { flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%; background: #2f6ff2; color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 13px; }
-.gb-body { flex: 1 1 auto; background: #fff; border: 1px solid var(--edge-soft); border-radius: 8px; padding: 7px 10px; min-width: 0; }
-.gb-meta { display: flex; justify-content: space-between; gap: 8px; font-size: 11px; color: var(--ink-dim); }
-.gb-meta b { color: var(--ink); }
-.gb-text { font-size: 13px; color: var(--ink); margin-top: 2px; word-break: break-word; }
-.gb-foot { padding: 6px 14px; font-size: 11px; color: var(--ink-dim); border-top: 1px solid var(--edge-soft); background: #f1efe6; }
 
 /* ---- ÉCRAN BLEU (BSOD) ---- */
 .os-bsod { position: fixed; inset: 0; z-index: 99999; background: #0a0aae; color: #fff; font-family: "Lucida Console", "Courier New", monospace; display: flex; align-items: center; justify-content: center; padding: 7%; cursor: pointer; }
@@ -1189,3 +1131,53 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-f
   box-shadow: 0 8px 24px rgba(0,0,0,.4); animation: bannerpop .4s ease;
 }
 @keyframes bannerpop { from { opacity: 0; transform: translateX(-50%) scale(.8); } to { opacity: 1; transform: translateX(-50%) scale(1); } }
+
+/* ---- fenêtre d'astuces : la liste des raccourcis ---- */
+.os-tips-body { flex-direction: column; gap: 14px; }
+.tips-sc { border-top: 1px solid var(--edge-soft); padding-top: 11px; }
+.tips-sc-h { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-dim); margin-bottom: 8px; }
+.tips-sc-list { margin: 0; display: flex; flex-direction: column; gap: 5px; }
+.tips-sc-row { display: flex; align-items: baseline; gap: 10px; }
+.tips-sc-row dt { flex: 0 0 116px; margin: 0; }
+.tips-sc-row dd { margin: 0; font-size: 12px; color: var(--ink); }
+.tips-sc kbd {
+  display: inline-block; font-family: var(--font-mono); font-size: 10.5px; line-height: 1.5;
+  background: #f4f5f8; color: #2a2f3a; border: 1px solid #d3d8e2; border-bottom-width: 2px;
+  border-radius: 4px; padding: 1px 6px; white-space: nowrap;
+}
+
+/* ============================================================================
+   ARTICLES — la liste dev.to
+   ============================================================================ */
+.ar { display: flex; flex-direction: column; height: 100%; background: #f6f7f9; }
+.ar-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex: 0 0 auto;
+  padding: 13px 16px; background: linear-gradient(180deg, #ffffff, #f6f8fb); border-bottom: 1px solid #e7ebf2; }
+.ar-h1 { font-family: var(--font-title); font-weight: 700; font-size: 17px; color: #1f2530; }
+.ar-sub { font-size: 11.5px; color: #6b7280; margin-top: 2px; }
+.ar-profile { flex: 0 0 auto; font-size: 11.5px; font-weight: 600; color: #2f6ff2; text-decoration: none;
+  border: 1px solid #d7e0f2; border-radius: 8px; padding: 5px 10px; background: #fff; white-space: nowrap; }
+.ar-profile:hover { border-color: #9dbaf0; }
+
+.ar-list { flex: 1 1 auto; overflow: auto; min-height: 0; padding: 8px; display: flex; flex-direction: column; gap: 6px; }
+.ar-state { display: flex; align-items: center; justify-content: center; padding: 28px 16px; font-size: 12.5px; color: var(--ink-dim); text-align: center; }
+.ar-err { color: #9d3a2f; background: #fff5f4; border: 1px solid #f2d6d3; border-radius: 8px; }
+
+.ar-row { display: flex; gap: 12px; align-items: flex-start; text-decoration: none; color: inherit;
+  background: #fff; border: 1px solid #e6e9ef; border-radius: 9px; padding: 10px 12px; }
+.ar-row:hover { border-color: #b9c4d6; background: #fcfdff; }
+.ar-row:focus-visible { outline: 2px solid var(--blue-600, #1a52d6); outline-offset: 1px; }
+.ar-when { flex: 0 0 62px; font-size: 11px; font-weight: 600; color: #8a93a3; padding-top: 2px; text-transform: capitalize; }
+.ar-main { flex: 1 1 auto; min-width: 0; }
+.ar-title { font-size: 13.5px; font-weight: 700; color: #1f2530; line-height: 1.3; }
+.ar-desc { margin: 3px 0 0; font-size: 12px; line-height: 1.45; color: #5b6473; text-wrap: pretty;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ar-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; margin-top: 7px; }
+.ar-chip { font-size: 10.5px; color: #5b6473; background: #f1f3f7; border: 1px solid #e6e9ef; border-radius: 6px; padding: 2px 7px; line-height: 1.5; }
+.ar-tag { font-size: 10.5px; color: #2f6ff2; background: #eef4ff; border: 1px solid #dbe7ff; border-radius: 6px; padding: 2px 7px; line-height: 1.5; }
+.ar-arr { flex: 0 0 auto; color: #9aa3b2; font-size: 13px; padding-top: 2px; }
+
+@media (max-width: 720px) {
+  .ar-row { flex-wrap: wrap; }
+  .ar-when { flex-basis: 100%; }
+  .ar-arr { display: none; }
+}
