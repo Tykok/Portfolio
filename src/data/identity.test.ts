@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+
 import { identity } from './identity';
 import { socials } from './socials';
 
@@ -35,6 +38,26 @@ describe('identity', () => {
     });
     expect(identity.bio.fr).toMatch(/La Réunion/);
     expect(identity.bio.en).toMatch(/Réunion/);
+  });
+});
+
+/**
+ * The sharing card is a committed PNG, so nothing in the app can catch it
+ * drifting from the data — and it did: the card shipped reading "Ouvert aux
+ * opportunités" long after `status` had become "À l'écoute, sans chercher".
+ * The generator's source is the closest thing to the image that a test can
+ * read. It does not prove public/og-image.png was regenerated, only that the
+ * script it comes from still says the right thing.
+ */
+describe('the sharing card generator', () => {
+  const script = readFileSync(resolve(__dirname, '..', '..', 'scripts', 'images', 'make_og.py'), 'utf8');
+
+  it('draws the status that identity declares', () => {
+    expect(script).toContain(identity.status.fr);
+  });
+
+  it('advertises no job search', () => {
+    expect(script.toLowerCase()).not.toMatch(/opportunit/);
   });
 });
 
