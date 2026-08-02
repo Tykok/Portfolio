@@ -22,7 +22,7 @@ const SUB_KEY: Record<AppKey, StringKey> = {
   cv: 'sub_cv',
   contact: 'sub_contact',
   terminal: 'sub_terminal',
-  media: 'sub_media',
+  articles: 'sub_articles',
   web: 'sub_web',
 };
 
@@ -58,58 +58,58 @@ export function StartMenu({ onClose, onShutdown, onLogoff }: Props) {
       <div className="os-start-cols">
         <div className="os-start-left">
           {pinnedApps.map((app) => (
-            <div key={app.key} className="os-startitem pinned" onClick={() => handleOpen(app.key)}>
+            <button key={app.key} type="button" className="os-startitem pinned" onClick={() => handleOpen(app.key)}>
               <span className="os-si-ic">
                 <AppIcon kind={app.icon} size={32} />
               </span>
-              <div className="os-si-tx">
+              <span className="os-si-tx">
                 <b>{app.title[lang]}</b>
-                <div className="sub">{t(SUB_KEY[app.key])}</div>
-              </div>
-            </div>
+                <span className="sub">{t(SUB_KEY[app.key])}</span>
+              </span>
+            </button>
           ))}
           <div className="os-sep" />
-          <div className="os-allprogs">
+          <button type="button" className="os-allprogs">
             {t('sm_allprogs')}
             <span className="ap-chev">›</span>
-          </div>
+          </button>
         </div>
 
         <div className="os-start-right">
-          <div className="os-place" onClick={() => handleOpen('about')}>
+          <button type="button" className="os-place" onClick={() => handleOpen('about')}>
             <span className="os-place-ic gly">👤</span>
             {t('sub_about')}
-          </div>
-          <div className="os-place" onClick={() => handleOpen('projects')}>
+          </button>
+          <button type="button" className="os-place" onClick={() => handleOpen('projects')}>
             <span className="os-place-ic gly">📁</span>
             {t('sub_projects')}
-          </div>
-          <div className="os-place" onClick={() => handleOpen('cv')}>
+          </button>
+          <button type="button" className="os-place" onClick={() => handleOpen('cv')}>
             <span className="os-place-ic gly">📄</span>
             {t('sub_cv')}
-          </div>
-          <div className="os-place" onClick={() => handleOpen('web')}>
+          </button>
+          <button type="button" className="os-place" onClick={() => handleOpen('articles')}>
+            <span className="os-place-ic gly">📰</span>
+            {t('sub_articles')}
+          </button>
+          <button type="button" className="os-place" onClick={() => handleOpen('web')}>
             <span className="os-place-ic gly">🌐</span>
             {t('sub_web')}
-          </div>
+          </button>
           <div className="os-sep blue" />
-          <div className="os-place" onClick={() => handleOpen('terminal')}>
+          <button type="button" className="os-place" onClick={() => handleOpen('terminal')}>
             <span className="os-place-ic gly">⌨</span>
             {t('sub_terminal')}
-          </div>
-          <div className="os-place" onClick={() => handleOpen('media')}>
-            <span className="os-place-ic gly">🎵</span>
-            {t('sub_media')}
-          </div>
+          </button>
           <div className="os-sep blue" />
-          <div className="os-place" onClick={handleTips}>
+          <button type="button" className="os-place" onClick={handleTips}>
             <span className="os-place-ic gly">💡</span>
             {t('m_tips')}
-          </div>
-          <div className="os-place" onClick={handleAbout}>
+          </button>
+          <button type="button" className="os-place" onClick={handleAbout}>
             <span className="os-place-ic gly">ℹ️</span>
             {t('m_about_os')}
-          </div>
+          </button>
         </div>
       </div>
 

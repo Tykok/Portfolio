@@ -1,0 +1,123 @@
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import type * as articlesApi from 'api/articles';
+import { getArticles } from 'api/articles';
+import { mockProjects } from 'api/mock/projects.mock';
+import type * as projectsApi from 'api/projects';
+import { getProjects } from 'api/projects';
+import { vi } from 'vitest';
+
+import fr from 'i18n/fr';
+
+import Main from './Main';
+
+vi.mock('api/projects', async (importOriginal) => ({
+  ...(await importOriginal<typeof projectsApi>()),
+  getProjects: vi.fn(),
+}));
+vi.mock('api/articles', async (importOriginal) => ({
+  ...(await importOriginal<typeof articlesApi>()),
+  getArticles: vi.fn(),
+}));
+
+/**
+ * The OS shell end to end: deep links, and the shortcuts that let someone drive
+ * it without a mouse. Every route here skips boot and login, which is the point
+ * of a shared link.
+ */
+function renderAt(hash: string) {
+  window.history.replaceState(null, '', hash);
+  return render(<Main />);
+}
+
+const windowsOnScreen = () => document.querySelectorAll('.os-window:not(.is-min)');
+
+describe('TicoqOS', () => {
+  beforeEach(() => {
+    vi.mocked(getProjects).mockResolvedValue(mockProjects);
+    vi.mocked(getArticles).mockResolvedValue([]);
+    localStorage.clear();
+  });
+
+  afterEach(() => {
+    window.history.replaceState(null, '', '/');
+  });
+
+  it('lands straight on the window a link names, boot and login skipped', async () => {
+    renderAt('#/cv');
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog', { name: /CV/ })).toBeInTheDocument();
+    });
+    expect(screen.queryByText(fr.login_hint)).not.toBeInTheDocument();
+  });
+
+  it('gives the keyboard to the window that opens', async () => {
+    renderAt('#/cv');
+
+    await waitFor(() => {
+      expect(document.activeElement).toHaveAttribute('role', 'dialog');
+    });
+  });
+
+  it('closes the active window on Escape', async () => {
+    renderAt('#/cv');
+    await waitFor(() => expect(windowsOnScreen()).toHaveLength(1));
+
+    fireEvent.keyDown(document, { key: 'Escape' });
+
+    await waitFor(() => expect(windowsOnScreen()).toHaveLength(0));
+  });
+
+  it('leaves Escape alone while someone is typing', async () => {
+    // The terminal and the contact box both take free text; closing the window
+    // out from under a half-written line would be its own bug.
+    renderAt('#/terminal');
+    await waitFor(() => expect(windowsOnScreen()).toHaveLength(1));
+
+    const input = document.querySelector('.os-term-row input') as HTMLInputElement;
+    fireEvent.keyDown(input, { key: 'Escape', target: input });
+
+    expect(windowsOnScreen()).toHaveLength(1);
+  });
+
+  it('opens the Start menu on Ctrl+Esc, as Windows does', async () => {
+    renderAt('#/about');
+    await waitFor(() => expect(windowsOnScreen()).toHaveLength(1));
+
+    fireEvent.keyDown(document, { key: 'Escape', ctrlKey: true });
+
+    expect(document.querySelector('.os-startmenu')).toBeInTheDocument();
+  });
+
+  it('shows the desktop on Ctrl+Alt+D', async () => {
+    renderAt('#/cv');
+    await waitFor(() => expect(windowsOnScreen()).toHaveLength(1));
+
+    fireEvent.keyDown(document, { key: 'd', ctrlKey: true, altKey: true });
+
+    await waitFor(() => expect(windowsOnScreen()).toHaveLength(0));
+    // Minimised, not closed: the taskbar still lists it.
+    expect(document.querySelectorAll('.os-window')).toHaveLength(1);
+  });
+
+  it('opens the tips window on F1, shortcut list included', async () => {
+    renderAt('#/about');
+    await waitFor(() => expect(windowsOnScreen()).toHaveLength(1));
+
+    fireEvent.keyDown(document, { key: 'F1' });
+
+    expect(screen.getByText(fr.sc_title)).toBeInTheDocument();
+    // Every binding the code implements is listed, or the sheet lies.
+    fr.os_shortcuts.forEach(([keys]) => {
+      expect(screen.getByText(keys)).toBeInTheDocument();
+    });
+  });
+
+  it('names the focused window in the address bar', async () => {
+    renderAt('#/about');
+
+    await waitFor(() => {
+      expect(window.location.hash).toBe('#/about');
+    });
+  });
+});

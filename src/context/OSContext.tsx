@@ -1,9 +1,20 @@
 import type { ReactNode } from 'react';
-import { createContext, useCallback, useContext, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 
 export type DesktopTheme = 'bliss' | 'field' | 'dusk' | 'matrix' | 'rose';
 
 const THEMES: DesktopTheme[] = ['bliss', 'field', 'dusk', 'matrix', 'rose'];
+
+const THEME_KEY = 'ticoq.theme';
+
+function isTheme(value: string | null): value is DesktopTheme {
+  return value !== null && (THEMES as string[]).includes(value);
+}
+
+function storedTheme(): DesktopTheme {
+  const stored = localStorage.getItem(THEME_KEY);
+  return isTheme(stored) ? stored : 'bliss';
+}
 
 interface OSContextValue {
   bsod: boolean;
@@ -20,6 +31,10 @@ interface OSContextValue {
   tipsOpen: boolean;
   openTips: () => void;
   closeTips: () => void;
+  /** Lifted out of TaskBar so Ctrl+Esc can reach it, as it does on Windows. */
+  startOpen: boolean;
+  setStartOpen: (open: boolean) => void;
+  toggleStart: () => void;
 }
 
 const OSContext = createContext<OSContextValue>({
@@ -37,14 +52,18 @@ const OSContext = createContext<OSContextValue>({
   tipsOpen: false,
   openTips: () => {},
   closeTips: () => {},
+  startOpen: false,
+  setStartOpen: () => {},
+  toggleStart: () => {},
 });
 
 export function OSProvider({ children }: { children: ReactNode }) {
   const [bsod, setBsod] = useState(false);
   const [konamiRain, setKonamiRain] = useState(false);
-  const [theme, setThemeState] = useState<DesktopTheme>('bliss');
+  const [theme, setThemeState] = useState<DesktopTheme>(storedTheme);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [tipsOpen, setTipsOpen] = useState(false);
+  const [startOpen, setStartOpen] = useState(false);
 
   const triggerBsod = useCallback(() => setBsod(true), []);
   const clearBsod = useCallback(() => setBsod(false), []);
@@ -52,20 +71,21 @@ export function OSProvider({ children }: { children: ReactNode }) {
   const clearRain = useCallback(() => setKonamiRain(false), []);
 
   const setTheme = useCallback((t: DesktopTheme | 'next') => {
-    if (t === 'next') {
-      setThemeState((prev) => {
-        const idx = THEMES.indexOf(prev);
-        return THEMES[(idx + 1) % THEMES.length];
-      });
-    } else {
-      setThemeState(t);
-    }
+    setThemeState((prev) => (t === 'next' ? THEMES[(THEMES.indexOf(prev) + 1) % THEMES.length] : t));
   }, []);
+
+  /* The chosen theme outlives the tab. Persisting from an effect rather than
+     from setTheme keeps the updater pure and covers 'next', whose resolved
+     value only exists after the state settles. */
+  useEffect(() => {
+    localStorage.setItem(THEME_KEY, theme);
+  }, [theme]);
 
   const openAbout = useCallback(() => setAboutOpen(true), []);
   const closeAbout = useCallback(() => setAboutOpen(false), []);
   const openTips = useCallback(() => setTipsOpen(true), []);
   const closeTips = useCallback(() => setTipsOpen(false), []);
+  const toggleStart = useCallback(() => setStartOpen((v) => !v), []);
 
   return (
     <OSContext.Provider
@@ -84,6 +104,9 @@ export function OSProvider({ children }: { children: ReactNode }) {
         tipsOpen,
         openTips,
         closeTips,
+        startOpen,
+        setStartOpen,
+        toggleStart,
       }}
     >
       {children}

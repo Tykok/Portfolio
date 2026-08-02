@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { useLang } from 'context/LangContext';
+import { useOS } from 'context/OSContext';
 import { useWindowContext } from 'context/WindowContext';
 
 import { StartMenu } from '../StartMenu/StartMenu';
@@ -16,7 +17,7 @@ interface Props {
 export function TaskBar({ onShutdown, onLogoff }: Props) {
   const { windows, activeId, minimizeWindow } = useWindowContext();
   const { t } = useLang();
-  const [startOpen, setStartOpen] = useState(false);
+  const { startOpen, setStartOpen, toggleStart } = useOS();
   const startWrapRef = useRef<HTMLDivElement>(null);
 
   /* Close StartMenu when clicking outside the button *or* the menu itself.
@@ -36,7 +37,7 @@ export function TaskBar({ onShutdown, onLogoff }: Props) {
       clearTimeout(id);
       document.removeEventListener('mousedown', onDown);
     };
-  }, [startOpen]);
+  }, [startOpen, setStartOpen]);
 
   /* Escape closes StartMenu */
   useEffect(() => {
@@ -46,7 +47,7 @@ export function TaskBar({ onShutdown, onLogoff }: Props) {
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [startOpen]);
+  }, [startOpen, setStartOpen]);
 
   const handleShowDesktop = () => {
     windows.filter((w) => !w.min).forEach((w) => minimizeWindow(w.id));
@@ -54,7 +55,7 @@ export function TaskBar({ onShutdown, onLogoff }: Props) {
 
   return (
     <>
-      <div className="os-taskbar tq-taskbar">
+      <div className="os-taskbar tq-taskbar" role="toolbar" aria-label={t('a11y_taskbar')}>
         <div className="tq-start-wrap" ref={startWrapRef}>
           {startOpen && (
             <StartMenu
@@ -69,13 +70,19 @@ export function TaskBar({ onShutdown, onLogoff }: Props) {
               }}
             />
           )}
-          <button className={`tq-start${startOpen ? ' open' : ''}`} onClick={() => setStartOpen((v) => !v)} title={t('tip_start')}>
+          <button
+            className={`tq-start${startOpen ? ' open' : ''}`}
+            onClick={toggleStart}
+            title={t('tip_start')}
+            aria-haspopup="menu"
+            aria-expanded={startOpen}
+          >
             <span className="orb" />
             {t('start')}
           </button>
         </div>
         <div className="os-quickdiv" />
-        <button className="os-showdesk" onClick={handleShowDesktop} title={t('tip_show_desktop')}>
+        <button className="os-showdesk" onClick={handleShowDesktop} title={t('tip_show_desktop')} aria-label={t('tip_show_desktop')}>
           🖥
         </button>
         <div className="os-quickdiv" />

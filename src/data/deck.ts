@@ -13,6 +13,11 @@ import type { Project } from './projects';
  */
 export type DeckEntry = { kind: 'personal'; project: Project } | { kind: 'company'; company: Company };
 
+/** The entry's id, whichever kind it is — what the address bar carries. */
+export function entryId(entry: DeckEntry): string {
+  return entry.kind === 'company' ? entry.company.id : entry.project.id;
+}
+
 /** Everything the rail needs, and nothing it does not. */
 export function toRailItem(entry: DeckEntry, lang: Lang): { id: string; monogram: string; gradient: string; label: string } {
   if (entry.kind === 'company') {

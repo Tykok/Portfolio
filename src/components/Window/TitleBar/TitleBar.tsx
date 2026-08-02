@@ -26,20 +26,37 @@ export function TitleBar({ icon, title, isMax, onMouseDown, onDblClick, onMin, o
         <AppIcon kind={icon} size={14} />
       </span>
       <span className="tq-tb-title">{title}</span>
+      {/* The glyphs are decorative: `_`, `▢` and `✕` read as nothing useful to a
+          screen reader, so each button carries its label explicitly. */}
       <span className="tq-tb-btns">
-        <button className="tq-tb-btn os-tb-btn-real" title={t('w_min')} onMouseDown={(e) => e.stopPropagation()} onClick={onMin}>
-          <span className="gl">_</span>
+        <button
+          className="tq-tb-btn os-tb-btn-real"
+          title={t('w_min')}
+          aria-label={`${t('w_min')} — ${title}`}
+          onMouseDown={(e) => e.stopPropagation()}
+          onClick={onMin}
+        >
+          <span className="gl" aria-hidden="true">
+            _
+          </span>
         </button>
-        <button className="tq-tb-btn os-tb-btn-real" title={t('w_max')} onMouseDown={(e) => e.stopPropagation()} onClick={onMax}>
-          {isMax ? '❐' : '▢'}
+        <button
+          className="tq-tb-btn os-tb-btn-real"
+          title={t('w_max')}
+          aria-label={`${t('w_max')} — ${title}`}
+          onMouseDown={(e) => e.stopPropagation()}
+          onClick={onMax}
+        >
+          <span aria-hidden="true">{isMax ? '❐' : '▢'}</span>
         </button>
         <button
           className="tq-tb-btn is-close os-tb-btn-real"
           title={t('w_close')}
+          aria-label={`${t('w_close')} — ${title}`}
           onMouseDown={(e) => e.stopPropagation()}
           onClick={onClose}
         >
-          ✕
+          <span aria-hidden="true">✕</span>
         </button>
       </span>
     </div>
