@@ -4,55 +4,36 @@ import { getBadge } from 'data/techBadges';
 import type { LocalizedString, LocalizedStringArray } from 'types/lang';
 
 const EXPERIENCE = [
+  /* One Pictarine entry, not two. The role never changed title, so splitting it
+     at October 2024 read as a padded timeline rather than a progression. The
+     bullets are the union of the two former entries, oldest work last. */
   {
     org: { fr: 'Pictarine · Toulouse', en: 'Pictarine · Toulouse' },
     pos: { fr: 'Développeur Back-End', en: 'Back-End Developer' },
-    when: { fr: 'oct. 2024 – présent', en: 'Oct 2024 – present' },
+    when: { fr: 'oct. 2022 – présent', en: 'Oct 2022 – present' },
     bullets: {
       fr: [
         'APIs backend en Kotlin / Spring Boot, données sur PostgreSQL',
         'Services serverless sur GCP : Cloud Functions, Cloud Scheduler et Cloud Run',
         'Intégrations de paiement (Stripe) et de services tiers (Klaviyo pour le marketing)',
         'Intégration et gestion de compte client',
-        'Maintenance et évolution du tooling interne utilisé par toutes les équipes',
-        'Collaboration avec Produit, Design, Data et Front (iOS, Android, Web)',
+        "Première version du catalogue produit, de l'intégration à la mise en production",
+        'Outil interne en Next.js / TypeScript, créé puis maintenu — adopté par toutes les équipes',
         "Cycle complet : conception, développement, mise en production, analyse d'impact — Docker & monitoring",
+        'Collaboration avec Produit, Design, Data et Front (iOS, Android, Web), en agile',
       ],
       en: [
         'Backend APIs in Kotlin / Spring Boot, data on PostgreSQL',
         'Serverless services on GCP: Cloud Functions, Cloud Scheduler and Cloud Run',
         'Payment integrations (Stripe) and third-party services (Klaviyo for marketing)',
         'Customer account onboarding and management',
-        'Maintenance and evolution of the internal tooling used by every team',
-        'Working with Product, Design, Data and Front (iOS, Android, Web)',
+        'First version of the product catalogue, from integration through to release',
+        'Internal tool in Next.js / TypeScript, built then maintained — adopted by every team',
         'Full cycle: design, build, release, impact analysis — Docker & monitoring',
+        'Working with Product, Design, Data and Front (iOS, Android, Web), in an agile setup',
       ],
     },
-    tags: ['Kotlin', 'Spring Boot', 'PostgreSQL', 'GCP', 'Node.js', 'Stripe', 'Docker', 'Python'],
-  },
-  {
-    org: { fr: 'Pictarine · Toulouse', en: 'Pictarine · Toulouse' },
-    pos: { fr: 'Développeur Back-End', en: 'Back-End Developer' },
-    when: { fr: 'oct. 2022 – oct. 2024', en: 'Oct 2022 – Oct 2024' },
-    bullets: {
-      fr: [
-        'APIs backend en Kotlin / Spring Boot',
-        "Intégration d'une première version du catalogue produit",
-        "Évolution de la gestion du paiement utilisateur dans l'application (Stripe)",
-        "Création d'un outil interne (Next.js / TypeScript) utilisé par plusieurs équipes",
-        'Amélioration et maintenance de services existants, gestion des données sous PostgreSQL',
-        'Environnement agile avec les équipes Produit et Techniques',
-      ],
-      en: [
-        'Backend APIs in Kotlin / Spring Boot',
-        'Shipped a first version of the product catalogue',
-        'Grew in-app user payment handling (Stripe)',
-        'Built an internal tool (Next.js / TypeScript) used by several teams',
-        'Improved and maintained existing services, data handling on PostgreSQL',
-        'Agile environment alongside Product and Engineering teams',
-      ],
-    },
-    tags: ['Kotlin', 'Spring Boot', 'PostgreSQL', 'Next.js', 'Node.js', 'TypeScript', 'Python'],
+    tags: ['Kotlin', 'Spring Boot', 'PostgreSQL', 'GCP', 'Next.js', 'Node.js', 'TypeScript', 'Stripe', 'Docker', 'Python'],
   },
   {
     org: { fr: 'MecaLIFE Group · Toulouse', en: 'MecaLIFE Group · Toulouse' },
@@ -216,13 +197,13 @@ export function Cv() {
 
   return (
     <div className="cv2" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-      {/* Toolbar */}
+      {/* Toolbar — download first: it is what a recruiter came for. */}
       <div className="cv2-tb">
-        <button className="cv2-act primary" onClick={handlePrint}>
-          {t('cv_print')}
-        </button>
-        <button className="cv2-act" style={{ opacity: 0.5, cursor: 'default' }}>
+        <a className="cv2-act primary" href={`/cv-elie-treport-${lang}.pdf`} download>
           {t('cv_dl')}
+        </a>
+        <button className="cv2-act" onClick={handlePrint}>
+          {t('cv_print')}
         </button>
       </div>
 

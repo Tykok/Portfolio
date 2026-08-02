@@ -14,11 +14,36 @@ const renderCv = () =>
   );
 
 describe('Cv app', () => {
-  it('lists the two Pictarine roles separately', () => {
+  it('carries Pictarine as one entry, not a timeline split in two', () => {
+    // The two former entries shared a job title, so the split read as padding.
     renderCv();
-    expect(screen.getByText('oct. 2024 – présent')).toBeInTheDocument();
-    expect(screen.getByText('oct. 2022 – oct. 2024')).toBeInTheDocument();
-    expect(screen.getAllByText('Pictarine · Toulouse')).toHaveLength(2);
+    expect(screen.getByText('oct. 2022 – présent')).toBeInTheDocument();
+    expect(screen.queryByText('oct. 2022 – oct. 2024')).not.toBeInTheDocument();
+    expect(screen.getAllByText('Pictarine · Toulouse')).toHaveLength(1);
+  });
+
+  it('keeps the work from both former Pictarine entries', () => {
+    // Merging is only safe if nothing was dropped: one bullet from each of the
+    // two entries, and the catalogue line that only the older one carried.
+    renderCv();
+    expect(screen.getByText(/Cloud Functions, Cloud Scheduler et Cloud Run/)).toBeInTheDocument();
+    expect(screen.getByText(/catalogue produit/)).toBeInTheDocument();
+    expect(screen.getByText(/Outil interne en Next\.js/)).toBeInTheDocument();
+  });
+
+  it('offers a PDF that is really downloadable, and a print button that prints', () => {
+    // Both buttons used to be broken: the download one was a disabled stub,
+    // and the print one called window.print() with no @media print behind it.
+    const print = vi.spyOn(window, 'print').mockImplementation(() => {});
+    renderCv();
+
+    const download = screen.getByText(fr.cv_dl).closest('a');
+    expect(download).toHaveAttribute('href', '/cv-elie-treport-fr.pdf');
+    expect(download).toHaveAttribute('download');
+
+    screen.getByText(fr.cv_print).click();
+    expect(print).toHaveBeenCalled();
+    print.mockRestore();
   });
 
   it('lists the MecaLIFE internship apart from the full stack role', () => {
