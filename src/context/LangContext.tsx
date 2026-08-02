@@ -24,11 +24,17 @@ const LangContext = createContext<LangContextValue>({
   t: ((key: keyof Translations) => key) as TranslateFn,
 });
 
+function readLang(): Lang {
+  /* `?lang=` wins over the stored preference so a link can carry the language
+     it was written in — someone sharing the English CV should not have it come
+     out in French because the reader once clicked the toggle. */
+  const asked = new URLSearchParams(window.location.search).get('lang');
+  if (asked === 'en' || asked === 'fr') return asked;
+  return localStorage.getItem('ticoq.lang') === 'en' ? 'en' : 'fr';
+}
+
 export function LangProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>(() => {
-    const stored = localStorage.getItem('ticoq.lang');
-    return stored === 'en' ? 'en' : 'fr';
-  });
+  const [lang, setLangState] = useState<Lang>(readLang);
 
   const setLang = (newLang: Lang) => {
     setLangState(newLang);

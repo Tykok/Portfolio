@@ -2,9 +2,9 @@ import type { JSX } from 'react';
 import { useEffect, useRef, useState } from 'react';
 
 import { About } from 'components/apps/About/About';
+import { Articles } from 'components/apps/Articles/Articles';
 import { Contact } from 'components/apps/Contact/Contact';
 import { Cv } from 'components/apps/Cv/Cv';
-import { Media } from 'components/apps/Media/Media';
 import { Projects } from 'components/apps/Projects/Projects';
 import { Terminal } from 'components/apps/Terminal/Terminal';
 import { Web } from 'components/apps/Web/Web';
@@ -18,9 +18,11 @@ import { Off } from 'components/OS/Off/Off';
 import { TipsDialog } from 'components/OS/TipsDialog/TipsDialog';
 import { TaskBar } from 'components/TaskBar/TaskBar';
 import { Window } from 'components/Window/Window';
+import { ArticlesProvider } from 'context/ArticlesContext';
 import { LangProvider } from 'context/LangContext';
 import { OSProvider, useOS } from 'context/OSContext';
 import { ProjectsProvider } from 'context/ProjectsContext';
+import { readInitialRoute, RouteProvider, useRoute } from 'context/RouteContext';
 import { useWindowContext, WindowProvider } from 'context/WindowContext';
 import type { AppKey } from 'types/app';
 
@@ -41,8 +43,8 @@ function AppContent({ appKey }: { appKey: AppKey }): JSX.Element | null {
       return <Contact />;
     case 'terminal':
       return <Terminal />;
-    case 'media':
-      return <Media />;
+    case 'articles':
+      return <Articles />;
     case 'web':
       return <Web />;
     default:
@@ -51,16 +53,113 @@ function AppContent({ appKey }: { appKey: AppKey }): JSX.Element | null {
 }
 
 function OS() {
-  const { windows } = useWindowContext();
-  const { bsod, konamiRain, triggerRain, aboutOpen, closeAbout, tipsOpen, closeTips, theme } = useOS();
-  const [phase, setPhase] = useState<Phase>('boot');
+  const { windows, activeId, openApp, focusWindow, closeWindow, minimizeWindow } = useWindowContext();
+  const { bsod, konamiRain, triggerRain, aboutOpen, closeAbout, tipsOpen, openTips, closeTips, theme, startOpen, toggleStart } = useOS();
+  const { route, setRouteApp } = useRoute();
+  /* A shared link names a window, so it lands on that window. Making someone
+     sit through the boot sequence and click a login tile to reach the page
+     they were sent is friction the link was meant to remove. */
+  const [deepLinked] = useState(() => readInitialRoute().app !== null);
+  const [phase, setPhase] = useState<Phase>(deepLinked ? 'desktop' : 'boot');
   const konamiSeq = useRef<string[]>([]);
+
+  /* Read inside the route effect without making it depend on every window
+     change — see the comment there. Declared before that effect so the ref is
+     already current when it runs in the same flush. */
+  const windowsRef = useRef(windows);
+  useEffect(() => {
+    windowsRef.current = windows;
+  }, [windows]);
 
   /* Auto-transition boot → login */
   useEffect(() => {
+    if (deepLinked) return;
     const id = setTimeout(() => setPhase('login'), BOOT_MS);
     return () => clearTimeout(id);
-  }, []);
+  }, [deepLinked]);
+
+  /* Address bar → windows. Deliberately blind to `windows`: were it a
+     dependency, focusing another window would re-run this with the old
+     `route.app` still in hand and pull focus straight back. */
+  useEffect(() => {
+    if (phase !== 'desktop' || !route.app) return;
+    const existing = windowsRef.current.find((w) => w.key === route.app);
+    if (!existing) openApp(route.app);
+    else if (!existing.active || existing.min) focusWindow(existing.id);
+  }, [route.app, phase, openApp, focusWindow]);
+
+  /* Windows → address bar. The focused window is what the URL names; with
+     none focused there is nothing to share but the desktop.
+     `hadWindows` guards the first pass: on a deep link this effect runs once
+     before the requested window exists, and clearing the route there wiped
+     the very slide the link carried. Only a desktop that once had windows is
+     an empty desktop on purpose. */
+  const hadWindows = useRef(false);
+  useEffect(() => {
+    if (phase !== 'desktop') return;
+    if (windows.length > 0) hadWindows.current = true;
+    const active = windows.find((w) => w.id === activeId && !w.min);
+    if (!active && !hadWindows.current) return;
+    setRouteApp(active ? active.key : null);
+  }, [windows, activeId, phase, setRouteApp]);
+
+  /* Keyboard shortcuts.
+     The set is constrained by what a browser lets a page have: Alt+Tab never
+     arrives, Alt+← is Back, Ctrl+Tab switches browser tabs. Ctrl+Esc and the
+     Ctrl+Alt row do reach us, and Ctrl+Esc happens to be the Start menu's real
+     Windows binding. The list is in the Tips window under `os_shortcuts` —
+     changing one means changing both. */
+  useEffect(() => {
+    if (phase !== 'desktop') return;
+
+    const isTyping = (target: EventTarget | null) => {
+      const el = target as HTMLElement | null;
+      if (!el) return false;
+      const tag = el.tagName;
+      return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || el.isContentEditable;
+    };
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'F1') {
+        e.preventDefault();
+        openTips();
+        return;
+      }
+
+      if (e.ctrlKey && e.key === 'Escape') {
+        e.preventDefault();
+        toggleStart();
+        return;
+      }
+
+      if (e.ctrlKey && e.altKey) {
+        const open = windows.filter((w) => !w.closing);
+        if (e.key === 'd' || e.key === 'D') {
+          e.preventDefault();
+          open.filter((w) => !w.min).forEach((w) => minimizeWindow(w.id));
+          return;
+        }
+        if ((e.key === 'ArrowRight' || e.key === 'ArrowLeft') && open.length > 0) {
+          e.preventDefault();
+          const at = open.findIndex((w) => w.id === activeId);
+          const step = e.key === 'ArrowRight' ? 1 : -1;
+          const next = open[(at + step + open.length) % open.length];
+          focusWindow(next.id);
+          return;
+        }
+      }
+
+      /* Escape closes the active window, but not while someone is mid-sentence
+         in the terminal or the contact box — and not when a dialog is up, which
+         owns Escape for itself. */
+      if (e.key === 'Escape' && !isTyping(e.target) && !aboutOpen && !tipsOpen && !startOpen && activeId) {
+        closeWindow(activeId);
+      }
+    };
+
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [phase, windows, activeId, aboutOpen, tipsOpen, startOpen, openTips, toggleStart, minimizeWindow, focusWindow, closeWindow]);
 
   /* Konami code listener (global) */
   useEffect(() => {
@@ -118,13 +217,17 @@ function OS() {
 function Main() {
   return (
     <LangProvider>
-      <WindowProvider>
-        <OSProvider>
-          <ProjectsProvider>
-            <OS />
-          </ProjectsProvider>
-        </OSProvider>
-      </WindowProvider>
+      <RouteProvider>
+        <WindowProvider>
+          <OSProvider>
+            <ProjectsProvider>
+              <ArticlesProvider>
+                <OS />
+              </ArticlesProvider>
+            </ProjectsProvider>
+          </OSProvider>
+        </WindowProvider>
+      </RouteProvider>
     </LangProvider>
   );
 }

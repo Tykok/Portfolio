@@ -139,25 +139,31 @@ const ICON_BODY: Record<IconKind, ReactElement> = {
     </g>
   ),
 
-  media: (
+  news: (
     <g>
       <defs>
-        <radialGradient id="ic-media-orb" cx=".38" cy=".32" r=".75">
-          <stop offset="0" stopColor="#bfe3ff" />
-          <stop offset=".5" stopColor="#3f8fe6" />
-          <stop offset="1" stopColor="#11357f" />
-        </radialGradient>
-        <linearGradient id="ic-media-ring" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#ff9d3a" />
-          <stop offset=".5" stopColor="#e8642b" />
-          <stop offset="1" stopColor="#b83d12" />
+        <linearGradient id="ic-news-page" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#ffffff" />
+          <stop offset="1" stopColor="#dcd9cc" />
+        </linearGradient>
+        <linearGradient id="ic-news-back" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#e9e6d8" />
+          <stop offset="1" stopColor="#bdb9a8" />
         </linearGradient>
       </defs>
-      <ellipse cx="24" cy="42" rx="14" ry="2.4" fill="#000" opacity=".12" />
-      <circle cx="24" cy="22" r="19" fill="url(#ic-media-ring)" />
-      <circle cx="24" cy="22" r="14.5" fill="url(#ic-media-orb)" stroke="#0c2e6e" strokeWidth=".6" />
-      <path d="M19.5 14.5 L33 22 L19.5 29.5 Z" fill="#fff" />
-      <ellipse cx="19" cy="15.5" rx="9" ry="6" fill="#fff" opacity=".3" transform="rotate(-28 19 15.5)" />
+      <ellipse cx="24" cy="42.5" rx="14" ry="2.4" fill="#000" opacity=".12" />
+      {/* Two sheets, the back one offset — a folded newspaper at 48px. */}
+      <rect x="12" y="9" width="26" height="31" rx="1.5" fill="url(#ic-news-back)" stroke="#8f8b7a" strokeWidth=".6" />
+      <rect x="9" y="11" width="26" height="29" rx="1.5" fill="url(#ic-news-page)" stroke="#8f8b7a" strokeWidth=".7" />
+      <rect x="12" y="14" width="20" height="5" rx="1" fill="#1a52d6" opacity=".85" />
+      <g fill="#8b8778">
+        <rect x="12" y="22" width="9" height="7" rx="1" fill="#c3d8f7" stroke="#7f96bd" strokeWidth=".4" />
+        <rect x="23" y="22" width="9" height="1.4" rx=".7" />
+        <rect x="23" y="25" width="9" height="1.4" rx=".7" />
+        <rect x="23" y="28" width="7" height="1.4" rx=".7" />
+        <rect x="12" y="32" width="20" height="1.4" rx=".7" />
+        <rect x="12" y="35" width="16" height="1.4" rx=".7" />
+      </g>
     </g>
   ),
 

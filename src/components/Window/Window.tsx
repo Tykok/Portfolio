@@ -29,6 +29,14 @@ export function Window({ win, isActive, children }: Props) {
   const resizeRef = useRef<{ startX: number; startY: number; winW: number; winH: number } | null>(null);
   const isDraggingRef = useRef(false);
   const isResizingRef = useRef(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  /* A window that opens takes the keyboard with it, the way clicking an icon
+     takes the mouse. Without this, opening an app from the desktop left focus
+     behind on the icon and Tab walked the taskbar instead of the new window. */
+  useEffect(() => {
+    rootRef.current?.focus({ preventScroll: true });
+  }, []);
 
   const handleFocus = () => {
     // TitleBar calls focusWindow itself + stops propagation, so only handle body clicks here
@@ -130,7 +138,19 @@ export function Window({ win, isActive, children }: Props) {
     .join(' ');
 
   return (
-    <div className={classes} style={style} onMouseDown={handleFocus}>
+    <div
+      ref={rootRef}
+      className={classes}
+      style={style}
+      onMouseDown={handleFocus}
+      /* Non-modal on purpose: several windows are open at once and the desktop
+         behind them stays live, which is why aria-modal is false rather than
+         absent — the distinction is what tells a screen reader it may leave. */
+      role="dialog"
+      aria-modal="false"
+      aria-label={meta.title[lang]}
+      tabIndex={-1}
+    >
       <div className="os-winflex tq-win">
         <TitleBar
           icon={meta.icon}

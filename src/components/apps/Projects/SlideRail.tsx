@@ -38,6 +38,7 @@ export function SlideRail({ entries, activeIndex, onSelect }: SlideRailProps) {
                 className={`deck-thumb${index === activeIndex ? ' on' : ''}`}
                 onClick={() => onSelect(index)}
                 aria-label={item.label}
+                aria-current={index === activeIndex ? 'true' : undefined}
               >
                 <span className="deck-thumb-n">{index + 1}</span>
                 <span className="deck-thumb-ico" style={{ background: item.gradient }}>

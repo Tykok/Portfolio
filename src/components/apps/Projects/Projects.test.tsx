@@ -6,6 +6,7 @@ import { vi } from 'vitest';
 
 import LangProvider from 'context/LangContext';
 import { ProjectsProvider } from 'context/ProjectsContext';
+import { RouteProvider } from 'context/RouteContext';
 import { companies } from 'data/companies';
 import fr from 'i18n/fr';
 
@@ -23,9 +24,11 @@ const total = mockProjects.length + companies.length;
 function renderApp() {
   return render(
     <LangProvider>
-      <ProjectsProvider>
-        <Projects />
-      </ProjectsProvider>
+      <RouteProvider>
+        <ProjectsProvider>
+          <Projects />
+        </ProjectsProvider>
+      </RouteProvider>
     </LangProvider>,
   );
 }
@@ -103,6 +106,60 @@ describe('Projects deck', () => {
     expect(shell?.querySelectorAll(':scope > .deck-B')).toHaveLength(1);
     expect(shell?.querySelectorAll(':scope > .pj-notice')).toHaveLength(1);
     expect(shell?.firstElementChild).toHaveClass('pj-notice');
+  });
+
+  describe('the address bar', () => {
+    afterEach(() => {
+      window.history.replaceState(null, '', '/');
+    });
+
+    it('opens on the slide the URL names, project or company', async () => {
+      window.history.replaceState(null, '', '#/projects/plant974');
+      renderApp();
+
+      await waitFor(() => {
+        expect(screen.getByText(`4 / ${total}`)).toBeInTheDocument();
+      });
+      expect(screen.getAllByText('Plant974 — flore de La Réunion').length).toBeGreaterThan(0);
+    });
+
+    it('falls back to the first slide when the id names nothing', async () => {
+      // A renamed project should not produce a broken window, and the address
+      // should stop advertising an id that no longer resolves.
+      window.history.replaceState(null, '', '#/projects/deleted-long-ago');
+      renderApp();
+
+      await waitFor(() => {
+        expect(screen.getByText(`1 / ${total}`)).toBeInTheDocument();
+      });
+      // The correction lands a tick after the deck settles: the slide is drawn
+      // first, the address catches up on the next flush.
+      await waitFor(() => {
+        expect(window.location.hash).toBe(`#/projects/${mockProjects[0].id}`);
+      });
+    });
+
+    it('rewrites the address as the deck moves', async () => {
+      window.history.replaceState(null, '', '#/projects');
+      await renderLoadedApp();
+
+      fireEvent.click(screen.getByRole('button', { name: 'Suivant' }));
+
+      await waitFor(() => {
+        expect(window.location.hash).toBe(`#/projects/${mockProjects[1].id}`);
+      });
+    });
+
+    it('does not touch the address when another app is the one on screen', async () => {
+      // The deck renders inside its window whatever has focus; only the focused
+      // app gets to name itself in the URL.
+      window.history.replaceState(null, '', '#/cv');
+      await renderLoadedApp();
+
+      fireEvent.click(screen.getByRole('button', { name: 'Suivant' }));
+
+      expect(window.location.hash).toBe('#/cv');
+    });
   });
 
   it('shows only the Pro group when the projects request fails', async () => {

@@ -25,12 +25,28 @@ export function TipsDialog() {
           </div>
         </div>
 
-        <div className="os-dialog-body">
+        <div className="os-dialog-body os-tips-body">
           <ul className="tips-list">
             {t('os_tips').map((tip) => (
               <li key={tip}>{tip}</li>
             ))}
           </ul>
+
+          {/* The shortcuts have nowhere else to be announced: an OS that can be
+              driven from the keyboard has to say so somewhere a visitor looks. */}
+          <div className="tips-sc">
+            <div className="tips-sc-h">{t('sc_title')}</div>
+            <dl className="tips-sc-list">
+              {t('os_shortcuts').map(([keys, what]) => (
+                <div key={keys} className="tips-sc-row">
+                  <dt>
+                    <kbd>{keys}</kbd>
+                  </dt>
+                  <dd>{what}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
         </div>
 
         <div className="os-dialog-foot">
