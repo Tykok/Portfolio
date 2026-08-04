@@ -143,12 +143,19 @@ export function PortfolioPage({ onNavigate }: Props) {
         </div>
         <div className="np-linklist">
           {EXT_LINKS.map((l) => (
-            <div key={l.key} className="np-extlink" onClick={() => onNavigate(l.href)}>
+            <div
+              key={l.key}
+              className="np-extlink"
+              onClick={() => (l.opensApp ? openApp(l.opensApp) : onNavigate(l.href))}
+              title={l.opensApp ? t('np_open_app') : undefined}
+            >
               <span className="np-extlink-dot" style={{ background: l.color }}>
                 {l.monogram}
               </span>
               <span className="np-extlink-name">{l.label}</span>
-              <span className="np-extlink-arr">↗</span>
+              {/* An arrow out for what leaves the desktop, a window for what
+                  stays on it — the two do not behave the same. */}
+              <span className="np-extlink-arr">{l.opensApp ? '⧉' : '↗'}</span>
             </div>
           ))}
         </div>
