@@ -129,6 +129,7 @@ export interface Translations {
   np_year: string;
   np_links: string;
   np_open_projects: string;
+  np_open_app: string;
   // Terminal
   t_b1: string;
   t_b2: string;
