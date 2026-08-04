@@ -136,6 +136,7 @@ const fr: Translations = {
   np_year: 'Année',
   np_links: 'Liens',
   np_open_projects: 'Ouvrir Parcours',
+  np_open_app: 'Ouvrir dans TicoqOS',
   t_b1: 'TicoqOS [Version 5.1.2003] — Backend Edition',
   t_b2: "(c) Elie « Tykok » Treport. Tape 'help' pour les commandes.",
   t_help: 'Commandes disponibles :',

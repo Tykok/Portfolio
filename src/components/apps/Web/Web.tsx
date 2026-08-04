@@ -1,6 +1,8 @@
 import { useState } from 'react';
 
 import { useLang } from 'context/LangContext';
+import { useWindowContext } from 'context/WindowContext';
+import { socials } from 'data/socials';
 
 import { PortfolioPage } from './PortfolioPage';
 
@@ -20,15 +22,13 @@ const makeTab = (url = HOME_URL, title = ''): Tab => ({
   title: title || (url === HOME_URL ? '' : url),
 });
 
-const EXT_LINKS = [
-  { label: 'GitHub', url: 'https://github.com/Tykok', color: '#24292f', monogram: 'GH' },
-  { label: 'LinkedIn', url: 'https://linkedin.com/in/elie-treport', color: '#0a66c2', monogram: 'in' },
-  { label: 'Dev.to', url: 'https://dev.to/tykok', color: '#0a0a0a', monogram: 'D' },
-  { label: 'Medium', url: 'https://medium.com/@tykok', color: '#191919', monogram: 'M' },
-];
+/* The third copy of this list, and the second one to carry a LinkedIn URL that
+   had drifted from the data. It reads socials.ts now, like the page below it. */
+const BOOKMARKS = socials.filter((s) => s.key !== 'email');
 
 export function Web() {
   const { t } = useLang();
+  const { openApp } = useWindowContext();
   const [tabs, setTabs] = useState<Tab[]>([makeTab()]);
   const [activeTabId, setActiveTabId] = useState(tabs[0].id);
   const [addr, setAddr] = useState(HOME_URL);
@@ -133,8 +133,13 @@ export function Web() {
 
       {/* Bookmarks */}
       <div className="tq-bmbar">
-        {EXT_LINKS.map((l) => (
-          <button key={l.label} className="bm-item" onClick={() => navigate(l.url)}>
+        {BOOKMARKS.map((l) => (
+          <button
+            key={l.key}
+            className="bm-item"
+            onClick={() => (l.opensApp ? openApp(l.opensApp) : navigate(l.href))}
+            title={l.opensApp ? t('np_open_app') : undefined}
+          >
             <span
               className="bm-favi letter"
               style={{

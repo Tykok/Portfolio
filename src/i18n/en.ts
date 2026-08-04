@@ -136,6 +136,7 @@ const en: Translations = {
   np_year: 'Year',
   np_links: 'Links',
   np_open_projects: 'Open Work',
+  np_open_app: 'Open inside TicoqOS',
   t_b1: 'TicoqOS [Version 5.1.2003] — Backend Edition',
   t_b2: '(c) Elie "Tykok" Treport. Type \'help\' for commands.',
   t_help: 'Available commands:',

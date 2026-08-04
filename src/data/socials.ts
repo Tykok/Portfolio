@@ -1,3 +1,4 @@
+import type { AppKey } from '../types/app';
 import type { LocalizedString } from '../types/lang';
 
 export interface Social {
@@ -9,6 +10,14 @@ export interface Social {
   color: string;
   primary: boolean;
   desc: LocalizedString;
+  /**
+   * An app that shows this account's content without leaving the desktop.
+   *
+   * Where it is set, a list of links opens the window instead of sending the
+   * visitor off-site — `href` stays, as the way out for whoever wants the real
+   * thing, and as the fallback for any list that has no app to open.
+   */
+  opensApp?: AppKey;
 }
 
 export const socials: Social[] = [
@@ -51,6 +60,7 @@ export const socials: Social[] = [
     color: '#0a0a0a',
     primary: false,
     desc: { fr: 'Mes articles techniques en clair.', en: 'My technical articles, in the open.' },
+    opensApp: 'articles',
   },
   {
     key: 'medium',

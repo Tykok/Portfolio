@@ -4,6 +4,9 @@ import { useLang } from 'context/LangContext';
 import type { Article } from 'data/articles';
 import { socials } from 'data/socials';
 
+/* This is the one dev.to link that still leaves the desktop, and it has to:
+   `opensApp` points at this very window, so honouring it here would be a button
+   that reopens the window you are already reading. */
 const DEV_TO = socials.find((s) => s.key === 'devto');
 
 function formatDate(iso: string, locale: string): string {
