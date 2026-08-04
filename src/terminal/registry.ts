@@ -67,36 +67,4 @@ export const COMMANDS: Command[] = [
     summary: 'clear the screen',
     run: () => ({ lines: [], clear: true }),
   },
-  {
-    name: 'show',
-    group: 'navigation',
-    usage: '<id>',
-    summary: 'show a project or article',
-    run: () => ({ lines: out('show placeholder') }),
-  },
-  {
-    name: 'cv',
-    group: 'profile',
-    usage: '',
-    summary: 'view my resume',
-    run: () => ({ lines: out('cv placeholder') }),
-  },
-  {
-    name: 'easter',
-    group: 'fun',
-    usage: '',
-    summary: 'find the easter egg',
-    run: () => ({ lines: out('easter egg') }),
-  },
-  {
-    name: 'gui',
-    group: 'system',
-    usage: '',
-    summary: 'leave the console for the desktop',
-    modes: ['console'],
-    run: (ctx) => {
-      ctx.host.gui?.();
-      return { lines: out('returning to desktop...') };
-    },
-  },
 ];
