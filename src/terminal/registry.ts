@@ -1,3 +1,4 @@
+import { contactView, cvUrl, cvView, skillsView, whoView } from './views/profile';
 import { blank, col, dim, err, heading, out } from './lines';
 import type { Command, CommandGroup, CommandResult, TerminalCtx } from './types';
 
@@ -50,6 +51,57 @@ function helpOne(name: string): CommandResult {
 }
 
 export const COMMANDS: Command[] = [
+  {
+    name: 'who',
+    aliases: ['whoami', 'about'],
+    group: 'profile',
+    usage: '',
+    summary: 'who I am, at length',
+    run: () => ({ lines: whoView() }),
+  },
+  {
+    name: 'skills',
+    aliases: ['stack'],
+    group: 'profile',
+    usage: '',
+    summary: 'my stack, by domain',
+    run: () => ({ lines: skillsView() }),
+  },
+  {
+    name: 'contact',
+    aliases: ['links'],
+    group: 'profile',
+    usage: '',
+    summary: 'every way to reach me',
+    run: () => ({ lines: contactView() }),
+  },
+  {
+    name: 'cv',
+    aliases: ['resume'],
+    group: 'profile',
+    usage: '',
+    summary: 'my résumé, as text',
+    detail: ['In the desktop terminal this also opens the CV window.', "`download cv` fetches the PDF."],
+    run: (ctx) => {
+      if (ctx.host.mode === 'window') ctx.host.openApp('cv');
+      return { lines: cvView() };
+    },
+  },
+  {
+    name: 'download',
+    group: 'profile',
+    usage: 'cv [fr|en]',
+    summary: 'fetch the résumé PDF',
+    detail: ['Defaults to the language the desktop is in — the file is not part of the English-only terminal.'],
+    example: 'download cv fr',
+    run: (ctx, arg) => {
+      const [what, asked] = arg.toLowerCase().split(/\s+/);
+      if (what !== 'cv') return { lines: err("Only 'download cv' is on offer. Try `download cv en`.") };
+      const lang = asked === 'fr' || asked === 'en' ? asked : ctx.lang;
+      ctx.host.openUrl(cvUrl(lang));
+      return { lines: dim(`Fetching ${cvUrl(lang)}…`) };
+    },
+  },
   {
     name: 'help',
     aliases: ['?', 'man'],
