@@ -93,3 +93,27 @@ describe('runCommand', () => {
       .forEach((c) => expect(out).toContain(c.name));
   });
 });
+
+describe('profile commands', () => {
+  it('opens the CV window as well as printing it, but only on the desktop', () => {
+    const windowed = makeCtx('window');
+    runCommand('cv', windowed);
+    expect(windowed.host.openApp).toHaveBeenCalledWith('cv');
+
+    const console_ = makeCtx('console');
+    runCommand('cv', console_);
+    expect(console_.host.openApp).not.toHaveBeenCalled();
+  });
+
+  it('downloads the résumé in the OS language, and in an explicit one', () => {
+    const ctx = makeCtx('console');
+    runCommand('download cv', ctx); // ctx.lang is 'fr'
+    expect(ctx.host.openUrl).toHaveBeenCalledWith('/cv-elie-treport-fr.pdf');
+    runCommand('download cv en', ctx);
+    expect(ctx.host.openUrl).toHaveBeenCalledWith('/cv-elie-treport-en.pdf');
+  });
+
+  it('refuses to download anything else', () => {
+    expect(runCommand('download wallpaper', makeCtx()).lines.some((l) => l.type === 'error')).toBe(true);
+  });
+});
