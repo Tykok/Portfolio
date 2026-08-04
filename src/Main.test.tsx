@@ -51,6 +51,21 @@ describe('TicoqOS', () => {
     expect(screen.queryByText(fr.login_hint)).not.toBeInTheDocument();
   });
 
+  it('opens windows maximized, and keeps a size to restore them to', async () => {
+    renderAt('#/cv');
+
+    await waitFor(() => expect(document.querySelector('.os-window')).toBeInTheDocument());
+    const win = document.querySelector('.os-window') as HTMLElement;
+    expect(win).toHaveClass('maxd');
+
+    // Restore has to land on a real window, not a zero-sized one: the geometry
+    // is still computed at open even though nothing shows it at first.
+    fireEvent.click(screen.getByRole('button', { name: new RegExp(fr.w_max) }));
+    expect(win).not.toHaveClass('maxd');
+    expect(win.style.width).not.toBe('');
+    expect(win.style.height).not.toBe('');
+  });
+
   it('gives the keyboard to the window that opens', async () => {
     renderAt('#/cv');
 

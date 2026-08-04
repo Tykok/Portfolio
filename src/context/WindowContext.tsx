@@ -28,10 +28,16 @@ function windowReducer(state: WindowState[], action: WindowAction): WindowState[
       const x = Math.max(8, Math.round((vw - w) / 2) + (n % 5) * 26 - 52);
       const y = Math.max(8, Math.round((vh - h) / 2) + (n % 5) * 22 - 44);
       const id = nextId();
-      // New window is active, all others lose focus — single atomic update
+      /* Windows open maximized. The geometry above is still computed, and still
+         matters: it is the size and place the window falls back to the moment
+         someone hits the restore button, which is why the cascade offset stays.
+
+         Only new windows. Re-opening one from the taskbar or an icon leaves it
+         as the visitor last put it — re-maximizing something they had just
+         restored would fight them. */
       return [
         ...state.map((w) => ({ ...w, active: false })),
-        { id, key: action.key, x, y, w, h, z: ++zCounter, min: false, max: false, closing: false, active: true },
+        { id, key: action.key, x, y, w, h, z: ++zCounter, min: false, max: true, closing: false, active: true },
       ];
     }
     case 'CLOSE':
