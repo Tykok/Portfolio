@@ -433,7 +433,7 @@ export function complete(partial: string, ctx: TerminalCtx): string[] {
 - [ ] **Step 7: Run the tests**
 
 Run: `npx vitest run src/terminal/run.test.ts`
-Expected: PASS, 10 tests.
+Expected: PASS, 9 tests.
 
 - [ ] **Step 8: Typecheck and lint**
 
