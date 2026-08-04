@@ -151,25 +151,23 @@ describe('runCommand', () => {
   });
 
   it('resolves a command through its alias', () => {
-    expect(text(runCommand('?', makeCtx()))).toContain('NAVIGATION');
+    expect(text(runCommand('?', makeCtx()))).toContain('SYSTEM');
   });
 
-  it('groups help, and shows a usage column', () => {
+  /* Only the system group has members at this point — the navigation, profile
+     and fun groups arrive with their commands in Tasks 2-5, and each asserts
+     its own heading there. An empty group prints nothing at all. */
+  it('groups help under a heading, and shows a usage column', () => {
     const out = text(runCommand('help', makeCtx()));
-    ['NAVIGATION', 'PROFILE', 'SYSTEM', 'FUN'].forEach((group) => expect(out).toContain(group));
+    expect(out).toContain('SYSTEM');
     expect(out).toContain('help <command>');
-  });
-
-  it('hides console-only commands from the windowed terminal, and lists them in the console', () => {
-    expect(text(runCommand('help', makeCtx('window')))).not.toContain('gui ');
-    expect(text(runCommand('help', makeCtx('console')))).toContain('gui');
   });
 
   it('details a single command on request, with its aliases and an example', () => {
     const out = text(runCommand('help clear', makeCtx()));
     expect(out).toContain('clear');
     expect(out).toContain('cls');
-    expect(out).not.toContain('NAVIGATION');
+    expect(out).not.toContain('SYSTEM');
   });
 
   it('says so when asked to detail something that is not a command', () => {
@@ -1400,6 +1398,17 @@ describe('system commands', () => {
     const ctx = makeCtx('window');
     expect(runCommand('gui', ctx).lines.some((l) => l.type === 'error')).toBe(true);
     expect(ctx.host.gui).not.toHaveBeenCalled();
+  });
+
+  /* The mode filter, now that there is a console-only command to filter. */
+  it('lists gui in the console help and nowhere else', () => {
+    expect(text(runCommand('help', makeCtx('console')))).toContain('gui');
+    expect(text(runCommand('help', makeCtx('window')))).not.toContain('gui');
+  });
+
+  it('advertises every group once its commands exist', () => {
+    const out = text(runCommand('help', makeCtx('console')));
+    ['NAVIGATION', 'PROFILE', 'SYSTEM', 'FUN'].forEach((group) => expect(out).toContain(group));
   });
 
   it('exit leaves the shell in the console, and jokes in a window', () => {
