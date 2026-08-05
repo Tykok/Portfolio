@@ -631,6 +631,15 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-f
 .os-term-row { display: flex; gap: 6px; }
 .os-term-row input { flex: 1 1 auto; background: transparent; border: none; outline: none; color: #d6f0d6; font: inherit; }
 
+/* The console profile: the terminal, full screen, with room to breathe. */
+.os-console { position: fixed; inset: 0; display: flex; flex-direction: column; gap: 8px; padding: 22px 26px 14px; font-size: 14px; z-index: 40; }
+.os-console-log { flex: 1 1 auto; overflow: auto; }
+.os-console .os-term-row { flex: 0 0 auto; font-size: 15px; }
+.os-console-foot { flex: 0 0 auto; color: #4c5a4c; font-size: 11px; letter-spacing: 1px; }
+@media (max-width: 720px) {
+  .os-console { padding: 14px 14px 10px; font-size: 12px; }
+}
+
 @keyframes osfade { from { opacity: 0; } to { opacity: 1; } }
 
 /* ============================================================================
