@@ -52,6 +52,18 @@ describe('entryView', () => {
     expect(out).toContain('Plant974');
     expect(out).toContain('FLORA OF RÉUNION');
   });
+
+  it('prints a real repo link when there is one', () => {
+    const entry = consoleDeck(mockProjects).find((e) => entryId(e) === 'plant974')!;
+    expect(text(entryView(entry))).toContain('https://github.com/Tykok/Plant974');
+  });
+
+  it('says why there is no link instead of printing the # sentinel', () => {
+    const entry = consoleDeck(mockProjects).find((e) => entryId(e) === 'ticoqos')!;
+    const out = text(entryView(entry));
+    expect(out).not.toContain('repo  #');
+    expect(out).not.toMatch(/demo\s+#/);
+  });
 });
 
 describe('findEntry', () => {

@@ -75,6 +75,10 @@ export function entryView(entry: DeckEntry): Line[] {
   }
 
   const { emoji, title, year, status, desc, bullets: items, stack, repo, demo, context, takeaway, linkNote } = entry.project;
+  /* `'#'` is this codebase's "no link" sentinel, not a URL — the deck window
+     reads it the same way (ProjectSlide.tsx:8). */
+  const hasRepo = repo !== '' && repo !== '#';
+  const hasDemo = demo !== '' && demo !== '#';
   return [
     ...out(`${emoji}  ${title[TERM_LANG].toUpperCase()} — ${year}`),
     ...dim(`${status.label[TERM_LANG]} · ${stack.join(' · ')}`),
@@ -85,9 +89,9 @@ export function entryView(entry: DeckEntry): Line[] {
     ...bullets(items[TERM_LANG]),
     ...blank,
     ...(takeaway ? dim(`  Took away: ${takeaway[TERM_LANG]}`) : []),
-    ...(repo ? out(col('  repo', repo, 10)) : []),
-    ...(demo ? out(col('  demo', demo, 10)) : []),
-    ...(!repo && !demo ? dim(`  ${linkNote?.[TERM_LANG] ?? 'No public code for this one.'}`) : []),
+    ...(hasRepo ? out(col('  repo', repo, 10)) : []),
+    ...(hasDemo ? out(col('  demo', demo, 10)) : []),
+    ...(!hasRepo && !hasDemo ? dim(`  ${linkNote?.[TERM_LANG] ?? 'No public code for this one.'}`) : []),
     ...dim('→ `ls` for the list.'),
   ];
 }
