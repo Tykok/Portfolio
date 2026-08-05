@@ -66,12 +66,13 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-f
 .os-login-left .lg b { color: #bcd6ff; font-style: italic; }
 .os-login-left .hint { font-size: 13px; color: #cfe0ff; margin-top: 8px; }
 .os-login-div { background: rgba(255,255,255,.4); height: 60%; width: 1px; justify-self: center; }
-.os-login-right { padding-left: 48px; }
+.os-login-right { padding-left: 48px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
 .os-usertile { display: inline-flex; align-items: center; gap: 16px; padding: 10px 18px 10px 10px; border-radius: 8px; cursor: pointer; transition: background .12s; }
 .os-usertile:hover { background: rgba(255,255,255,.16); }
 .os-usertile:active { background: rgba(255,255,255,.26); }
 .os-usertile .name { color: #fff; font-size: 20px; font-weight: 700; }
 .os-usertile .role { color: #cfe0ff; font-size: 12px; }
+.os-usertile.is-console .os-avatar { background: #0b0b0d; color: #5be05b; font-family: var(--font-mono); font-size: 15px; }
 .os-avatar {
   width: 64px; height: 64px; border-radius: 8px; flex: 0 0 auto;
   border: 3px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,.35);
@@ -644,7 +645,7 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-f
   /* --- Écran de connexion / démarrage --- */
   .os-login-main { grid-template-columns: 1fr; }
   .os-login-left, .os-login-div { display: none; }
-  .os-login-right { padding: 0; display: flex; justify-content: center; }
+  .os-login-right { padding: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
   .os-login-foot { height: 46px; font-size: 11px; padding: 0 16px; }
   .os-boot-logo { font-size: 38px; }
   .os-boot-sub { font-size: 11px; letter-spacing: 2px; }
