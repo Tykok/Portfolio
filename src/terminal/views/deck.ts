@@ -3,7 +3,7 @@ import { type DeckEntry, entryId } from 'data/deck';
 import type { Project } from 'data/projects';
 
 import { blank, bullets, col, dim, heading, out } from '../lines';
-import type { Line } from '../types';
+import type { Line, TerminalData } from '../types';
 import { TERM_LANG } from '../types';
 
 /**
@@ -16,6 +16,15 @@ export function consoleDeck(projects: Project[]): DeckEntry[] {
     ...companies.map((company) => ({ kind: 'company' as const, company })),
     ...projects.map((project) => ({ kind: 'personal' as const, project })),
   ];
+}
+
+/**
+ * The deck as the terminal should see it, given whatever the fetch produced.
+ * A failed fetch drops the personal group and keeps the companies — they are
+ * static module data with no API in front of them.
+ */
+export function deckFrom(data: TerminalData): DeckEntry[] {
+  return consoleDeck(data.projectsError ? [] : data.projects);
 }
 
 export function findEntry(entries: DeckEntry[], id: string): DeckEntry | undefined {

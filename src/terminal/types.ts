@@ -76,5 +76,7 @@ export interface Command {
   modes?: TerminalMode[];
   /** Kept out of help's groups — the easter eggs. */
   hidden?: boolean;
+  /** Tab completions for this command's argument, when it has one worth completing. */
+  complete?: (arg: string, ctx: TerminalCtx) => string[];
   run: (ctx: TerminalCtx, arg: string) => CommandResult;
 }
