@@ -1,5 +1,5 @@
 import type { JSX } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { About } from 'components/apps/About/About';
 import { Articles } from 'components/apps/Articles/Articles';
@@ -12,7 +12,9 @@ import { Desktop } from 'components/Desktop/Desktop';
 import { AboutDialog } from 'components/OS/AboutDialog/AboutDialog';
 import { Boot } from 'components/OS/Boot/Boot';
 import { Bsod } from 'components/OS/Bsod/Bsod';
+import { Console } from 'components/OS/Console/Console';
 import { KonamiRain } from 'components/OS/KonamiRain/KonamiRain';
+import type { LoginProfile } from 'components/OS/Login/Login';
 import { Login } from 'components/OS/Login/Login';
 import { Off } from 'components/OS/Off/Off';
 import { TipsDialog } from 'components/OS/TipsDialog/TipsDialog';
@@ -26,7 +28,7 @@ import { readInitialRoute, RouteProvider, useRoute } from 'context/RouteContext'
 import { useWindowContext, WindowProvider } from 'context/WindowContext';
 import type { AppKey } from 'types/app';
 
-type Phase = 'boot' | 'login' | 'desktop' | 'off';
+type Phase = 'boot' | 'login' | 'desktop' | 'console' | 'off';
 
 const BOOT_MS = 2800;
 const KONAMI = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
@@ -55,12 +57,13 @@ function AppContent({ appKey }: { appKey: AppKey }): JSX.Element | null {
 function OS() {
   const { windows, activeId, openApp, focusWindow, closeWindow, minimizeWindow } = useWindowContext();
   const { bsod, konamiRain, triggerRain, aboutOpen, closeAbout, tipsOpen, openTips, closeTips, theme, startOpen, toggleStart } = useOS();
-  const { route, setRouteApp } = useRoute();
-  /* A shared link names a window, so it lands on that window. Making someone
-     sit through the boot sequence and click a login tile to reach the page
-     they were sent is friction the link was meant to remove. */
-  const [deepLinked] = useState(() => readInitialRoute().app !== null);
-  const [phase, setPhase] = useState<Phase>(deepLinked ? 'desktop' : 'boot');
+  const { route, setRouteApp, setRouteConsole } = useRoute();
+  /* A shared link names a window or the console profile, so it lands there.
+     Making someone sit through the boot sequence and click a login tile to
+     reach the page they were sent is friction the link was meant to remove. */
+  const [initialRoute] = useState(readInitialRoute);
+  const deepLinked = initialRoute.app !== null || initialRoute.console === true;
+  const [phase, setPhase] = useState<Phase>(initialRoute.console ? 'console' : initialRoute.app ? 'desktop' : 'boot');
   const konamiSeq = useRef<string[]>([]);
 
   /* Read inside the route effect without making it depend on every window
@@ -186,13 +189,37 @@ function OS() {
     return () => document.removeEventListener('keydown', onKey);
   }, [aboutOpen, closeAbout, tipsOpen, closeTips]);
 
-  const themeClass = phase === 'desktop' && theme !== 'bliss' ? ` theme-${theme}` : '';
+  const enterConsole = useCallback(() => {
+    setRouteConsole(true);
+    setPhase('console');
+  }, [setRouteConsole]);
+
+  const leaveConsole = useCallback(() => {
+    setRouteConsole(false);
+    setPhase('desktop');
+  }, [setRouteConsole]);
+
+  const themed = phase === 'desktop' || phase === 'console';
+  const themeClass = themed && theme !== 'bliss' ? ` theme-${theme}` : '';
 
   return (
     /* .tq always present — CSS variables are always in scope */
     <div className={`os-root tq${themeClass}`}>
       {phase === 'boot' && <Boot onDone={() => setPhase('login')} />}
-      {phase === 'login' && <Login onLogin={() => setPhase('desktop')} />}
+      {phase === 'login' && <Login onLogin={(profile: LoginProfile) => (profile === 'console' ? enterConsole() : setPhase('desktop'))} />}
+      {phase === 'console' && (
+        <Console
+          onGui={leaveConsole}
+          onLogout={() => {
+            setRouteConsole(false);
+            setPhase('login');
+          }}
+          onShutdown={() => {
+            setRouteConsole(false);
+            setPhase('off');
+          }}
+        />
+      )}
       {phase === 'off' && <Off onRestart={() => setPhase('boot')} />}
 
       {phase === 'desktop' && (
