@@ -1,10 +1,13 @@
+import type { DesktopTheme } from 'context/OSContext';
 import { appsMeta } from 'data/apps';
 import { entryId } from 'data/deck';
 import type { AppKey } from 'types/app';
+import type { Lang } from 'types/lang';
 
 import { aboutView } from './views/about';
 import { articlesView } from './views/articles';
 import { deckFrom, entryView, findEntry, projectsView } from './views/deck';
+import { cowsay, FORTUNES, LOGO, NEOFETCH, VALID_THEMES } from './views/fun';
 import { contactView, cvUrl, cvView, skillsView, whoView } from './views/profile';
 import { blank, col, dim, err, heading, out } from './lines';
 import type { Command, CommandGroup, CommandResult, TerminalCtx, TerminalMode } from './types';
@@ -211,11 +214,185 @@ export const COMMANDS: Command[] = [
     run: (ctx, arg) => (arg.trim() ? helpOne(arg.trim().toLowerCase()) : helpAll(ctx)),
   },
   {
+    name: 'gui',
+    aliases: ['startx', 'desktop'],
+    group: 'system',
+    usage: '',
+    summary: 'leave the console for the graphical desktop',
+    modes: ['console'],
+    run: (ctx) => {
+      ctx.host.gui?.();
+      return { lines: dim('Starting the graphical environment…') };
+    },
+  },
+  {
+    name: 'exit',
+    aliases: ['quit'],
+    group: 'system',
+    usage: '',
+    summary: 'end the session',
+    run: (ctx) => {
+      if (ctx.host.mode === 'console') {
+        ctx.host.gui?.();
+        return { lines: dim('Leaving the console…') };
+      }
+      return { lines: out("You don't just quit TicoqOS. 😉 (close the window if you insist)") };
+    },
+  },
+  {
+    name: 'logout',
+    aliases: ['logoff'],
+    group: 'system',
+    usage: '',
+    summary: 'back to the login screen',
+    modes: ['console'],
+    run: (ctx) => {
+      ctx.host.logout?.();
+      return { lines: dim('Logging off…') };
+    },
+  },
+  {
+    name: 'shutdown',
+    aliases: ['poweroff', 'halt'],
+    group: 'system',
+    usage: '',
+    summary: 'turn the machine off',
+    modes: ['console'],
+    run: (ctx) => {
+      ctx.host.shutdown?.();
+      return { lines: dim('Shutting down…') };
+    },
+  },
+  {
+    name: 'theme',
+    group: 'system',
+    usage: '<name>',
+    summary: `desktop theme: ${VALID_THEMES.join(' | ')} | next`,
+    example: 'theme matrix',
+    run: (ctx, arg) => {
+      const wanted = arg.trim().toLowerCase();
+      if (!wanted) return { lines: dim(`Themes: ${VALID_THEMES.join(' · ')} · next`) };
+      if (wanted !== 'next' && !(VALID_THEMES as string[]).includes(wanted)) {
+        return { lines: err(`Unknown theme: ${wanted}. Themes: ${VALID_THEMES.join(' · ')} · next.`) };
+      }
+      ctx.host.setTheme(wanted === 'next' ? 'next' : (wanted as DesktopTheme));
+      return { lines: out(`Theme → ${wanted}.`) };
+    },
+  },
+  {
+    name: 'lang',
+    group: 'system',
+    usage: 'fr|en',
+    summary: 'language of the desktop and its windows',
+    detail: ['The terminal itself is English only — this changes the desktop, the windows and the start menu.'],
+    example: 'lang en',
+    run: (ctx, arg) => {
+      const wanted = arg.trim().toLowerCase();
+      if (wanted !== 'fr' && wanted !== 'en') return { lines: err("Two languages here: 'lang fr' or 'lang en'.") };
+      ctx.host.setLang(wanted as Lang);
+      return { lines: out(`The desktop now speaks ${wanted === 'fr' ? 'French' : 'English'}. This shell stays English.`) };
+    },
+  },
+  {
     name: 'clear',
     aliases: ['cls'],
     group: 'system',
     usage: '',
     summary: 'clear the screen',
     run: () => ({ lines: [], clear: true }),
+  },
+  {
+    name: 'neofetch',
+    aliases: ['fetch'],
+    group: 'fun',
+    usage: '',
+    summary: 'the machine, as it likes to present itself',
+    run: () => ({ lines: [...out(...LOGO), ...blank, ...out(...NEOFETCH.map(([k, v]) => col(k, v, 14)))] }),
+  },
+  {
+    name: 'cowsay',
+    group: 'fun',
+    usage: '<message>',
+    summary: 'a rooster says what you tell it',
+    example: 'cowsay ship it',
+    run: (_ctx, arg) => ({ lines: cowsay(arg.trim() || "Cock-a-doodle-doo! Type 'cowsay your message'.") }),
+  },
+  {
+    name: 'fortune',
+    group: 'fun',
+    usage: '',
+    summary: 'a developer proverb',
+    run: () => ({ lines: dim(`"${FORTUNES[Math.floor(Math.random() * FORTUNES.length)]}"`) }),
+  },
+  {
+    name: 'coffee',
+    group: 'fun',
+    usage: '',
+    summary: 'fuel',
+    hidden: true,
+    run: () => ({ lines: out('☕  coffee served. Happy coding.') }),
+  },
+  {
+    name: 'cocorico',
+    group: 'fun',
+    usage: '',
+    summary: 'the house greeting',
+    hidden: true,
+    run: () => ({ lines: out('🐓  Cock-a-doodle-doo! TicoqOS salutes you.') }),
+  },
+  {
+    name: 'matrix',
+    group: 'fun',
+    usage: '',
+    summary: 'wake up',
+    hidden: true,
+    run: () => ({ lines: dim('…wake up, Neo. (Ctrl-C to leave the matrix)') }),
+  },
+  {
+    name: 'konami',
+    group: 'fun',
+    usage: '',
+    summary: 'a timeless classic',
+    hidden: true,
+    run: () => ({ lines: out('🎮 ↑ ↑ ↓ ↓ ← → ← → B A. Type it on the keyboard, not here…') }),
+  },
+  {
+    name: 'easter',
+    aliases: ['egg'],
+    group: 'fun',
+    usage: '',
+    summary: 'you found it',
+    hidden: true,
+    run: () => ({
+      lines: [
+        ...out('🥚 Easter egg found! You really read terminals, respect.'),
+        ...dim("Hint: try 'coffee', 'matrix', 'fortune'… and 'crash' (if you dare)."),
+      ],
+    }),
+  },
+  {
+    name: 'sudo',
+    group: 'fun',
+    usage: '<anything>',
+    summary: 'nice try',
+    hidden: true,
+    run: (_ctx, arg) => {
+      const asked = arg.trim().toLowerCase().replace(/!$/, '');
+      if (asked === 'make me a sandwich') {
+        return { lines: out('🥪 Fine. *hands you a sandwich*  (xkcd 149, still relevant)') };
+      }
+      return { lines: err('Nope. You are not root on MY portfolio 😏') };
+    },
+  },
+  {
+    name: 'crash',
+    group: 'fun',
+    usage: '',
+    summary: 'a blue screen, on request',
+    hidden: true,
+    run: (ctx) => {
+      ctx.host.triggerBsod();
+      return { lines: err('⚠ Simulated fatal error… preparing the blue screen.') };
+    },
   },
 ];
