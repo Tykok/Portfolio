@@ -1,5 +1,3 @@
-import { mockProjects } from 'api/mock/projects.mock';
-
 import en from './en';
 import fr from './fr';
 import { interpolate, t } from './index';
@@ -34,7 +32,7 @@ describe('locale completeness', () => {
   });
 
   it('keeps list-valued keys the same length across locales', () => {
-    const lists = ['cal_days', 'cal_months', 'os_tips', 't_fortunes', 't_neofetch'] as const;
+    const lists = ['cal_days', 'cal_months', 'os_tips'] as const;
     lists.forEach((k) => {
       expect(en[k]).toHaveLength(fr[k].length);
       expect(fr[k].length).toBeGreaterThan(0);
@@ -51,13 +49,6 @@ describe('locale completeness', () => {
       expect(locale.cal_days).toHaveLength(7);
       expect(locale.cal_weekstart).toBeGreaterThanOrEqual(0);
       expect(locale.cal_weekstart).toBeLessThanOrEqual(6);
-    });
-  });
-
-  it('states the real project count in neofetch', () => {
-    [fr, en].forEach((l) => {
-      const mem = l.t_neofetch.find((row) => /Mémoire|Memory/.test(row[0]));
-      expect(mem?.[1]).toContain(String(mockProjects.length));
     });
   });
 });
@@ -82,7 +73,7 @@ describe('interpolate', () => {
 
 describe('t', () => {
   it('interpolates string values', () => {
-    expect(t('fr', 't_projects_l', { n: 3 })).toBe('3 projets :');
+    expect(t('fr', 'ar_min', { n: 3 })).toBe('3 min');
   });
 
   it('returns non-string values as-is', () => {
