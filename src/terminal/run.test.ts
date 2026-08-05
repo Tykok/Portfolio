@@ -1,7 +1,7 @@
 import { mockProjects } from 'api/mock/projects.mock';
 import { vi } from 'vitest';
 
-import { runCommand, visibleIn } from './run';
+import { complete, runCommand, visibleIn } from './run';
 import type { TerminalCtx, TerminalHost, TerminalMode } from './types';
 
 /** A host whose every call is observable, so tests assert effects, not prose. */
@@ -115,5 +115,44 @@ describe('profile commands', () => {
 
   it('refuses to download anything else', () => {
     expect(runCommand('download wallpaper', makeCtx()).lines.some((l) => l.type === 'error')).toBe(true);
+  });
+});
+
+describe('navigation commands', () => {
+  it('says it is loading rather than claiming an empty deck', () => {
+    const out = text(runCommand('ls', makeCtx('console', { projects: [], projectsLoading: true })));
+    expect(out).toContain('Loading');
+  });
+
+  it('keeps the companies when the projects API fails, and says so', () => {
+    const out = text(runCommand('ls', makeCtx('console', { projects: [], projectsError: true })));
+    expect(out).toContain('unreachable');
+    expect(out).toContain('pictarine');
+  });
+
+  it('asks which entry when show is given nothing', () => {
+    expect(runCommand('show', makeCtx()).lines.some((l) => l.type === 'error')).toBe(true);
+  });
+
+  it('shows an entry by prefix', () => {
+    expect(text(runCommand('show plant', makeCtx()))).toContain('Plant974');
+  });
+});
+
+describe('complete', () => {
+  it('completes command names', () => {
+    expect(complete('sk', makeCtx())).toContain('skills');
+  });
+
+  it('completes entry ids behind show', () => {
+    expect(complete('show pic', makeCtx())).toEqual(['show pictarine']);
+  });
+
+  it('completes command names behind help', () => {
+    expect(complete('help cle', makeCtx())).toEqual(['help clear']);
+  });
+
+  it('offers nothing for a word that matches nothing', () => {
+    expect(complete('zzz', makeCtx())).toEqual([]);
   });
 });

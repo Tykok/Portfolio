@@ -1,3 +1,4 @@
+import { consoleDeck, entryView, findEntry, projectsView } from './views/deck';
 import { contactView, cvUrl, cvView, skillsView, whoView } from './views/profile';
 import { blank, col, dim, err, heading, out } from './lines';
 import type { Command, CommandGroup, CommandResult, TerminalCtx } from './types';
@@ -51,6 +52,35 @@ function helpOne(name: string): CommandResult {
 }
 
 export const COMMANDS: Command[] = [
+  {
+    name: 'projects',
+    aliases: ['ls', 'work'],
+    group: 'navigation',
+    usage: '',
+    summary: 'the whole deck: employers, then side projects',
+    run: (ctx) => {
+      if (ctx.data.projectsLoading) return { lines: dim('Loading projects…') };
+      const entries = consoleDeck(ctx.data.projectsError ? [] : ctx.data.projects);
+      const notice = ctx.data.projectsError ? dim('The projects API is unreachable — companies only.') : [];
+      return { lines: [...notice, ...projectsView(entries)] };
+    },
+  },
+  {
+    name: 'show',
+    aliases: ['cat', 'open-entry'],
+    group: 'navigation',
+    usage: '<id>',
+    summary: 'one entry in full',
+    detail: ['Ids come from `ls`. An unambiguous prefix is enough — `show plant` finds plant974.'],
+    example: 'show pictarine',
+    run: (ctx, arg) => {
+      if (!arg.trim()) return { lines: err('Which one? `show <id>` — run `ls` for the ids.') };
+      const entries = consoleDeck(ctx.data.projectsError ? [] : ctx.data.projects);
+      const entry = findEntry(entries, arg);
+      if (!entry) return { lines: err(`No entry called '${arg.trim()}'. Run \`ls\` for the ids.`) };
+      return { lines: entryView(entry) };
+    },
+  },
   {
     name: 'who',
     aliases: ['whoami', 'about'],
