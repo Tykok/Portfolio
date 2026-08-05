@@ -1,9 +1,16 @@
+import { appsMeta } from 'data/apps';
 import { entryId } from 'data/deck';
+import type { AppKey } from 'types/app';
 
+import { aboutView } from './views/about';
+import { articlesView } from './views/articles';
 import { deckFrom, entryView, findEntry, projectsView } from './views/deck';
 import { contactView, cvUrl, cvView, skillsView, whoView } from './views/profile';
 import { blank, col, dim, err, heading, out } from './lines';
 import type { Command, CommandGroup, CommandResult, TerminalCtx, TerminalMode } from './types';
+
+/** Every app's key, in the order the desktop lists them. */
+const APP_SLUGS: AppKey[] = appsMeta.map((app) => app.key);
 
 export const GROUP_LABELS: Record<CommandGroup, string> = {
   navigation: 'NAVIGATION',
@@ -89,6 +96,54 @@ export const COMMANDS: Command[] = [
       const entry = findEntry(deckFrom(ctx.data), arg);
       if (!entry) return { lines: err(`No entry called '${arg.trim()}'. Run \`ls\` for the ids.`) };
       return { lines: entryView(entry) };
+    },
+  },
+  {
+    name: 'articles',
+    aliases: ['posts', 'blog'],
+    group: 'navigation',
+    usage: '',
+    summary: 'my dev.to posts',
+    run: (ctx) => ({ lines: articlesView(ctx.data.articles, ctx.data.articlesLoading, ctx.data.articlesError) }),
+  },
+  {
+    name: 'open',
+    group: 'navigation',
+    usage: '<app>',
+    summary: 'an app — as a window on the desktop, as text here',
+    detail: [`Apps: ${APP_SLUGS.join(' | ')}.`, 'In the console there are no windows, so the app prints instead.'],
+    example: 'open articles',
+    run: (ctx, arg) => {
+      const wanted = arg.trim().toLowerCase();
+      if (!wanted) return { lines: err(`Which app? ${APP_SLUGS.join(' | ')}`) };
+      if (!appsMeta.some((app) => app.key === wanted)) {
+        return { lines: err(`Unknown app: ${wanted}. Try ${APP_SLUGS.join(' | ')}.`) };
+      }
+
+      const key = wanted as AppKey;
+      if (ctx.host.mode === 'window') {
+        ctx.host.openApp(key);
+        return { lines: dim(`Opening ${key}…`) };
+      }
+
+      switch (key) {
+        case 'projects':
+          return COMMANDS.find((c) => c.name === 'projects')!.run(ctx, '');
+        case 'articles':
+          return COMMANDS.find((c) => c.name === 'articles')!.run(ctx, '');
+        case 'cv':
+          return COMMANDS.find((c) => c.name === 'cv')!.run(ctx, '');
+        case 'contact':
+          return COMMANDS.find((c) => c.name === 'contact')!.run(ctx, '');
+        case 'about':
+          return { lines: aboutView() };
+        case 'terminal':
+          return { lines: dim('You are already in it.') };
+        case 'web':
+          return {
+            lines: [...out('The portfolio page is the desktop version of everything here.'), ...dim('→ `gui` for it, or `ls` to stay.')],
+          };
+      }
     },
   },
   {
