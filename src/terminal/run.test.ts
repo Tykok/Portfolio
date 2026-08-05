@@ -139,6 +139,35 @@ describe('navigation commands', () => {
   });
 });
 
+describe('open', () => {
+  it('opens a real window on the desktop', () => {
+    const ctx = makeCtx('window');
+    runCommand('open articles', ctx);
+    expect(ctx.host.openApp).toHaveBeenCalledWith('articles');
+  });
+
+  it('prints the app instead of opening it in the console', () => {
+    const ctx = makeCtx('console');
+    const out = text(runCommand('open projects', ctx));
+    expect(ctx.host.openApp).not.toHaveBeenCalled();
+    expect(out).toContain('PERSONAL PROJECTS');
+  });
+
+  it('prints the About text in the console', () => {
+    expect(text(runCommand('open about', makeCtx('console')))).toContain('Interests');
+  });
+
+  it('rejects an app that does not exist, and lists the ones that do', () => {
+    const result = runCommand('open media', makeCtx());
+    expect(result.lines.some((l) => l.type === 'error')).toBe(true);
+    expect(text(result)).toContain('projects');
+  });
+
+  it('asks which app when given none', () => {
+    expect(runCommand('open', makeCtx()).lines.some((l) => l.type === 'error')).toBe(true);
+  });
+});
+
 describe('complete', () => {
   it('completes command names', () => {
     expect(complete('sk', makeCtx())).toContain('skills');
