@@ -3,8 +3,10 @@ export interface Translations {
   start: string;
   logoff: string;
   shutdown: string;
-  login_hint: string;
   login_role: string;
+  login_role_console: string;
+  login_console_name: string;
+  login_hint_profiles: string;
   login_foot: string;
   boot_sub: string;
   boot_foot: string;

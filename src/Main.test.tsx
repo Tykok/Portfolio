@@ -48,7 +48,7 @@ describe('TicoqOS', () => {
     await waitFor(() => {
       expect(screen.getByRole('dialog', { name: /CV/ })).toBeInTheDocument();
     });
-    expect(screen.queryByText(fr.login_hint)).not.toBeInTheDocument();
+    expect(screen.queryByText(fr.login_hint_profiles)).not.toBeInTheDocument();
   });
 
   it('opens windows maximized, and keeps a size to restore them to', async () => {
