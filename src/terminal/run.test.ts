@@ -1,6 +1,8 @@
 import { mockProjects } from 'api/mock/projects.mock';
 import { vi } from 'vitest';
 
+import type { Article } from 'data/articles';
+
 import { complete, runCommand, visibleIn } from './run';
 import type { TerminalCtx, TerminalHost, TerminalMode } from './types';
 
@@ -139,6 +141,18 @@ describe('navigation commands', () => {
   });
 });
 
+const ARTICLE: Article = {
+  id: 1,
+  title: 'Kotlin coroutines, without the folklore',
+  description: 'What suspend actually does.',
+  url: 'https://dev.to/tykok/coroutines',
+  publishedAt: '2026-03-04T08:00:00Z',
+  readingMinutes: 7,
+  reactions: 42,
+  comments: 3,
+  tags: ['kotlin', 'concurrency'],
+};
+
 describe('open', () => {
   it('opens a real window on the desktop', () => {
     const ctx = makeCtx('window');
@@ -165,6 +179,22 @@ describe('open', () => {
 
   it('asks which app when given none', () => {
     expect(runCommand('open', makeCtx()).lines.some((l) => l.type === 'error')).toBe(true);
+  });
+
+  it('dispatches every app to its own command in the console', () => {
+    const ctx = makeCtx('console', { articles: [ARTICLE] });
+    expect(text(runCommand('open cv', ctx))).toContain('EXPERIENCE');
+    expect(text(runCommand('open contact', ctx))).toContain('Links:');
+    expect(text(runCommand('open articles', ctx))).toContain('ARTICLES');
+  });
+
+  it('says you are already in it for the terminal itself', () => {
+    expect(text(runCommand('open terminal', makeCtx('console')))).toContain('already in it');
+  });
+
+  it('points at gui rather than printing a page for the portfolio site', () => {
+    const out = text(runCommand('open web', makeCtx('console')));
+    expect(out).toContain('gui');
   });
 });
 
