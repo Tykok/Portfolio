@@ -871,7 +871,20 @@ describe('entryView', () => {
     const entry = consoleDeck(mockProjects).find((e) => entryId(e) === 'plant974')!;
     const out = text(entryView(entry));
     expect(out).toContain('Plant974');
-    expect(out).toContain('flora of Réunion');
+    /* The header is all-caps, as the deck's own company header is. */
+    expect(out).toContain('FLORA OF RÉUNION');
+  });
+
+  it('prints a real repo link when there is one', () => {
+    const entry = consoleDeck(mockProjects).find((e) => entryId(e) === 'plant974')!;
+    expect(text(entryView(entry))).toContain('https://github.com/Tykok/Plant974');
+  });
+
+  it('says why there is no link instead of printing the # sentinel', () => {
+    const entry = consoleDeck(mockProjects).find((e) => entryId(e) === 'ticoqos')!;
+    const out = text(entryView(entry));
+    expect(out).not.toContain('repo  #');
+    expect(out).not.toMatch(/demo\s+#/);
   });
 });
 
@@ -977,6 +990,10 @@ export function entryView(entry: DeckEntry): Line[] {
   }
 
   const { emoji, title, year, status, desc, bullets: items, stack, repo, demo, context, takeaway, linkNote } = entry.project;
+  /* `'#'` is this codebase's "no link" sentinel, not a URL — the deck window
+     reads it the same way (ProjectSlide.tsx:8). */
+  const hasRepo = repo !== '' && repo !== '#';
+  const hasDemo = demo !== '' && demo !== '#';
   return [
     ...out(`${emoji}  ${title[TERM_LANG].toUpperCase()} — ${year}`),
     ...dim(`${status.label[TERM_LANG]} · ${stack.join(' · ')}`),
@@ -987,9 +1004,9 @@ export function entryView(entry: DeckEntry): Line[] {
     ...bullets(items[TERM_LANG]),
     ...blank,
     ...(takeaway ? dim(`  Took away: ${takeaway[TERM_LANG]}`) : []),
-    ...(repo ? out(col('  repo', repo, 10)) : []),
-    ...(demo ? out(col('  demo', demo, 10)) : []),
-    ...(!repo && !demo ? dim(`  ${linkNote?.[TERM_LANG] ?? 'No public code for this one.'}`) : []),
+    ...(hasRepo ? out(col('  repo', repo, 10)) : []),
+    ...(hasDemo ? out(col('  demo', demo, 10)) : []),
+    ...(!hasRepo && !hasDemo ? dim(`  ${linkNote?.[TERM_LANG] ?? 'No public code for this one.'}`) : []),
     ...dim('→ `ls` for the list.'),
   ];
 }
