@@ -10,7 +10,7 @@ import { blank, col, dim, err, heading, out } from './lines';
 import type { Command, CommandGroup, CommandResult, TerminalCtx, TerminalMode } from './types';
 
 /** Every app's key, in the order the desktop lists them. */
-const APP_SLUGS: AppKey[] = appsMeta.map((app) => app.key);
+export const APP_SLUGS: AppKey[] = appsMeta.map((app) => app.key);
 
 export const GROUP_LABELS: Record<CommandGroup, string> = {
   navigation: 'NAVIGATION',
