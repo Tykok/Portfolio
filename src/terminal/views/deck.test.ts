@@ -61,7 +61,7 @@ describe('entryView', () => {
   it('says why there is no link instead of printing the # sentinel', () => {
     const entry = consoleDeck(mockProjects).find((e) => entryId(e) === 'ticoqos')!;
     const out = text(entryView(entry));
-    expect(out).not.toContain('repo  #');
+    expect(out).not.toMatch(/repo\s+#/);
     expect(out).not.toMatch(/demo\s+#/);
   });
 });
@@ -79,5 +79,11 @@ describe('findEntry', () => {
 
   it('returns nothing for an id that matches nothing', () => {
     expect(findEntry(entries, 'nope')).toBeUndefined();
+  });
+
+  it('refuses an ambiguous prefix rather than guessing', () => {
+    // 'ce' matches both the company `cegid` and the project `cedict` — the
+    // only two fixture ids sharing that prefix.
+    expect(findEntry(entries, 'ce')).toBeUndefined();
   });
 });

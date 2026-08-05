@@ -1,7 +1,9 @@
-import { consoleDeck, entryView, findEntry, projectsView } from './views/deck';
+import { entryId } from 'data/deck';
+
+import { deckFrom, entryView, findEntry, projectsView } from './views/deck';
 import { contactView, cvUrl, cvView, skillsView, whoView } from './views/profile';
 import { blank, col, dim, err, heading, out } from './lines';
-import type { Command, CommandGroup, CommandResult, TerminalCtx } from './types';
+import type { Command, CommandGroup, CommandResult, TerminalCtx, TerminalMode } from './types';
 
 export const GROUP_LABELS: Record<CommandGroup, string> = {
   navigation: 'NAVIGATION',
@@ -12,13 +14,22 @@ export const GROUP_LABELS: Record<CommandGroup, string> = {
 
 const GROUP_ORDER: CommandGroup[] = ['navigation', 'profile', 'system', 'fun'];
 
+/** The commands a given mode admits — what help lists and what resolves. */
+export function visibleIn(mode: TerminalMode): Command[] {
+  return COMMANDS.filter((command) => !command.modes || command.modes.includes(mode));
+}
+
+export function findCommand(name: string, mode: TerminalMode): Command | undefined {
+  return visibleIn(mode).find((command) => command.name === name || command.aliases?.includes(name));
+}
+
 /** `name usage`, as help's left column prints it. */
 function signature(command: Command): string {
   return command.usage ? `${command.name} ${command.usage}` : command.name;
 }
 
 function helpAll(ctx: TerminalCtx): CommandResult {
-  const shown = COMMANDS.filter((c) => !c.hidden && (!c.modes || c.modes.includes(ctx.host.mode)));
+  const shown = visibleIn(ctx.host.mode).filter((c) => !c.hidden);
   const lines = GROUP_ORDER.flatMap((group) => {
     const members = shown.filter((c) => c.group === group);
     if (members.length === 0) return [];
@@ -60,9 +71,8 @@ export const COMMANDS: Command[] = [
     summary: 'the whole deck: employers, then side projects',
     run: (ctx) => {
       if (ctx.data.projectsLoading) return { lines: dim('Loading projects…') };
-      const entries = consoleDeck(ctx.data.projectsError ? [] : ctx.data.projects);
       const notice = ctx.data.projectsError ? dim('The projects API is unreachable — companies only.') : [];
-      return { lines: [...notice, ...projectsView(entries)] };
+      return { lines: [...notice, ...projectsView(deckFrom(ctx.data))] };
     },
   },
   {
@@ -73,10 +83,10 @@ export const COMMANDS: Command[] = [
     summary: 'one entry in full',
     detail: ['Ids come from `ls`. An unambiguous prefix is enough — `show plant` finds plant974.'],
     example: 'show pictarine',
+    complete: (arg, ctx) => deckFrom(ctx.data).map(entryId).filter((id) => id.startsWith(arg)),
     run: (ctx, arg) => {
       if (!arg.trim()) return { lines: err('Which one? `show <id>` — run `ls` for the ids.') };
-      const entries = consoleDeck(ctx.data.projectsError ? [] : ctx.data.projects);
-      const entry = findEntry(entries, arg);
+      const entry = findEntry(deckFrom(ctx.data), arg);
       if (!entry) return { lines: err(`No entry called '${arg.trim()}'. Run \`ls\` for the ids.`) };
       return { lines: entryView(entry) };
     },
@@ -139,6 +149,10 @@ export const COMMANDS: Command[] = [
     usage: '<command>',
     summary: 'this help, or one command in detail',
     example: 'help show',
+    complete: (arg, ctx) =>
+      visibleIn(ctx.host.mode)
+        .filter((c) => c.name.startsWith(arg))
+        .map((c) => c.name),
     run: (ctx, arg) => (arg.trim() ? helpOne(arg.trim().toLowerCase()) : helpAll(ctx)),
   },
   {
