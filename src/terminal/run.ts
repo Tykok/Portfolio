@@ -1,20 +1,10 @@
-import { entryId } from 'data/deck';
-
-import { consoleDeck } from './views/deck';
 import { blank, err } from './lines';
-import { COMMANDS } from './registry';
-import type { Command, CommandResult, Line, TerminalCtx, TerminalMode } from './types';
+import { findCommand, visibleIn } from './registry';
+import type { CommandResult, Line, TerminalCtx } from './types';
+
+export { findCommand, visibleIn } from './registry';
 
 const PROMPT = 'C:\\> ';
-
-/** The commands a given mode admits — what help lists and what resolves. */
-export function visibleIn(mode: TerminalMode): Command[] {
-  return COMMANDS.filter((command) => !command.modes || command.modes.includes(mode));
-}
-
-export function findCommand(name: string, mode: TerminalMode): Command | undefined {
-  return visibleIn(mode).find((command) => command.name === name || command.aliases?.includes(name));
-}
 
 /**
  * One line in, the lines it produced out. Pure: every effect goes through
@@ -41,9 +31,9 @@ export function runCommand(raw: string, ctx: TerminalCtx): CommandResult {
 }
 
 /**
- * Tab completion. A bare word completes command names; the argument of a
- * command that takes an id completes the ids, because those are the only words
- * in this shell nobody can be expected to remember.
+ * Tab completion. A bare word completes command names; an argument completes
+ * whatever the command itself offers, so a new command opts in by declaring
+ * `complete` rather than by being named here.
  */
 export function complete(partial: string, ctx: TerminalCtx): string[] {
   const [base, ...rest] = partial.trimStart().split(/\s+/);
@@ -57,17 +47,6 @@ export function complete(partial: string, ctx: TerminalCtx): string[] {
   }
 
   const command = findCommand(word, ctx.host.mode);
-  if (!command || (command.name !== 'show' && command.name !== 'help')) return [];
-
-  const arg = rest.join(' ').toLowerCase();
-  if (command.name === 'help') {
-    return visibleIn(ctx.host.mode)
-      .filter((c) => c.name.startsWith(arg))
-      .map((c) => `help ${c.name}`);
-  }
-
-  return consoleDeck(ctx.data.projectsError ? [] : ctx.data.projects)
-    .map((entry) => entryId(entry))
-    .filter((id) => id.startsWith(arg))
-    .map((id) => `show ${id}`);
+  if (!command?.complete) return [];
+  return command.complete(rest.join(' ').toLowerCase(), ctx).map((value) => `${word} ${value}`);
 }
