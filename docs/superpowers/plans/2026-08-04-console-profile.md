@@ -1168,7 +1168,7 @@ git commit -m "feat(term): browse the deck with ls and show"
 
 **Interfaces:**
 - Consumes: `Article` from `data/articles`, `identity` from `data/identity`, `appsMeta` from `data/apps`.
-- Produces: `articlesView(articles: Article[], loading: boolean, failed: boolean): Line[]`, `aboutView(): Line[]`, `APP_SLUGS: AppKey[]`.
+- Produces: `articlesView(articles: Article[], loading: boolean, failed: boolean): Line[]`, `aboutView(): Line[]`, and `APP_SLUGS: AppKey[]` in `src/terminal/registry.ts` (`export const APP_SLUGS: AppKey[] = appsMeta.map((app) => app.key);`) — the single source the `open` command's three error/detail messages read from, instead of three inline `appsMeta.map(...)` calls.
 
 - [ ] **Step 1: Write the failing test**
 
