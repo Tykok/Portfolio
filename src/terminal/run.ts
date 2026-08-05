@@ -1,3 +1,6 @@
+import { entryId } from 'data/deck';
+
+import { consoleDeck } from './views/deck';
 import { blank, err } from './lines';
 import { COMMANDS } from './registry';
 import type { Command, CommandResult, Line, TerminalCtx, TerminalMode } from './types';
@@ -37,11 +40,34 @@ export function runCommand(raw: string, ctx: TerminalCtx): CommandResult {
   return { lines: [...echo, ...result.lines, ...blank] };
 }
 
-/** Tab completion: command names, plus the ids `show` takes. Filled in Task 3. */
+/**
+ * Tab completion. A bare word completes command names; the argument of a
+ * command that takes an id completes the ids, because those are the only words
+ * in this shell nobody can be expected to remember.
+ */
 export function complete(partial: string, ctx: TerminalCtx): string[] {
-  const word = partial.trimStart().toLowerCase();
-  if (!word) return [];
-  return visibleIn(ctx.host.mode)
-    .filter((command) => command.name.startsWith(word))
-    .map((command) => command.name);
+  const [base, ...rest] = partial.trimStart().split(/\s+/);
+  const word = base.toLowerCase();
+
+  if (rest.length === 0) {
+    if (!word) return [];
+    return visibleIn(ctx.host.mode)
+      .filter((command) => command.name.startsWith(word))
+      .map((command) => command.name);
+  }
+
+  const command = findCommand(word, ctx.host.mode);
+  if (!command || (command.name !== 'show' && command.name !== 'help')) return [];
+
+  const arg = rest.join(' ').toLowerCase();
+  if (command.name === 'help') {
+    return visibleIn(ctx.host.mode)
+      .filter((c) => c.name.startsWith(arg))
+      .map((c) => `help ${c.name}`);
+  }
+
+  return consoleDeck(ctx.data.projectsError ? [] : ctx.data.projects)
+    .map((entry) => entryId(entry))
+    .filter((id) => id.startsWith(arg))
+    .map((id) => `show ${id}`);
 }
