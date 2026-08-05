@@ -52,3 +52,26 @@ describe('sameRoute', () => {
     expect(sameRoute({ app: 'cv' }, { app: 'about' })).toBe(false);
   });
 });
+
+describe('the console profile', () => {
+  it('reads #/console as the console, with no app', () => {
+    expect(parseHash('#/console')).toEqual({ app: null, console: true });
+  });
+
+  it('ignores anything after it — a shell has no page to restore', () => {
+    expect(parseHash('#/console/projects/pictarine')).toEqual({ app: null, console: true });
+  });
+
+  it('round-trips', () => {
+    expect(formatRoute({ app: null, console: true })).toBe('#/console');
+    expect(parseHash(formatRoute({ app: null, console: true }))).toEqual({ app: null, console: true });
+  });
+
+  it('is not the same route as the bare desktop', () => {
+    expect(sameRoute({ app: null }, { app: null, console: true })).toBe(false);
+  });
+
+  it('is never confused with an app, because no app is called console', () => {
+    expect(parseHash('#/console').app).toBeNull();
+  });
+});

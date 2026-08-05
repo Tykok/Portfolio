@@ -10,12 +10,15 @@ interface RouteContextValue {
   setRouteApp: (app: AppKey | null) => void;
   /** The deck moved: keep the app, change the slide. */
   setRouteSlide: (slide: string | undefined) => void;
+  /** Entering or leaving the console profile — the hash names the mode. */
+  setRouteConsole: (on: boolean) => void;
 }
 
 const RouteContext = createContext<RouteContextValue>({
   route: EMPTY_ROUTE,
   setRouteApp: () => {},
   setRouteSlide: () => {},
+  setRouteConsole: () => {},
 });
 
 export function readInitialRoute(): Route {
@@ -31,6 +34,10 @@ export function RouteProvider({ children }: { children: ReactNode }) {
 
   const setRouteSlide = useCallback((slide: string | undefined) => {
     setRoute((prev) => (prev.slide === slide ? prev : { ...prev, slide }));
+  }, []);
+
+  const setRouteConsole = useCallback((on: boolean) => {
+    setRoute((prev) => (Boolean(prev.console) === on ? prev : on ? { app: null, console: true } : EMPTY_ROUTE));
   }, []);
 
   /* replaceState, never a hash assignment: assigning fires `hashchange`, which
@@ -56,7 +63,10 @@ export function RouteProvider({ children }: { children: ReactNode }) {
     return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
 
-  const value = useMemo<RouteContextValue>(() => ({ route, setRouteApp, setRouteSlide }), [route, setRouteApp, setRouteSlide]);
+  const value = useMemo<RouteContextValue>(
+    () => ({ route, setRouteApp, setRouteSlide, setRouteConsole }),
+    [route, setRouteApp, setRouteSlide, setRouteConsole],
+  );
 
   return <RouteContext.Provider value={value}>{children}</RouteContext.Provider>;
 }
