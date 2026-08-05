@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import type * as articlesApi from 'api/articles';
 import { getArticles } from 'api/articles';
 import { mockProjects } from 'api/mock/projects.mock';
@@ -135,4 +136,56 @@ describe('TicoqOS', () => {
       expect(window.location.hash).toBe('#/about');
     });
   });
+});
+
+describe('the console profile', () => {
+  beforeEach(() => {
+    vi.mocked(getProjects).mockResolvedValue(mockProjects);
+    vi.mocked(getArticles).mockResolvedValue([]);
+    localStorage.clear();
+  });
+
+  afterEach(() => {
+    window.history.replaceState(null, '', '/');
+  });
+
+  it('lands straight in the console from a shared link', async () => {
+    renderAt('#/console');
+
+    await waitFor(() => expect(screen.getByText(/TicoqBIOS/)).toBeInTheDocument());
+    expect(screen.getByText(/NAVIGATION/)).toBeInTheDocument();
+    expect(windowsOnScreen()).toHaveLength(0);
+    expect(screen.queryByText(fr.login_hint_profiles)).not.toBeInTheDocument();
+  });
+
+  it('reads the deck without opening a single window', async () => {
+    renderAt('#/console');
+
+    await waitFor(() => expect(screen.getByRole('textbox')).toBeInTheDocument());
+    await userEvent.type(screen.getByRole('textbox'), 'show pictarine{Enter}');
+    expect(screen.getByText(/Backend Engineer/)).toBeInTheDocument();
+    expect(windowsOnScreen()).toHaveLength(0);
+  });
+
+  it('crosses to the desktop on gui, and says so in the address bar', async () => {
+    renderAt('#/console');
+
+    await waitFor(() => expect(screen.getByRole('textbox')).toBeInTheDocument());
+    await userEvent.type(screen.getByRole('textbox'), 'gui{Enter}');
+    await waitFor(() => expect(document.querySelector('.os-desktop')).toBeInTheDocument());
+    expect(window.location.hash).toBe('#/');
+  });
+
+  it(
+    'is reachable from the login screen, and names itself in the address bar',
+    async () => {
+      renderAt('#/');
+
+      await waitFor(() => expect(screen.getByText(fr.login_hint_profiles)).toBeInTheDocument(), { timeout: 4000 });
+      await userEvent.click(screen.getByRole('button', { name: /root/ }));
+      await waitFor(() => expect(screen.getByText(/TicoqBIOS/)).toBeInTheDocument());
+      expect(window.location.hash).toBe('#/console');
+    },
+    8000,
+  );
 });
