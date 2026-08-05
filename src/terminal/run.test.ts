@@ -215,3 +215,90 @@ describe('complete', () => {
     expect(complete('zzz', makeCtx())).toEqual([]);
   });
 });
+
+describe('system commands', () => {
+  it('crosses to the desktop from the console', () => {
+    const ctx = makeCtx('console');
+    runCommand('gui', ctx);
+    expect(ctx.host.gui).toHaveBeenCalled();
+  });
+
+  it('has no gui to offer in the windowed terminal', () => {
+    const ctx = makeCtx('window');
+    expect(runCommand('gui', ctx).lines.some((l) => l.type === 'error')).toBe(true);
+    expect(ctx.host.gui).not.toHaveBeenCalled();
+  });
+
+  /* The mode filter, now that there is a console-only command to filter. */
+  it('lists gui in the console help and nowhere else', () => {
+    expect(text(runCommand('help', makeCtx('console')))).toContain('gui');
+    expect(text(runCommand('help', makeCtx('window')))).not.toContain('gui');
+  });
+
+  it('advertises every group once its commands exist', () => {
+    const out = text(runCommand('help', makeCtx('console')));
+    ['NAVIGATION', 'PROFILE', 'SYSTEM', 'FUN'].forEach((group) => expect(out).toContain(group));
+  });
+
+  it('exit leaves the shell in the console, and jokes in a window', () => {
+    const console_ = makeCtx('console');
+    runCommand('exit', console_);
+    expect(console_.host.gui).toHaveBeenCalled();
+
+    const windowed = makeCtx('window');
+    runCommand('exit', windowed);
+    expect(text(runCommand('exit', windowed))).toContain('close the window');
+  });
+
+  it('logs off and shuts down from the console only', () => {
+    const ctx = makeCtx('console');
+    runCommand('logout', ctx);
+    runCommand('shutdown', ctx);
+    expect(ctx.host.logout).toHaveBeenCalled();
+    expect(ctx.host.shutdown).toHaveBeenCalled();
+    expect(runCommand('shutdown', makeCtx('window')).lines.some((l) => l.type === 'error')).toBe(true);
+  });
+
+  it('sets a theme by name, cycles with next, and refuses nonsense', () => {
+    const ctx = makeCtx();
+    runCommand('theme matrix', ctx);
+    expect(ctx.host.setTheme).toHaveBeenCalledWith('matrix');
+    runCommand('theme next', ctx);
+    expect(ctx.host.setTheme).toHaveBeenCalledWith('next');
+    expect(runCommand('theme mauve', ctx).lines.some((l) => l.type === 'error')).toBe(true);
+  });
+
+  it('switches the OS language while staying English itself', () => {
+    const ctx = makeCtx();
+    const out = text(runCommand('lang fr', ctx));
+    expect(ctx.host.setLang).toHaveBeenCalledWith('fr');
+    expect(out).toContain('desktop');
+  });
+
+  it('rejects a language it does not have', () => {
+    expect(runCommand('lang de', makeCtx()).lines.some((l) => l.type === 'error')).toBe(true);
+  });
+});
+
+describe('fun commands', () => {
+  it('blue-screens on demand, through the host', () => {
+    const ctx = makeCtx();
+    runCommand('crash', ctx);
+    expect(ctx.host.triggerBsod).toHaveBeenCalled();
+  });
+
+  it('keeps the case of what cowsay is given', () => {
+    expect(text(runCommand('cowsay Hello There', makeCtx()))).toContain('Hello There');
+  });
+
+  it('keeps the eggs out of the help listing', () => {
+    const out = text(runCommand('help', makeCtx()));
+    expect(out).not.toContain('cocorico');
+    expect(text(runCommand('cocorico', makeCtx()))).toContain('🐓');
+  });
+
+  it('still answers the classic', () => {
+    expect(text(runCommand('sudo make me a sandwich', makeCtx()))).toContain('sandwich');
+    expect(runCommand('sudo rm', makeCtx()).lines.some((l) => l.type === 'error')).toBe(true);
+  });
+});
