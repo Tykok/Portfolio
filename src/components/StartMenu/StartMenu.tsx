@@ -14,10 +14,9 @@ interface Props {
   onLogoff: () => void;
 }
 
-const PINNED: AppKey[] = ['about', 'projects', 'cv', 'contact', 'terminal'];
+const PINNED: AppKey[] = ['web', 'projects', 'cv', 'contact', 'terminal'];
 
 const SUB_KEY: Record<AppKey, StringKey> = {
-  about: 'sub_about',
   projects: 'sub_projects',
   cv: 'sub_cv',
   contact: 'sub_contact',
@@ -76,10 +75,6 @@ export function StartMenu({ onClose, onShutdown, onLogoff }: Props) {
         </div>
 
         <div className="os-start-right">
-          <button type="button" className="os-place" onClick={() => handleOpen('about')}>
-            <span className="os-place-ic gly">👤</span>
-            {t('sub_about')}
-          </button>
           <button type="button" className="os-place" onClick={() => handleOpen('projects')}>
             <span className="os-place-ic gly">📁</span>
             {t('sub_projects')}

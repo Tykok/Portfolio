@@ -191,10 +191,6 @@ describe('open', () => {
     expect(out).toContain('PERSONAL PROJECTS');
   });
 
-  it('prints the About text in the console', () => {
-    expect(text(runCommand('open about', makeCtx('console')))).toContain('Interests');
-  });
-
   it('rejects an app that does not exist, and lists the ones that do', () => {
     const result = runCommand('open media', makeCtx());
     expect(result.lines.some((l) => l.type === 'error')).toBe(true);

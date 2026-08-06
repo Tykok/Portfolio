@@ -1,7 +1,6 @@
 import type { JSX } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { About } from 'components/apps/About/About';
 import { Articles } from 'components/apps/Articles/Articles';
 import { Contact } from 'components/apps/Contact/Contact';
 import { Cv } from 'components/apps/Cv/Cv';
@@ -35,8 +34,6 @@ const KONAMI = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'Ar
 
 function AppContent({ appKey }: { appKey: AppKey }): JSX.Element | null {
   switch (appKey) {
-    case 'about':
-      return <About />;
     case 'projects':
       return <Projects />;
     case 'cv':
