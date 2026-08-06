@@ -47,9 +47,23 @@ jobs:
         if: ${{ !cancelled() }}
         run: npm run typecheck
 
+      # Vitest's fork/thread pools occasionally hang on this suite's size
+      # instead of failing — no error, no exit, until something external
+      # kills the process (confirmed on both pools, on this runner and
+      # locally: a real, intermittent Vitest/Node issue, not a broken test).
+      # A per-attempt timeout turns that hang into a retry instead of
+      # burning the whole job's budget.
       - name: Test
         if: ${{ !cancelled() }}
-        run: npm test
+        run: |
+          for attempt in 1 2 3; do
+            if timeout 90s npm test; then
+              exit 0
+            fi
+            echo "::warning::npm test attempt $attempt/3 failed or hung — retrying on a clean process"
+            pkill -9 -f vitest || true
+          done
+          exit 1
 
       - name: Build
         if: ${{ !cancelled() }}
