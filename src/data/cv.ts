@@ -111,7 +111,7 @@ export const EXPERIENCE: CvExperience[] = [
         'Recueil des besoins, modélisation et création de la base de données (MySQL)',
         'Localisation des établissements sur une carte interactive',
         'Recherche avancée par formulaire, connexion sécurisée & gestion des droits',
-        'Restitution du travail à l\'équipe et pistes d\'intégration à leur activité',
+        "Restitution du travail à l'équipe et pistes d'intégration à leur activité",
       ],
       en: [
         'School location and management project',
