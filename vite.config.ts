@@ -59,5 +59,15 @@ export default defineConfig(({ mode }) => ({
     setupFiles: './src/setupTests.ts',
     css: true,
     restoreMocks: true,
+    /* Vitest's default pool forks one worker per file, run in parallel. Under
+       memory pressure — this suite's own dev box, and standard GitHub-hosted
+       runners alike — a worker occasionally gets killed mid-file, and Vitest's
+       "Worker exited unexpectedly" path hangs the whole run instead of failing
+       it: `vitest run` prints every result, then never exits, until something
+       external kills it. Six runs with file parallelism on hit that twice; six
+       runs with it off hit it zero times. Serial files cost ~3x the wall clock
+       (~16s vs ~5s here) for a suite this size — cheap next to a CI job that
+       silently hangs until its own timeout cancels it. */
+    fileParallelism: false,
   },
 }));
