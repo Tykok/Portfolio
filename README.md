@@ -102,10 +102,12 @@ src/
   api/          client HTTP, accès projets, mock
   components/
     apps/       fenêtres applicatives (About, Cv, Projects, Terminal, Web…)
-    OS/         couches système (Boot, Login, Bsod, TipsDialog, KonamiRain…)
+    OS/         couches système (Boot, Login, Bsod, TipsDialog, KonamiRain, Console…)
     Desktop/    bureau, icônes, menu contextuel
     TaskBar/    barre des tâches, zone de notification, calendrier
     Window/     chrome de fenêtre, barre de titre
+  terminal/     moteur de commandes (registry, run, views) partagé par la
+                fenêtre Terminal et la console plein écran
   context/      Lang, OS, Window, Projects
   data/         identité, projets, réseaux, badges techno
   i18n/         fr.ts, en.ts, types.ts — source unique des libellés
@@ -122,7 +124,7 @@ sinon TypeScript refuse de compiler.
 const { t, lang } = useLang();
 
 t('cv_exp'); // string
-t('t_projects_l', { n: 6 }); // interpolation de {n}
+t('ar_min', { n: 7 }); // interpolation de {n}
 t('cal_months'); // string[] — le type suit la clé
 ```
 

@@ -47,6 +47,7 @@ export const techBadges: Record<string, TechBadge> = {
   Git: { color: '#e8542f', monogram: 'Gt' },
   Linux: { color: '#33373d', monogram: 'Lx' },
   Terraform: { color: '#7b42bc', monogram: 'Tf' },
+  'CI/CD': { color: '#2088ff', monogram: 'CI' },
 };
 
 export function getBadge(tech: string): TechBadge {

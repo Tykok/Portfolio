@@ -82,6 +82,19 @@ describe('runCommand', () => {
     expect(runCommand('help nope', makeCtx()).lines.some((l) => l.type === 'error')).toBe(true);
   });
 
+  it('answers help for a console-only command the same way the command itself would', () => {
+    // `gui` errors when run directly in the windowed terminal (it is
+    // console-only) — `help gui` used to ignore mode and describe it anyway,
+    // contradicting the command it was documenting.
+    const windowed = makeCtx('window');
+    expect(runCommand('help gui', windowed).lines.some((l) => l.type === 'error')).toBe(true);
+
+    const console_ = makeCtx('console');
+    const out = text(runCommand('help gui', console_));
+    expect(out).not.toContain('No such command');
+    expect(out).toContain('gui');
+  });
+
   it('clear wipes the log instead of appending to it', () => {
     const result = runCommand('clear', makeCtx());
     expect(result.clear).toBe(true);
@@ -117,6 +130,17 @@ describe('profile commands', () => {
 
   it('refuses to download anything else', () => {
     expect(runCommand('download wallpaper', makeCtx()).lines.some((l) => l.type === 'error')).toBe(true);
+  });
+
+  it('rejects an unrecognized language instead of silently serving the OS one', () => {
+    const ctx = makeCtx('console'); // ctx.lang is 'fr'
+    const result = runCommand('download cv de', ctx);
+    expect(result.lines.some((l) => l.type === 'error')).toBe(true);
+    expect(ctx.host.openUrl).not.toHaveBeenCalled();
+
+    // The no-argument case is the documented fallback and must still work.
+    runCommand('download cv', ctx);
+    expect(ctx.host.openUrl).toHaveBeenCalledWith('/cv-elie-treport-fr.pdf');
   });
 });
 

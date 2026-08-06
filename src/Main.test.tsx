@@ -188,4 +188,29 @@ describe('the console profile', () => {
     },
     8000,
   );
+
+  it('follows a pasted #/console into the shell, from the desktop', async () => {
+    // The app hash already had this (route.app → windows). route.console had
+    // nothing reconciling a *later* change with `phase` — the hash updated,
+    // but the console never opened until something else changed phase.
+    renderAt('#/about'); // the suite's usual fast path to a rendered desktop
+    await waitFor(() => expect(document.querySelector('.os-desktop')).toBeInTheDocument());
+
+    window.location.hash = '#/console';
+    fireEvent(window, new Event('hashchange'));
+
+    await waitFor(() => expect(screen.getByText(/TicoqBIOS/)).toBeInTheDocument());
+    expect(document.querySelector('.os-desktop')).toBeNull();
+  });
+
+  it('follows the address bar back out, when it is edited away from #/console', async () => {
+    renderAt('#/console');
+    await waitFor(() => expect(screen.getByText(/TicoqBIOS/)).toBeInTheDocument());
+
+    window.location.hash = '#/';
+    fireEvent(window, new Event('hashchange'));
+
+    await waitFor(() => expect(document.querySelector('.os-desktop')).toBeInTheDocument());
+    expect(screen.queryByText(/TicoqBIOS/)).not.toBeInTheDocument();
+  });
 });
