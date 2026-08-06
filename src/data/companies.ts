@@ -14,6 +14,10 @@ export interface Company {
   role: LocalizedString;
   /** What the company does, for a reader who has never heard of it. */
   what: LocalizedString;
+  /** History and scale — public facts `what` has no room for. */
+  description?: LocalizedString;
+  /** A few real photos, self-hosted under /companies. Skipped entirely where none exist. */
+  images?: string[];
   /** The projects and chantiers carried out there. */
   work: LocalizedStringArray;
   stack: string[];
@@ -32,6 +36,11 @@ export const companies: Company[] = [
       fr: 'Impression photo en magasin : Pictarine développe les applications par lesquelles les clients commandent leurs tirages, retirés ensuite chez de grandes enseignes nord-américaines.',
       en: 'In-store photo printing: Pictarine builds the apps customers order their prints through, then collect from large North American chains.',
     },
+    description: {
+      fr: "Fondée à Toulouse en 2010, Pictarine a gardé son équipe à Labège tout en construisant une activité presque entièrement américaine, où l'application est distribuée via des milliers de points de retrait partenaires. Un cas plutôt rare de start-up française : l'essentiel de son chiffre d'affaires, plusieurs dizaines de millions d'euros par an, vient d'un marché où elle n'opère quasiment pas elle-même.",
+      en: "Founded in Toulouse in 2010, Pictarine kept its team in Labège while building a business that runs almost entirely on the US market, where the app is distributed through thousands of partner pickup points. A fairly unusual case for a French start-up: most of its yearly revenue, in the tens of millions of euros, comes from a market the company itself barely operates in.",
+    },
+    images: ['/companies/pictarine-1.jpg', '/companies/pictarine-2.jpg'],
     role: {
       fr: "Backend Engineer. J'interviens sur le cycle produit complet — conception, développement, mise en production — en apportant ma vision technique et en challengeant les choix, pas seulement en les exécutant. Je travaille aussi sur GCP : Cloud Functions, Cloud Scheduler, Cloud Run.",
       en: 'Backend Engineer. I work the full product cycle — design, build, ship — bringing a technical point of view and pushing back on decisions, not just executing them. I also work on GCP: Cloud Functions, Cloud Scheduler, Cloud Run.',
@@ -67,6 +76,10 @@ export const companies: Company[] = [
       fr: "Rapports détaillés de véhicules : les équipements et options d'un modèle donné, à partir de sa marque, son année et sa version.",
       en: 'Detailed vehicle reports: the equipment and options of a given model, from its make, year and trim.',
     },
+    description: {
+      fr: 'MecaLIFE Group est né à Toulouse en 2020. Sous une même marque, plusieurs services distincts — identification par immatriculation, cotation, historique d\'entretien — équipent professionnels et particuliers du marché de l\'occasion, chacun sur son propre nom de domaine.',
+      en: "MecaLIFE Group was founded in Toulouse in 2020. Under one brand, several distinct services — VIN/plate identification, pricing, service history — serve both professionals and private buyers in the used-vehicle market, each running on its own subdomain.",
+    },
     role: {
       fr: "Full Stack Developer, en stage puis en poste. Front, back, base de données, et l'administration des serveurs Debian avec leur chaîne de déploiement.",
       en: 'Full Stack Developer, first as an intern then on staff. Front, back, database, and the administration of the Debian servers along with their deployment chain.',
@@ -101,6 +114,10 @@ export const companies: Company[] = [
       fr: "Opérateur public de l'Éducation nationale : ressources pédagogiques, livres scolaires, action culturelle. L'antenne de Saint-Denis couvre La Réunion.",
       en: 'A public body of the French education ministry: teaching resources, school books, cultural programmes. The Saint-Denis branch covers Réunion.',
     },
+    description: {
+      fr: "Héritier du CNDP, établi dès 1954, Réseau Canopé a pris sa forme actuelle en 2014. L'opérateur coordonne aujourd'hui 12 directions territoriales et une centaine d'Ateliers Canopé à travers la France — dont celui de Saint-Denis, où s'est déroulé le stage — et forme chaque année plus de 200 000 enseignants.",
+      en: 'The successor to the CNDP, first established in 1954, Réseau Canopé took its current form in 2014. The operator now coordinates 12 regional directorates and around a hundred Ateliers Canopé across France — including the one in Saint-Denis, where the internship took place — training over 200,000 teachers a year.',
+    },
     role: {
       fr: "Full Stack, stage. Seul sur le projet, accompagné d'un tuteur.",
       en: 'Full Stack, internship. Alone on the project, with a tutor alongside.',
@@ -134,6 +151,10 @@ export const companies: Company[] = [
     what: {
       fr: 'Éditeur de logiciels de gestion : paie, comptabilité, ERP.',
       en: 'A business software vendor: payroll, accounting, ERP.',
+    },
+    description: {
+      fr: "Fondé en 1983 et basé à Lyon, Cegid est un poids lourd du logiciel de gestion en France, avec plus de 460 millions d'euros de chiffre d'affaires annuel. L'agence de Roubaix, où s'est déroulé le stage, est une de ses implantations régionales.",
+      en: "Founded in 1983 and based in Lyon, Cegid is a major player in French business software, with over €460 million in annual revenue. The Roubaix office, where the internship took place, is one of its regional locations.",
     },
     role: {
       fr: "Full Stack, stage. Seul sur l'outil, accompagné d'un tuteur.",
