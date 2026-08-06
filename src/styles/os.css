@@ -519,7 +519,13 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-f
 .deck-acts { display: flex; gap: 9px; }
 .deck-nolink { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: var(--ink-dim); }
 
-.deck-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 34px; height: 34px; border-radius: 50%; border: 1px solid #d4dcea; background: rgba(255,255,255,.9); color: #2f3742; font-size: 18px; line-height: 1; cursor: pointer; box-shadow: 0 2px 8px rgba(20,30,60,.14); z-index: 2; }
+/* Anchored to the hero's own top padding, not the stage's vertical center:
+   the stage's height tracks the window, not the scrollable slide content, so
+   a 50%-top button drifts over body text on any slide tall enough to scroll.
+   The hero's content (`.deck-hero-body`) is bottom-aligned, so its top edge
+   — where the button sits — stays clear even when the title wraps to two
+   lines. */
+.deck-nav { position: absolute; top: 16px; width: 34px; height: 34px; border-radius: 50%; border: 1px solid #d4dcea; background: rgba(255,255,255,.9); color: #2f3742; font-size: 18px; line-height: 1; cursor: pointer; box-shadow: 0 2px 8px rgba(20,30,60,.14); z-index: 2; }
 .deck-nav:hover:not(:disabled) { background: #fff; }
 .deck-nav:disabled { opacity: .35; cursor: default; }
 .deck-nav.prev { left: 12px; }
@@ -934,6 +940,13 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-f
 .np-yr { color: #9b9a97; font-size: 12px; flex: 0 0 34px; text-align: right; }
 .np-hide-sm { }
 
+@media (max-width: 720px) {
+  /* Without this, the Stack column has nowhere to shrink to and pushes the
+     Année column past the row's right edge — the class was already in
+     PortfolioPage.tsx's markup, wired to a rule with no body. */
+  .np-hide-sm { display: none; }
+}
+
 /* ---- External links ---- */
 .np-linklist { display: flex; gap: 8px; flex-wrap: wrap; }
 .np-extlink {
@@ -1206,6 +1219,12 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-f
   @page { size: A4 portrait; margin: 11mm 12mm; }
 
   html, body, #root { height: auto; overflow: visible; background: #fff; }
+
+  /* `#root` losing its 100vh under print leaves `.os-root` (absolute, inset:0)
+     pinned to a zero-height box — its own `overflow: hidden` then clips the
+     whole CV to nothing. It has no printable content of its own, so drop the
+     positioning and clipping rather than track the height chain. */
+  .os-root { position: static !important; inset: auto !important; overflow: visible !important; height: auto !important; }
 
   /* Le chrome de l'OS ne s'imprime pas. */
   .os-desktop, .os-taskbar, .os-startmenu, .os-ctxmenu, .os-tooltip,
