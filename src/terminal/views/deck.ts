@@ -46,9 +46,7 @@ export function projectsView(entries: DeckEntry[]): Line[] {
           ...heading(`WORK — ${work.length}`),
           ...out(
             ...work.map((entry) =>
-              entry.kind === 'company'
-                ? col(entry.company.id, `${entry.company.name} · ${entry.company.period[TERM_LANG]}`, 16)
-                : '',
+              entry.kind === 'company' ? col(entry.company.id, `${entry.company.name} · ${entry.company.period[TERM_LANG]}`, 16) : '',
             ),
           ),
         ]

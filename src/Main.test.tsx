@@ -176,18 +176,14 @@ describe('the console profile', () => {
     expect(window.location.hash).toBe('#/');
   });
 
-  it(
-    'is reachable from the login screen, and names itself in the address bar',
-    async () => {
-      renderAt('#/');
+  it('is reachable from the login screen, and names itself in the address bar', async () => {
+    renderAt('#/');
 
-      await waitFor(() => expect(screen.getByText(fr.login_hint_profiles)).toBeInTheDocument(), { timeout: 4000 });
-      await userEvent.click(screen.getByRole('button', { name: /root/ }));
-      await waitFor(() => expect(screen.getByText(/TicoqBIOS/)).toBeInTheDocument());
-      expect(window.location.hash).toBe('#/console');
-    },
-    8000,
-  );
+    await waitFor(() => expect(screen.getByText(fr.login_hint_profiles)).toBeInTheDocument(), { timeout: 4000 });
+    await userEvent.click(screen.getByRole('button', { name: /root/ }));
+    await waitFor(() => expect(screen.getByText(/TicoqBIOS/)).toBeInTheDocument());
+    expect(window.location.hash).toBe('#/console');
+  }, 8000);
 
   it('follows a pasted #/console into the shell, from the desktop', async () => {
     // The app hash already had this (route.app → windows). route.console had

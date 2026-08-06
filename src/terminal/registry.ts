@@ -52,7 +52,7 @@ function helpAll(ctx: TerminalCtx): CommandResult {
       ...blank,
       ...lines,
       ...blank,
-      ...dim("Some commands are not listed. `help <command>` details any of them."),
+      ...dim('Some commands are not listed. `help <command>` details any of them.'),
     ],
   };
 }
@@ -106,7 +106,10 @@ export const COMMANDS: Command[] = [
     summary: 'one entry in full',
     detail: ['Ids come from `ls`. An unambiguous prefix is enough — `show plant` finds plant974.'],
     example: 'show pictarine',
-    complete: (arg, ctx) => deckFrom(ctx.data).map(entryId).filter((id) => id.startsWith(arg)),
+    complete: (arg, ctx) =>
+      deckFrom(ctx.data)
+        .map(entryId)
+        .filter((id) => id.startsWith(arg)),
     run: (ctx, arg) => {
       if (!arg.trim()) return { lines: err('Which one? `show <id>` — run `ls` for the ids.') };
       const entry = findEntry(deckFrom(ctx.data), arg);
@@ -192,7 +195,7 @@ export const COMMANDS: Command[] = [
     group: 'profile',
     usage: '',
     summary: 'my résumé, as text',
-    detail: ['In the desktop terminal this also opens the CV window.', "`download cv` fetches the PDF."],
+    detail: ['In the desktop terminal this also opens the CV window.', '`download cv` fetches the PDF.'],
     run: (ctx) => {
       if (ctx.host.mode === 'window') ctx.host.openApp('cv');
       return { lines: cvView() };
