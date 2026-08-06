@@ -21,7 +21,13 @@ export function CompanySlide({ company }: { company: Company }) {
     <article className="deck-slide">
       <header className="deck-hero" style={{ background: company.gradient }}>
         <div className="deck-hero-body">
-          <span className="deck-monogram">{company.monogram}</span>
+          {company.logo ? (
+            <span className="deck-logo">
+              <img src={company.logo} alt="" />
+            </span>
+          ) : (
+            <span className="deck-monogram">{company.monogram}</span>
+          )}
           <h2 className="deck-title">{company.name}</h2>
           <div className="deck-meta">
             <span className="deck-year">{company.period[lang]}</span>
