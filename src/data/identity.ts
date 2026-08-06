@@ -4,6 +4,10 @@ export interface Identity {
   name: string;
   alias: string;
   initials: string;
+  /** Self-hosted under /identity. */
+  photo: string;
+  /** GitHub account picture, self-hosted under /identity — the login screen's tile, not the site's photo. */
+  githubAvatar: string;
   role: LocalizedString;
   location: LocalizedString;
   status: LocalizedString;
@@ -12,7 +16,7 @@ export interface Identity {
   githubUrl: string;
   /** Short pitch — one line, used where space is tight (terminal, tooltips). */
   tagline: LocalizedString;
-  /** Full profile paragraph — About app, CV header. */
+  /** Full profile paragraph — Portfolio page, CV header. */
   bio: LocalizedString;
   /** What I'm doing right now, in one sentence. */
   now: LocalizedString;
@@ -23,6 +27,8 @@ export const identity: Identity = {
   name: 'Elie Treport',
   alias: 'Tykok',
   initials: 'ET',
+  photo: '/identity/elie-treport.jpg',
+  githubAvatar: '/identity/github-avatar.png',
   role: { fr: 'Développeur Backend Kotlin', en: 'Kotlin Backend Developer' },
   location: { fr: 'Escalquens, Occitanie · Toulouse', en: 'Escalquens, Occitania · Toulouse' },
   status: { fr: "À l'écoute, sans chercher", en: 'Not looking, but listening' },

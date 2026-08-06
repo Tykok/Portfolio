@@ -13,8 +13,13 @@ export function Login({ onLogin }: Props) {
   const { t } = useLang();
   const tiles = useRef<Array<HTMLDivElement | null>>([]);
 
-  const profiles: Array<{ profile: LoginProfile; avatar: string; name: string; role: string }> = [
-    { profile: 'desktop', avatar: identity.initials.charAt(0), name: identity.name, role: t('login_role') },
+  const profiles: Array<{ profile: LoginProfile; avatar: React.ReactNode; name: string; role: string }> = [
+    {
+      profile: 'desktop',
+      avatar: <img src={identity.githubAvatar} alt="" />,
+      name: identity.name,
+      role: t('login_role'),
+    },
     { profile: 'console', avatar: '>_', name: t('login_console_name'), role: t('login_role_console') },
   ];
 

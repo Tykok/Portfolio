@@ -4,7 +4,6 @@ import { entryId } from 'data/deck';
 import type { AppKey } from 'types/app';
 import type { Lang } from 'types/lang';
 
-import { aboutView } from './views/about';
 import { articlesView } from './views/articles';
 import { deckFrom, entryView, findEntry, projectsView } from './views/deck';
 import { cowsay, FORTUNES, LOGO, NEOFETCH, VALID_THEMES } from './views/fun';
@@ -154,8 +153,6 @@ export const COMMANDS: Command[] = [
           return runNamed(ctx, 'cv');
         case 'contact':
           return runNamed(ctx, 'contact');
-        case 'about':
-          return { lines: aboutView() };
         case 'terminal':
           return { lines: dim('You are already in it.') };
         case 'web':

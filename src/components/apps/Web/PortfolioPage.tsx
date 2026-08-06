@@ -4,10 +4,14 @@ import { useProjects } from 'context/ProjectsContext';
 import { useWindowContext } from 'context/WindowContext';
 import { identity } from 'data/identity';
 import { socials } from 'data/socials';
+import { getBadge } from 'data/techBadges';
 
 /* Read from `socials` rather than redeclared here: the LinkedIn URL used to be
    written in both places, and the two had already drifted apart. */
 const EXT_LINKS = socials.filter((s) => s.key !== 'email');
+
+/* Mirrors the former About app's chip list — kept in sync manually, same as MAIN_SKILLS did there. */
+const MAIN_SKILLS = ['Kotlin', 'Spring Boot', 'Java', 'TypeScript', 'Next.js', 'PostgreSQL', 'MySQL', 'Docker', 'Stripe', 'Git'];
 
 interface Props {
   onNavigate: (url: string) => void;
@@ -24,7 +28,7 @@ export function PortfolioPage({ onNavigate }: Props) {
       <div className="np-toolbar">
         <span className="np-crumb dim">TicoqOS</span>
         <span className="np-sep">›</span>
-        <span className="np-crumb dim">Portfolio</span>
+        <span className="np-crumb dim">{lang === 'fr' ? 'À propos' : 'About'}</span>
         <span className="np-sep">›</span>
         <span className="np-crumb">{identity.name}</span>
       </div>
@@ -34,7 +38,7 @@ export function PortfolioPage({ onNavigate }: Props) {
 
       {/* Page header */}
       <div className="np-hd">
-        <div className="np-emoji">🐓</div>
+        <img className="np-avatar" src={identity.photo} alt={identity.name} />
         <h1 className="np-title">{identity.name}</h1>
         <p className="np-role">{identity.role[lang]}</p>
       </div>
@@ -91,6 +95,42 @@ export function PortfolioPage({ onNavigate }: Props) {
               <p key={para.slice(0, 24)}>{para}</p>
             ))}
           </span>
+        </div>
+
+        <div className="np-divider" />
+
+        {/* Stack & skills — chips ported from the former About app */}
+        <div className="np-h2">
+          <span>🛠️</span>
+          {t('about_skills')}
+        </div>
+        <div className="np-chips">
+          {MAIN_SKILLS.map((tech) => {
+            const badge = getBadge(tech);
+            return (
+              <div key={tech} className="np-chip">
+                <span
+                  className="bdg"
+                  style={{
+                    background: badge.color,
+                    width: 20,
+                    height: 20,
+                    borderRadius: 6,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: 9,
+                    fontWeight: 700,
+                    color: '#fff',
+                    flexShrink: 0,
+                  }}
+                >
+                  {badge.monogram}
+                </span>
+                {tech}
+              </div>
+            );
+          })}
         </div>
 
         <div className="np-divider" />

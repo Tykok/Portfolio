@@ -97,7 +97,7 @@ describe('TicoqOS', () => {
   });
 
   it('opens the Start menu on Ctrl+Esc, as Windows does', async () => {
-    renderAt('#/about');
+    renderAt('#/contact');
     await waitFor(() => expect(windowsOnScreen()).toHaveLength(1));
 
     fireEvent.keyDown(document, { key: 'Escape', ctrlKey: true });
@@ -117,7 +117,7 @@ describe('TicoqOS', () => {
   });
 
   it('opens the tips window on F1, shortcut list included', async () => {
-    renderAt('#/about');
+    renderAt('#/contact');
     await waitFor(() => expect(windowsOnScreen()).toHaveLength(1));
 
     fireEvent.keyDown(document, { key: 'F1' });
@@ -130,10 +130,10 @@ describe('TicoqOS', () => {
   });
 
   it('names the focused window in the address bar', async () => {
-    renderAt('#/about');
+    renderAt('#/contact');
 
     await waitFor(() => {
-      expect(window.location.hash).toBe('#/about');
+      expect(window.location.hash).toBe('#/contact');
     });
   });
 });
@@ -189,7 +189,7 @@ describe('the console profile', () => {
     // The app hash already had this (route.app → windows). route.console had
     // nothing reconciling a *later* change with `phase` — the hash updated,
     // but the console never opened until something else changed phase.
-    renderAt('#/about'); // the suite's usual fast path to a rendered desktop
+    renderAt('#/contact'); // the suite's usual fast path to a rendered desktop
     await waitFor(() => expect(document.querySelector('.os-desktop')).toBeInTheDocument());
 
     window.location.hash = '#/console';
