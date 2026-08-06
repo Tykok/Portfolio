@@ -38,7 +38,7 @@ export const companies: Company[] = [
     },
     description: {
       fr: "Fondée à Toulouse en 2010, Pictarine a gardé son équipe à Labège tout en construisant une activité presque entièrement américaine, où l'application est distribuée via des milliers de points de retrait partenaires. Un cas plutôt rare de start-up française : l'essentiel de son chiffre d'affaires, plusieurs dizaines de millions d'euros par an, vient d'un marché où elle n'opère quasiment pas elle-même.",
-      en: "Founded in Toulouse in 2010, Pictarine kept its team in Labège while building a business that runs almost entirely on the US market, where the app is distributed through thousands of partner pickup points. A fairly unusual case for a French start-up: most of its yearly revenue, in the tens of millions of euros, comes from a market the company itself barely operates in.",
+      en: 'Founded in Toulouse in 2010, Pictarine kept its team in Labège while building a business that runs almost entirely on the US market, where the app is distributed through thousands of partner pickup points. A fairly unusual case for a French start-up: most of its yearly revenue, in the tens of millions of euros, comes from a market the company itself barely operates in.',
     },
     images: ['/companies/pictarine-1.jpg', '/companies/pictarine-2.jpg'],
     role: {
@@ -77,8 +77,8 @@ export const companies: Company[] = [
       en: 'Detailed vehicle reports: the equipment and options of a given model, from its make, year and trim.',
     },
     description: {
-      fr: 'MecaLIFE Group est né à Toulouse en 2020. Sous une même marque, plusieurs services distincts — identification par immatriculation, cotation, historique d\'entretien — équipent professionnels et particuliers du marché de l\'occasion, chacun sur son propre nom de domaine.',
-      en: "MecaLIFE Group was founded in Toulouse in 2020. Under one brand, several distinct services — VIN/plate identification, pricing, service history — serve both professionals and private buyers in the used-vehicle market, each running on its own subdomain.",
+      fr: "MecaLIFE Group est né à Toulouse en 2020. Sous une même marque, plusieurs services distincts — identification par immatriculation, cotation, historique d'entretien — équipent professionnels et particuliers du marché de l'occasion, chacun sur son propre nom de domaine.",
+      en: 'MecaLIFE Group was founded in Toulouse in 2020. Under one brand, several distinct services — VIN/plate identification, pricing, service history — serve both professionals and private buyers in the used-vehicle market, each running on its own subdomain.',
     },
     role: {
       fr: "Full Stack Developer, en stage puis en poste. Front, back, base de données, et l'administration des serveurs Debian avec leur chaîne de déploiement.",
@@ -89,7 +89,7 @@ export const companies: Company[] = [
         'Plateforme de rapports détaillés de véhicules — une centaine de rapports par mois, équipements et options par marque, année et version',
         "Tarification dynamique à partir du VIN ou de l'immatriculation, et estimation du délai de rapport selon sa complexité et l'agenda des rédacteurs",
         "Outil interne de matching équipements/options, pour estimer ce qu'un véhicule embarque probablement",
-        'Plateforme de ventes aux enchères en fin de poste (une vingtaine pendant l\'alternance), paiement Stripe',
+        "Plateforme de ventes aux enchères en fin de poste (une vingtaine pendant l'alternance), paiement Stripe",
         'Administration des serveurs Debian (Apache, dépendances), CI/CD et déploiement continu',
       ],
       en: [
@@ -128,7 +128,7 @@ export const companies: Company[] = [
         'Recueil des besoins, modélisation et création de la base',
         'Recherche avancée, connexion sécurisée et gestion des droits',
         'Objectif : que les équipes voient où des actions ont été menées, pour décider où en mener de nouvelles',
-        'Restitution finale à l\'équipe, avec des pistes concrètes pour intégrer le travail à leur activité',
+        "Restitution finale à l'équipe, avec des pistes concrètes pour intégrer le travail à leur activité",
       ],
       en: [
         "A site cataloguing the island's schools on an interactive map",
@@ -154,7 +154,7 @@ export const companies: Company[] = [
     },
     description: {
       fr: "Fondé en 1983 et basé à Lyon, Cegid est un poids lourd du logiciel de gestion en France, avec plus de 460 millions d'euros de chiffre d'affaires annuel. L'agence de Roubaix, où s'est déroulé le stage, est une de ses implantations régionales.",
-      en: "Founded in 1983 and based in Lyon, Cegid is a major player in French business software, with over €460 million in annual revenue. The Roubaix office, where the internship took place, is one of its regional locations.",
+      en: 'Founded in 1983 and based in Lyon, Cegid is a major player in French business software, with over €460 million in annual revenue. The Roubaix office, where the internship took place, is one of its regional locations.',
     },
     role: {
       fr: "Full Stack, stage. Seul sur l'outil, accompagné d'un tuteur.",
