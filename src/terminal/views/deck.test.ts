@@ -41,7 +41,7 @@ describe('entryView', () => {
     const out = text(entryView(entry));
     expect(out).toContain('Pictarine');
     expect(out).toContain('Backend Engineer');
-    expect(out).toContain('Stripe payments and customer account management');
+    expect(out).toContain('Full rebuild of the Stripe payment flow');
     expect(out).toContain('Kotlin');
     expect(out).not.toContain('Impression photo en magasin');
   });
