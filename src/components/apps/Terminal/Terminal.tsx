@@ -47,7 +47,15 @@ export function Terminal() {
 
       <div className="os-term-row">
         <span className="pr">C:\&gt;</span>
-        <input ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={onKeyDown} spellCheck={false} autoComplete="off" autoFocus />
+        <input
+          ref={inputRef}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={onKeyDown}
+          spellCheck={false}
+          autoComplete="off"
+          autoFocus
+        />
       </div>
     </div>
   );
