@@ -4,6 +4,8 @@ export interface Company {
   id: string;
   monogram: string;
   gradient: string;
+  /** Official logo, self-hosted under /companies. Falls back to `monogram` when absent. */
+  logo?: string;
   /** Not localized — a company's name is its name. */
   name: string;
   place: LocalizedString;
@@ -22,6 +24,7 @@ export const companies: Company[] = [
     id: 'pictarine',
     monogram: 'PI',
     gradient: 'linear-gradient(135deg,#fb7185,#be123c)',
+    logo: '/companies/pictarine.png',
     name: 'Pictarine',
     place: { fr: 'Toulouse', en: 'Toulouse' },
     period: { fr: 'oct. 2022 → présent', en: 'Oct 2022 → present' },
@@ -30,21 +33,25 @@ export const companies: Company[] = [
       en: 'In-store photo printing: Pictarine builds the apps customers order their prints through, then collect from large North American chains.',
     },
     role: {
-      fr: "Backend Engineer. Je conçois, fais évoluer et maintiens l'API, et je porte tout ce qui touche à la base PostgreSQL. Je travaille aussi sur GCP : Cloud Functions, Cloud Scheduler, Cloud Run.",
-      en: 'Backend Engineer. I design, grow and maintain the API, and I own everything that touches the PostgreSQL database. I also work on GCP: Cloud Functions, Cloud Scheduler, Cloud Run.',
+      fr: "Backend Engineer. J'interviens sur le cycle produit complet — conception, développement, mise en production — en apportant ma vision technique et en challengeant les choix, pas seulement en les exécutant. Je travaille aussi sur GCP : Cloud Functions, Cloud Scheduler, Cloud Run.",
+      en: 'Backend Engineer. I work the full product cycle — design, build, ship — bringing a technical point of view and pushing back on decisions, not just executing them. I also work on GCP: Cloud Functions, Cloud Scheduler, Cloud Run.',
     },
     work: {
       fr: [
-        'Paiement Stripe et gestion de compte client',
-        'Services tiers pour le marketing (Klaviyo)',
-        'Première version du catalogue produit',
-        'Tooling interne en Next.js, adopté par toutes les équipes',
+        'Outil interne en Next.js pour gérer le catalogue produit (prix, disponibilité, ajout/suppression) — mon premier projet, toujours utilisé par toutes les équipes',
+        'Refonte complète du flux de paiement Stripe : échanges API, live activity, système de refund — plusieurs milliers de commandes par mois aux seuls États-Unis',
+        'Services serverless sur GCP (Cloud Functions, Cloud Scheduler, Cloud Run), dont la synchronisation Klaviyo toutes les 15 minutes',
+        'Migration des emails et push notifications vers Kotlin, intégration Klaviyo',
+        'Picta France, une nouvelle API créée de zéro pour déployer imprimantes et logiciel Pictarine en magasin',
+        'En cours : catalogue produit assisté par IA, sur une API et une application entièrement nouvelles',
       ],
       en: [
-        'Stripe payments and customer account management',
-        'Third-party marketing services (Klaviyo)',
-        'First version of the product catalogue',
-        'Internal tooling in Next.js, adopted by every team',
+        'Internal tool in Next.js for managing the product catalogue (pricing, availability, add/remove) — my first project, still used by every team',
+        'Full rebuild of the Stripe payment flow: API exchanges, live activity, a refund system — several thousand orders a month in the US alone',
+        'Serverless services on GCP (Cloud Functions, Cloud Scheduler, Cloud Run), including a Klaviyo sync every 15 minutes',
+        'Migrated emails and push notifications to Kotlin, integrated Klaviyo',
+        "Picta France, a new API built from scratch to deploy Pictarine's own printers and software in stores",
+        'Ongoing: AI-assisted product catalogue, on a brand-new API and app',
       ],
     },
     stack: ['Kotlin', 'Spring Boot', 'PostgreSQL', 'GCP', 'Next.js', 'Node.js', 'Python'],
@@ -66,16 +73,18 @@ export const companies: Company[] = [
     },
     work: {
       fr: [
-        'La plateforme de rapports véhicules',
-        'Une plateforme de ventes aux enchères en fin de poste, avec paiement Stripe et tarification dynamique selon le type de véhicule',
-        "Un outil interne d'aide à la conception de rapports",
-        'CI/CD, Apache et Docker sur Debian',
+        'Plateforme de rapports détaillés de véhicules — une centaine de rapports par mois, équipements et options par marque, année et version',
+        "Tarification dynamique à partir du VIN ou de l'immatriculation, et estimation du délai de rapport selon sa complexité et l'agenda des rédacteurs",
+        "Outil interne de matching équipements/options, pour estimer ce qu'un véhicule embarque probablement",
+        'Plateforme de ventes aux enchères en fin de poste (une vingtaine pendant l\'alternance), paiement Stripe',
+        'Administration des serveurs Debian (Apache, dépendances), CI/CD et déploiement continu',
       ],
       en: [
-        'The vehicle report platform',
-        'An auction platform at the end of the role, with Stripe payments and pricing that varied by vehicle type',
-        'An internal tool to help design reports',
-        'CI/CD, Apache and Docker on Debian',
+        'Detailed vehicle report platform — around a hundred reports a month, equipment and options by make, year and trim',
+        "Dynamic pricing from a VIN or licence plate, and report-readiness estimates based on complexity and the report writers' schedules",
+        'Internal equipment/options matching tool, to estimate what a given vehicle likely carries',
+        'Auction platform at the end of the role (about twenty auctions during the apprenticeship), Stripe payments',
+        'Debian server administration (Apache, dependencies), CI/CD and continuous deployment',
       ],
     },
     stack: ['PHP', 'Laravel', 'React', 'Node.js', 'PostgreSQL', 'Docker'],
@@ -84,6 +93,7 @@ export const companies: Company[] = [
     id: 'canope',
     monogram: 'RC',
     gradient: 'linear-gradient(135deg,#fbbf24,#b45309)',
+    logo: '/companies/canope.svg',
     name: 'Réseau Canopé',
     place: { fr: 'Saint-Denis, La Réunion', en: 'Saint-Denis, Réunion' },
     period: { fr: 'janv. → févr. 2020', en: 'Jan → Feb 2020' },
@@ -101,12 +111,14 @@ export const companies: Company[] = [
         'Recueil des besoins, modélisation et création de la base',
         'Recherche avancée, connexion sécurisée et gestion des droits',
         'Objectif : que les équipes voient où des actions ont été menées, pour décider où en mener de nouvelles',
+        'Restitution finale à l\'équipe, avec des pistes concrètes pour intégrer le travail à leur activité',
       ],
       en: [
         "A site cataloguing the island's schools on an interactive map",
         'Requirements gathering, modelling and creating the database',
         'Advanced search, secure login and rights management',
         'The point: so the teams could see where activities had already run, and decide where to run new ones',
+        'Final presentation to the team, with concrete ideas for folding the work into their day-to-day',
       ],
     },
     stack: ['PHP', 'MySQL', 'JavaScript'],
@@ -115,6 +127,7 @@ export const companies: Company[] = [
     id: 'cegid',
     monogram: 'CG',
     gradient: 'linear-gradient(135deg,#2dd4bf,#0f766e)',
+    logo: '/companies/cegid.png',
     name: 'Cegid',
     place: { fr: 'Roubaix', en: 'Roubaix' },
     period: { fr: 'juin → juil. 2019', en: 'Jun → Jul 2019' },
