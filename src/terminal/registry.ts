@@ -57,8 +57,8 @@ function helpAll(ctx: TerminalCtx): CommandResult {
   };
 }
 
-function helpOne(name: string): CommandResult {
-  const command = COMMANDS.find((c) => c.name === name || c.aliases?.includes(name));
+function helpOne(ctx: TerminalCtx, name: string): CommandResult {
+  const command = findCommand(name, ctx.host.mode);
   if (!command) return { lines: err(`No such command: ${name}. Type 'help' for the list.`) };
 
   return {
@@ -70,6 +70,19 @@ function helpOne(name: string): CommandResult {
       ...(command.example ? [...blank, ...dim(`  e.g. ${command.example}`)] : []),
     ],
   };
+}
+
+/**
+ * Dispatches to another command's `run` by name — `open`'s way of reusing
+ * `projects`/`cv`/`contact`/`articles` in the console instead of duplicating
+ * their views. The four names are stable string literals today, but this is
+ * the safety net for the day one of them isn't: a clear error instead of a
+ * runtime throw from a bare `COMMANDS.find(...)!`.
+ */
+function runNamed(ctx: TerminalCtx, name: string): CommandResult {
+  const command = COMMANDS.find((c) => c.name === name);
+  if (!command) return { lines: err(`Internal error: no such command '${name}'.`) };
+  return command.run(ctx, '');
 }
 
 export const COMMANDS: Command[] = [
@@ -131,13 +144,13 @@ export const COMMANDS: Command[] = [
 
       switch (key) {
         case 'projects':
-          return COMMANDS.find((c) => c.name === 'projects')!.run(ctx, '');
+          return runNamed(ctx, 'projects');
         case 'articles':
-          return COMMANDS.find((c) => c.name === 'articles')!.run(ctx, '');
+          return runNamed(ctx, 'articles');
         case 'cv':
-          return COMMANDS.find((c) => c.name === 'cv')!.run(ctx, '');
+          return runNamed(ctx, 'cv');
         case 'contact':
-          return COMMANDS.find((c) => c.name === 'contact')!.run(ctx, '');
+          return runNamed(ctx, 'contact');
         case 'about':
           return { lines: aboutView() };
         case 'terminal':
@@ -195,6 +208,9 @@ export const COMMANDS: Command[] = [
     run: (ctx, arg) => {
       const [what, asked] = arg.toLowerCase().split(/\s+/);
       if (what !== 'cv') return { lines: err("Only 'download cv' is on offer. Try `download cv en`.") };
+      if (asked && asked !== 'fr' && asked !== 'en') {
+        return { lines: err("Two languages here: 'download cv fr' or 'download cv en'.") };
+      }
       const lang = asked === 'fr' || asked === 'en' ? asked : ctx.lang;
       ctx.host.openUrl(cvUrl(lang));
       return { lines: dim(`Fetching ${cvUrl(lang)}…`) };
@@ -211,7 +227,7 @@ export const COMMANDS: Command[] = [
       visibleIn(ctx.host.mode)
         .filter((c) => c.name.startsWith(arg))
         .map((c) => c.name),
-    run: (ctx, arg) => (arg.trim() ? helpOne(arg.trim().toLowerCase()) : helpAll(ctx)),
+    run: (ctx, arg) => (arg.trim() ? helpOne(ctx, arg.trim().toLowerCase()) : helpAll(ctx)),
   },
   {
     name: 'gui',
