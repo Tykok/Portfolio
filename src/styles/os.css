@@ -512,6 +512,11 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-f
 .deck-role { font-size: 12.5px; color: #3a414d; margin: 10px 0 0; }
 .deck-role-l { font-weight: 700; text-transform: uppercase; letter-spacing: .06em; font-size: 10px; color: #9aa3b2; margin-right: 8px; }
 
+/* A handful of real photos, not a gallery — scrolls on overflow rather than
+   wrapping, so it stays one tidy row at any width instead of reflowing. */
+.deck-photos { display: flex; gap: 8px; padding: 12px 20px 0; overflow-x: auto; }
+.deck-photos img { flex: 0 0 auto; height: 110px; width: auto; border-radius: 8px; object-fit: cover; }
+
 .deck-bul { list-style: none; margin: 10px 0; padding: 0 20px; display: flex; flex-direction: column; gap: 7px; }
 .deck-bul li { display: flex; gap: 9px; align-items: flex-start; font-size: 12.5px; color: #3a414d; line-height: 1.4; }
 
@@ -536,7 +541,10 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-f
 .deck-nav:disabled { opacity: .35; cursor: default; }
 .deck-nav.prev { left: 12px; }
 .deck-nav.next { right: 12px; }
-.deck-counter { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); font-size: 11px; font-weight: 600; color: #6b7280; background: rgba(255,255,255,.9); border: 1px solid #e7ebf2; border-radius: 999px; padding: 2px 12px; z-index: 2; }
+/* Same reasoning as `.deck-nav`: anchored to the hero's top, not the stage's
+   bottom edge, so it never drifts over body text on a slide long enough to
+   scroll (photos, a description paragraph — both push that content lower). */
+.deck-counter { position: absolute; top: 16px; left: 50%; transform: translateX(-50%); font-size: 11px; font-weight: 600; color: #6b7280; background: rgba(255,255,255,.9); border: 1px solid #e7ebf2; border-radius: 999px; padding: 2px 12px; z-index: 2; }
 
 @media (max-width: 720px) {
   .deck-B { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); }

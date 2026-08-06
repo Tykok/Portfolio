@@ -45,7 +45,16 @@ export function CompanySlide({ company }: { company: Company }) {
           <span className="deck-role-l">{t('p_role')}</span>
           {company.role[lang]}
         </p>
+        {company.description && <p className="deck-context">{company.description[lang]}</p>}
       </section>
+
+      {company.images && company.images.length > 0 && (
+        <div className="deck-photos">
+          {company.images.map((src) => (
+            <img key={src} src={src} alt="" />
+          ))}
+        </div>
+      )}
 
       <span className="deck-work-l">{t('co_work')}</span>
       <ul className="deck-bul">
