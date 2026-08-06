@@ -7,13 +7,19 @@ import { blank, bullets, col, dim, heading, out } from '../lines';
 import type { Line } from '../types';
 import { TERM_LANG } from '../types';
 
-/** `skills` output, grouped so the list reads like a stack rather than a dump. */
-const SKILL_GROUPS: Array<[string, string[]]> = [
-  ['Backend', ['Kotlin', 'Spring Boot', 'Java / JEE', 'Python']],
+/**
+ * `skills` output, grouped so the list reads like a stack rather than a dump.
+ * The categories are hand-picked (`HARD_SKILLS` is flat, with no domain of its
+ * own), but the items are exactly `HARD_SKILLS`'s items, partitioned — a test
+ * in `profile.test.ts` checks the two never drift apart again the way they
+ * once did against the CV's hardcoded groups.
+ */
+export const SKILL_GROUPS: Array<[string, string[]]> = [
+  ['Backend', ['Kotlin', 'Spring Boot', 'Java', 'Python', 'PHP', 'Laravel']],
   ['Data', ['PostgreSQL', 'MySQL']],
   ['Front', ['TypeScript', 'Next.js', 'React', 'Angular']],
   ['Ops & tooling', ['Docker', 'Linux', 'Bash', 'Git', 'CI/CD', 'GCP']],
-  ['Integrations', ['Stripe', 'Klaviyo', 'JWT / OAuth2']],
+  ['Integrations', ['Stripe', 'Klaviyo', 'JWT', 'OAuth2']],
 ];
 
 export function whoView(): Line[] {

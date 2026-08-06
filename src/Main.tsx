@@ -199,6 +199,23 @@ function OS() {
     setPhase('desktop');
   }, [setRouteConsole]);
 
+  /* Address bar → console. Unlike app hashes, nothing reconciled a *later*
+     change to `route.console` with `phase`: pasting `#/console` over the bare
+     desktop updated the route but left `phase` at 'desktop' forever, and the
+     reverse — editing away from `#/console` while the console showed — had
+     the same gap. This only ever fires from outside navigation: `enterConsole`
+     and `leaveConsole` already set both `route.console` and `phase` together,
+     in the same batched update, so by the time this effect runs the two are
+     already in agreement and neither branch matches — see the comment there. */
+  useEffect(() => {
+    if (phase === 'desktop' && route.console) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- external source (address bar); covers both branches, see comment above.
+      setPhase('console');
+    } else if (phase === 'console' && !route.console) {
+      setPhase('desktop');
+    }
+  }, [phase, route.console]);
+
   const themed = phase === 'desktop' || phase === 'console';
   const themeClass = themed && theme !== 'bliss' ? ` theme-${theme}` : '';
 
@@ -231,12 +248,20 @@ function OS() {
             </Window>
           ))}
           <TaskBar onShutdown={() => setPhase('off')} onLogoff={() => setPhase('login')} />
-          {bsod && <Bsod />}
-          {konamiRain && <KonamiRain />}
           {aboutOpen && <AboutDialog />}
           {tipsOpen && <TipsDialog />}
         </>
       )}
+
+      {/* Full-screen overlays, phase-independent on purpose: `crash`/`konami`
+          are reachable from the console too, and a BSOD or the Konami rain
+          that a visitor just triggered there should show up right where they
+          are, not wait silently for the next `gui` to ambush the desktop.
+          Both are `position: fixed` above everything (.os-bsod is z-index
+          99999, well above .os-console's 40), so they render correctly no
+          matter which phase is showing underneath. */}
+      {bsod && <Bsod />}
+      {konamiRain && <KonamiRain />}
     </div>
   );
 }

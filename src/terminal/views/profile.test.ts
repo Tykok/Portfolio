@@ -1,6 +1,7 @@
+import { HARD_SKILLS } from 'data/cv';
 import { identity } from 'data/identity';
 
-import { contactView, cvUrl, cvView, skillsView, whoView } from './profile';
+import { contactView, cvUrl, cvView, SKILL_GROUPS, skillsView, whoView } from './profile';
 
 const text = (lines: { text: string }[]) => lines.map((l) => l.text).join('\n');
 
@@ -25,6 +26,15 @@ describe('skillsView', () => {
     ['Backend', 'Data', 'Front', 'Ops', 'Integrations'].forEach((group) => expect(out).toContain(group));
     expect(out).toContain('Kotlin');
     expect(out).toContain('PostgreSQL');
+  });
+
+  it('agrees with the CV: every hard skill in exactly one group, and nothing else', () => {
+    // `skills` used to hand-list a set that disagreed with `cv`'s HARD_SKILLS
+    // (PHP/Laravel missing here, React/Angular/Klaviyo/JWT/OAuth2/CI-CD missing
+    // there). This is the guard against that drift coming back.
+    const grouped = SKILL_GROUPS.flatMap(([, techs]) => techs);
+    expect(new Set(grouped).size).toBe(grouped.length); // no tech listed twice
+    expect(new Set(grouped)).toEqual(new Set(HARD_SKILLS));
   });
 });
 
