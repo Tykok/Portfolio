@@ -1,6 +1,6 @@
 import type { LocalizedString } from './lang';
 
-export type AppKey = 'about' | 'projects' | 'cv' | 'contact' | 'terminal' | 'articles' | 'web';
+export type AppKey = 'projects' | 'cv' | 'contact' | 'terminal' | 'articles' | 'web';
 
 export type IconKind = 'pc' | 'folder' | 'doc' | 'mail' | 'term' | 'news' | 'globe';
 

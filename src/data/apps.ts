@@ -2,20 +2,12 @@ import type { AppMeta } from '../types/app';
 
 export const appsMeta: AppMeta[] = [
   {
-    key: 'about',
-    icon: 'pc',
-    defaultWidth: 470,
-    defaultHeight: 624,
-    title: { fr: 'À propos de moi', en: 'About me' },
-    short: { fr: 'À propos de moi', en: 'About me' },
-  },
-  {
     key: 'web',
     icon: 'globe',
     defaultWidth: 940,
     defaultHeight: 640,
-    title: { fr: 'Portfolio — TicoqExplorer', en: 'Portfolio — TicoqExplorer' },
-    short: { fr: 'Mon Portfolio', en: 'My Portfolio' },
+    title: { fr: 'À propos — TicoqExplorer', en: 'About — TicoqExplorer' },
+    short: { fr: 'À propos', en: 'About' },
   },
   {
     key: 'projects',

@@ -23,14 +23,17 @@ export function Cv() {
       <div className="cv2-body">
         {/* Header */}
         <div className="cv2-head">
-          <h1 className="cv2-nm">{identity.name}</h1>
-          <div className="cv2-role">{identity.role[lang]}</div>
-          <div className="cv2-contact">
-            <b>{identity.email}</b>
-            <i>·</i>
-            <span>{identity.github}</span>
-            <i>·</i>
-            <span>{identity.location[lang]}</span>
+          <img className="cv2-photo" src={identity.photo} alt={identity.name} />
+          <div>
+            <h1 className="cv2-nm">{identity.name}</h1>
+            <div className="cv2-role">{identity.role[lang]}</div>
+            <div className="cv2-contact">
+              <b>{identity.email}</b>
+              <i>·</i>
+              <span>{identity.github}</span>
+              <i>·</i>
+              <span>{identity.location[lang]}</span>
+            </div>
           </div>
         </div>
 

@@ -58,7 +58,6 @@ export interface Translations {
   aos_mem: string;
   aos_ok: string;
   // Start menu subtitles
-  sub_about: string;
   sub_projects: string;
   sub_cv: string;
   sub_contact: string;
@@ -68,7 +67,7 @@ export interface Translations {
   sm_allprogs: string;
   m_about_os: string;
   m_tips: string;
-  // About app
+  // Portfolio page (Web app)
   about_skills: string;
   // Projects app
   p_count_l: string;

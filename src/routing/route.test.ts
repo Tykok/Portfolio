@@ -49,7 +49,7 @@ describe('sameRoute', () => {
   it('treats a missing slide and an undefined slide as one', () => {
     expect(sameRoute({ app: 'cv' }, { app: 'cv', slide: undefined })).toBe(true);
     expect(sameRoute({ app: 'cv' }, { app: 'cv', slide: 'x' })).toBe(false);
-    expect(sameRoute({ app: 'cv' }, { app: 'about' })).toBe(false);
+    expect(sameRoute({ app: 'cv' }, { app: 'contact' })).toBe(false);
   });
 });
 
