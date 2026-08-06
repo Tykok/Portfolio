@@ -496,6 +496,12 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-f
 .deck-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .deck-hero-body { position: relative; z-index: 1; color: #fff; text-shadow: 0 1px 8px rgba(0,0,0,.35); }
 .deck-monogram { font-size: 26px; }
+/* A real logo on a white plate, since brand marks assume a light background
+   the hero's own gradient doesn't give them. Width tracks the logo's own
+   aspect ratio (a circular mark and a wide wordmark both fit); height is
+   fixed so every hero's badge lines up regardless of which company it is. */
+.deck-logo { display: inline-flex; align-items: center; height: 40px; padding: 0 8px; background: #fff; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.18); }
+.deck-logo img { display: block; height: 26px; width: auto; max-width: 96px; object-fit: contain; }
 .deck-title { font-family: var(--font-title); font-weight: 700; letter-spacing: -.2px; font-size: 22px; margin: 6px 0 4px; }
 .deck-meta { display: flex; align-items: center; gap: 10px; font-size: 12px; }
 .deck-status { padding: 1px 9px; border-radius: 999px; background: rgba(255,255,255,.22); font-weight: 600; }
