@@ -1,0 +1,111 @@
+name: Release
+
+# Production seulement. develop est vérifiée par la CI et se prévisualise en local.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Un déploiement à la fois, et jamais annulé en cours de route : deux runs
+# concurrents se battraient pour la même ligne du manifeste.
+concurrency:
+  group: release-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  SITE_URL: https://tykok.fr
+  IMAGE: ghcr.io/tykok/portfolio
+
+jobs:
+  release:
+    name: Construire, publier, déclarer
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Taguée par SHA de commit. Jamais latest : un tag mobile rend le
+      # rollback impossible et le contenu d'un déploiement indéterminé.
+      - name: Construire et pousser
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ env.IMAGE }}:${{ github.sha }}
+          build-args: |
+            VITE_SITE_URL=${{ env.SITE_URL }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # Contrôle sur l'artefact plutôt que confiance aveugle dans le build.
+      - name: Vérifier l'image publiée
+        run: |
+          docker run -d --name check -p 8912:8080 "${IMAGE}:${GITHUB_SHA}"
+          for _ in $(seq 1 30); do
+            curl -fsS -o /dev/null http://localhost:8912/ && break
+            sleep 1
+          done
+          body="$(curl -s http://localhost:8912/)"
+          if ! printf '%s' "${body}" | grep -q "${SITE_URL}"; then
+            echo "index.html ne référence pas ${SITE_URL}" >&2
+            exit 1
+          fi
+          if printf '%s' "${body}" | grep -q '__SITE_URL__'; then
+            echo "jeton __SITE_URL__ non résolu" >&2
+            exit 1
+          fi
+          docker rm -f check
+
+      # C'est ici que git devient la source de vérité du déploiement :
+      # l'historique des versions servies EST l'historique de ce fichier.
+      - name: Déclarer la nouvelle version dans homelab
+        env:
+          DEPLOY_KEY: ${{ secrets.HOMELAB_DEPLOY_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${DEPLOY_KEY}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts 2>/dev/null
+
+          git clone --depth 1 git@github.com:Tykok/homelab.git /tmp/homelab
+          cd /tmp/homelab
+
+          file=manifests/apps/portfolio/kustomization.yaml
+          before="$(grep -c "newTag: ${GITHUB_SHA}" "${file}" || true)"
+          sed -i "s|^\( *newTag: \).*|\1${GITHUB_SHA}|" "${file}"
+
+          if git diff --quiet; then
+            if [ "${before}" -gt 0 ]; then
+              echo "déjà à ${GITHUB_SHA}, rien à faire"
+              exit 0
+            fi
+            echo "le sed n'a rien changé — la forme de newTag a-t-elle bougé ?" >&2
+            exit 1
+          fi
+
+          git config user.name  'portfolio-ci'
+          git config user.email 'portfolio-ci@users.noreply.github.com'
+          git commit -am "chore(portfolio): image ${GITHUB_SHA}"
+
+          # Un autre dépôt peut avoir poussé entre le clone et maintenant.
+          for attempt in 1 2 3; do
+            if git push; then
+              exit 0
+            fi
+            echo "::warning::push refusé, tentative ${attempt}/3 après rebase"
+            git pull --rebase
+          done
+          exit 1
