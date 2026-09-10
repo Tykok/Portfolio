@@ -66,9 +66,10 @@ s'exécute même si une précédente échoue, pour qu'un seul run rapporte tout.
 La version de Node vient de `.nvmrc`, donc la CI et le poste de dev ne peuvent
 pas diverger.
 
-`.github/workflows/image.yml` couvre le `Dockerfile`, `docker/**` et lui-même,
-sur les pull requests comme sur les push vers `main` et `develop` : c'est là
-que l'image est vérifiée, avant fusion comme après.
+`.github/workflows/image.yml` couvre le `Dockerfile`, `docker/**`, lui-même et
+tout ce qui entre dans le build de l'image (`.nvmrc`, le code source, la
+config Vite/TS…), sur les pull requests comme sur les push vers `main` et
+`develop` : c'est là que l'image est vérifiée, avant fusion comme après.
 
 ## Déploiement
 
@@ -87,15 +88,30 @@ conséquence.
 `develop` n'a pas d'environnement servi : elle est vérifiée par la CI et se
 prévisualise avec `npm run preview`.
 
+Le runbook (manifestes, configuration Argo CD, rollback) vit dans le repo
+`homelab`, pas ici : ce dépôt ne fait que construire et déclarer une version.
+Un rollback est un `git revert` du commit de version dans `homelab`, pas une
+action sur ce dépôt.
+
+### Construire l'image
+
+```bash
+docker build --build-arg VITE_SITE_URL=https://tykok.fr -t portfolio .
+```
+
+`VITE_SITE_URL` est obligatoire : sans elle, le build échoue plutôt que de
+produire un canonical pointant sur localhost (voir le `Dockerfile`).
+
 ## Variables d'environnement
 
 Copier `.env.example` en `.env.local` pour surcharger. Préfixe `VITE_` obligatoire
 pour qu'une variable soit exposée au client.
 
-| Variable        | Défaut | Effet                                                                 |
-| --------------- | ------ | --------------------------------------------------------------------- |
-| `VITE_USE_MOCK` | `true` | Sert les projets depuis `src/api/mock/`. À `false`, appelle l'API.    |
-| `VITE_API_URL`  | vide   | URL de base de l'API projets. Lue seulement si `VITE_USE_MOCK=false`. |
+| Variable        | Défaut | Effet                                                                                                                       |
+| --------------- | ------ | --------------------------------------------------------------------------------------------------------------------------- |
+| `VITE_USE_MOCK` | `true` | Sert les projets depuis `src/api/mock/`. À `false`, appelle l'API.                                                          |
+| `VITE_API_URL`  | vide   | URL de base de l'API projets. Lue seulement si `VITE_USE_MOCK=false`.                                                       |
+| `VITE_SITE_URL` | vide   | URL absolue du site, pour canonical/og:url/og:image. Obligatoire pour `docker build` (voir Dockerfile), optionnelle en dev. |
 
 ## Organisation
 
