@@ -1,0 +1,79 @@
+name: Image
+
+# La configuration nginx a une vraie logique et n'est couverte par aucun test
+# de l'application. Deux bugs y ont déjà été trouvés en l'exécutant plutôt
+# qu'en la lisant.
+on:
+  pull_request:
+    paths:
+      - 'Dockerfile'
+      - 'docker/**'
+      - '.github/workflows/image.yml'
+      - '.nvmrc'
+      - '.dockerignore'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'src/**'
+      - 'public/**'
+      - 'index.html'
+      - 'vite.config.ts'
+      - 'tsconfig.json'
+  push:
+    branches: [main, develop]
+    paths:
+      - 'Dockerfile'
+      - 'docker/**'
+      - '.github/workflows/image.yml'
+      - '.nvmrc'
+      - '.dockerignore'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'src/**'
+      - 'public/**'
+      - 'index.html'
+      - 'vite.config.ts'
+      - 'tsconfig.json'
+
+permissions:
+  contents: read
+
+jobs:
+  nginx:
+    name: Comportement de la configuration nginx
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Valider la syntaxe
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro" \
+            nginxinc/nginx-unprivileged:1.27-alpine nginx -t
+      - name: Routage, cache et en-têtes
+        run: bash docker/test/image.test.sh
+
+  build:
+    name: L'image se construit et sert un index correct
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Construire
+        run: docker build --build-arg VITE_SITE_URL=https://tykok.fr -t portfolio:ci .
+      - name: Servir et vérifier
+        run: |
+          docker run -d --name check -p 8912:8080 portfolio:ci
+          for _ in $(seq 1 30); do
+            curl -fsS -o /dev/null http://localhost:8912/ && break
+            sleep 1
+          done
+          body="$(curl -s http://localhost:8912/)"
+          if ! echo "${body}" | grep -q 'https://tykok.fr'; then
+            echo 'canonical faux' >&2
+            exit 1
+          fi
+          if echo "${body}" | grep -q '__SITE_URL__'; then
+            echo 'jeton non résolu' >&2
+            exit 1
+          fi
+          docker rm -f check

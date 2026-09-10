@@ -1,0 +1,13 @@
+node_modules
+build
+coverage
+.git
+.github
+.idea
+docs
+scripts
+.claude
+.superpowers
+*.log
+.env
+.env.*
