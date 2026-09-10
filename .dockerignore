@@ -5,6 +5,9 @@ coverage
 .github
 .idea
 docs
+scripts
+.claude
+.superpowers
 *.log
 .env
 .env.*
