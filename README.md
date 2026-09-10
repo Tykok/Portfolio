@@ -66,8 +66,9 @@ s'exécute même si une précédente échoue, pour qu'un seul run rapporte tout.
 La version de Node vient de `.nvmrc`, donc la CI et le poste de dev ne peuvent
 pas diverger.
 
-`.github/workflows/image.yml` couvre le `Dockerfile` et `docker/**`, sur pull
-request uniquement : c'est là que l'image est vérifiée avant d'être fusionnée.
+`.github/workflows/image.yml` couvre le `Dockerfile`, `docker/**` et lui-même,
+sur les pull requests comme sur les push vers `main` et `develop` : c'est là
+que l'image est vérifiée, avant fusion comme après.
 
 ## Déploiement
 
