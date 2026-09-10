@@ -1,0 +1,18 @@
+version: 2
+updates:
+  # Les actions du CI/CD sont épinglées par SHA (voir release.yml) : sans
+  # ceci, ces épingles ne bougeraient plus jamais.
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+
+  - package-ecosystem: 'docker'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
