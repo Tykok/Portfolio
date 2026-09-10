@@ -1,7 +1,10 @@
 # syntax=docker/dockerfile:1
 
 # --- construction ------------------------------------------------------------
-FROM node:20.14-alpine AS build
+# Doit suivre .nvmrc à la main : FROM est résolu avant que Docker n'ait
+# accès aux fichiers du contexte, donc rien ne peut lire .nvmrc ici.
+ARG NODE_VERSION=20.14
+FROM node:${NODE_VERSION}-alpine AS build
 
 WORKDIR /app
 
