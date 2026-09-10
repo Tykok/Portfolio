@@ -66,21 +66,22 @@ s'exécute même si une précédente échoue, pour qu'un seul run rapporte tout.
 La version de Node vient de `.nvmrc`, donc la CI et le poste de dev ne peuvent
 pas diverger.
 
-`.github/workflows/deploy-script.yml` couvre les scripts de déploiement, sur
-changement de `deploy/**` uniquement : le comportement de `deploy-portfolio.sh`
-dans un Debian, et celui du vhost Nginx servi pour de vrai.
+`.github/workflows/image.yml` couvre le `Dockerfile` et `docker/**`, sur pull
+request uniquement : c'est là que l'image est vérifiée avant d'être fusionnée.
 
 ## Déploiement
 
-`main` est publiée sur <https://tykok.fr>, servie par un Nginx du réseau privé
-derrière Traefik. Le build est fait par GitHub Actions, jamais sur la machine.
+`main` est publiée sur <https://tykok.fr>, servie depuis un cluster k3s par
+Argo CD en GitOps. Le build est fait par GitHub Actions, jamais sur la machine.
 
 ```
-push sur main → build → release GitHub → webhook n8n → SSH → script → symlink basculé
+push sur main → build de l'image → GHCR → écriture du tag dans le repo homelab → Argo CD synchronise
 ```
 
-Le détail, la mise en place et la procédure de rollback sont dans
-[`deploy/README.md`](deploy/README.md).
+`.github/workflows/release.yml` construit l'image, la publie sur GHCR taguée
+par SHA de commit, puis déclare la nouvelle version en écrivant ce tag dans le
+repo `homelab`. Argo CD, qui surveille ce dépôt, synchronise le cluster en
+conséquence.
 
 `develop` n'a pas d'environnement servi : elle est vérifiée par la CI et se
 prévisualise avec `npm run preview`.
