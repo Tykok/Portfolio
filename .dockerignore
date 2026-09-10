@@ -1,0 +1,10 @@
+node_modules
+build
+coverage
+.git
+.github
+.idea
+docs
+*.log
+.env
+.env.*
