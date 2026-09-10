@@ -68,6 +68,12 @@ jobs:
             sleep 1
           done
           body="$(curl -s http://localhost:8912/)"
-          echo "${body}" | grep -q 'https://tykok.fr' || { echo 'canonical faux' >&2; exit 1; }
-          echo "${body}" | grep -q '__SITE_URL__' && { echo 'jeton non résolu' >&2; exit 1; }
+          if ! echo "${body}" | grep -q 'https://tykok.fr'; then
+            echo 'canonical faux' >&2
+            exit 1
+          fi
+          if echo "${body}" | grep -q '__SITE_URL__'; then
+            echo 'jeton non résolu' >&2
+            exit 1
+          fi
           docker rm -f check
