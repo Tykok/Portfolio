@@ -94,7 +94,7 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts 2>/dev/null
 
-          git clone --depth 1 git@github.com:Tykok/homelab.git /tmp/homelab
+          git clone --depth 1 git@github.com:Tykok/Homelab.git /tmp/homelab
           cd /tmp/homelab
 
           file=manifests/apps/portfolio/kustomization.yaml
