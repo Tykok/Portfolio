@@ -29,7 +29,7 @@ RUN find build -name '*.map' -delete
 # --- service -----------------------------------------------------------------
 # Image non privilégiée : tourne en uid 101 et écoute sur 8080, ce qui permet
 # runAsNonRoot dans le Deployment sans contorsion.
-FROM nginxinc/nginx-unprivileged:1.27-alpine
+FROM nginxinc/nginx-unprivileged:1.30.4-alpine
 
 COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/build /usr/share/nginx/html
