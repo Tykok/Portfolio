@@ -11,7 +11,7 @@
 set -euo pipefail
 
 CONF="$(cd "$(dirname "$0")/.." && pwd)/nginx.conf"
-IMAGE='nginxinc/nginx-unprivileged:1.27-alpine'
+IMAGE='nginxinc/nginx-unprivileged:1.30.4-alpine'
 PORT=8911
 ROOT="$(mktemp -d)"
 CID=''
