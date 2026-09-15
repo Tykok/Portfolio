@@ -79,6 +79,7 @@ export function DesktopIcon({ app, x, y, selected, tabbable, onSelect, onOpen, o
       className={`os-deskicon${selected ? ' sel' : ''}${isDragging ? ' dragging' : ''}`}
       style={{ left: x, top: y }}
       role="button"
+      data-sound="none"
       tabIndex={tabbable ? 0 : -1}
       aria-label={app.title[lang]}
       onPointerDown={handlePointerDown}

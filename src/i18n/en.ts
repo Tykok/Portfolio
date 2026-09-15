@@ -17,6 +17,8 @@ const en: Translations = {
   w_max: 'Maximize',
   w_close: 'Close',
   lang_switch: 'Change language',
+  sound_on: 'Sound on',
+  sound_off: 'Sound off',
   ctx_arrange: 'Arrange Icons By',
   ctx_refresh: 'Refresh',
   ctx_lineup: 'Line up Icons',
