@@ -66,52 +66,34 @@ s'exécute même si une précédente échoue, pour qu'un seul run rapporte tout.
 La version de Node vient de `.nvmrc`, donc la CI et le poste de dev ne peuvent
 pas diverger.
 
-`.github/workflows/image.yml` couvre le `Dockerfile`, `docker/**`, lui-même et
-tout ce qui entre dans le build de l'image (`.nvmrc`, le code source, la
-config Vite/TS…), sur les pull requests comme sur les push vers `main` et
-`develop` : c'est là que l'image est vérifiée, avant fusion comme après.
+`.github/workflows/deploy-script.yml` couvre les scripts de déploiement, sur
+changement de `deploy/**` uniquement : le comportement de `deploy-portfolio.sh`
+dans un Debian, et celui du vhost Nginx servi pour de vrai.
 
 ## Déploiement
 
-`main` est publiée sur <https://tykok.fr>, servie depuis un cluster k3s par
-Argo CD en GitOps. Le build est fait par GitHub Actions, jamais sur la machine.
+`main` est publiée sur <https://tykok.fr>, servie par un Nginx du réseau privé
+derrière Traefik. Le build est fait par GitHub Actions, jamais sur la machine.
 
 ```
-push sur main → build de l'image → GHCR → écriture du tag dans le repo homelab → Argo CD synchronise
+push sur main → build → release GitHub → webhook n8n → SSH → script → symlink basculé
 ```
 
-`.github/workflows/release.yml` construit l'image, la publie sur GHCR taguée
-par SHA de commit, puis déclare la nouvelle version en écrivant ce tag dans le
-repo `homelab`. Argo CD, qui surveille ce dépôt, synchronise le cluster en
-conséquence.
+Le détail, la mise en place et la procédure de rollback sont dans
+[`deploy/README.md`](deploy/README.md).
 
 `develop` n'a pas d'environnement servi : elle est vérifiée par la CI et se
 prévisualise avec `npm run preview`.
-
-Le runbook (manifestes, configuration Argo CD, rollback) vit dans le repo
-`homelab`, pas ici : ce dépôt ne fait que construire et déclarer une version.
-Un rollback est un `git revert` du commit de version dans `homelab`, pas une
-action sur ce dépôt.
-
-### Construire l'image
-
-```bash
-docker build --build-arg VITE_SITE_URL=https://tykok.fr -t portfolio .
-```
-
-`VITE_SITE_URL` est obligatoire : sans elle, le build échoue plutôt que de
-produire un canonical pointant sur localhost (voir le `Dockerfile`).
 
 ## Variables d'environnement
 
 Copier `.env.example` en `.env.local` pour surcharger. Préfixe `VITE_` obligatoire
 pour qu'une variable soit exposée au client.
 
-| Variable        | Défaut | Effet                                                                                                                       |
-| --------------- | ------ | --------------------------------------------------------------------------------------------------------------------------- |
-| `VITE_USE_MOCK` | `true` | Sert les projets depuis `src/api/mock/`. À `false`, appelle l'API.                                                          |
-| `VITE_API_URL`  | vide   | URL de base de l'API projets. Lue seulement si `VITE_USE_MOCK=false`.                                                       |
-| `VITE_SITE_URL` | vide   | URL absolue du site, pour canonical/og:url/og:image. Obligatoire pour `docker build` (voir Dockerfile), optionnelle en dev. |
+| Variable        | Défaut | Effet                                                                 |
+| --------------- | ------ | --------------------------------------------------------------------- |
+| `VITE_USE_MOCK` | `true` | Sert les projets depuis `src/api/mock/`. À `false`, appelle l'API.    |
+| `VITE_API_URL`  | vide   | URL de base de l'API projets. Lue seulement si `VITE_USE_MOCK=false`. |
 
 ## Organisation
 
@@ -120,12 +102,10 @@ src/
   api/          client HTTP, accès projets, mock
   components/
     apps/       fenêtres applicatives (About, Cv, Projects, Terminal, Web…)
-    OS/         couches système (Boot, Login, Bsod, TipsDialog, KonamiRain, Console…)
+    OS/         couches système (Boot, Login, Bsod, TipsDialog, KonamiRain…)
     Desktop/    bureau, icônes, menu contextuel
     TaskBar/    barre des tâches, zone de notification, calendrier
     Window/     chrome de fenêtre, barre de titre
-  terminal/     moteur de commandes (registry, run, views) partagé par la
-                fenêtre Terminal et la console plein écran
   context/      Lang, OS, Window, Projects
   data/         identité, projets, réseaux, badges techno
   i18n/         fr.ts, en.ts, types.ts — source unique des libellés
@@ -142,7 +122,7 @@ sinon TypeScript refuse de compiler.
 const { t, lang } = useLang();
 
 t('cv_exp'); // string
-t('ar_min', { n: 7 }); // interpolation de {n}
+t('t_projects_l', { n: 6 }); // interpolation de {n}
 t('cal_months'); // string[] — le type suit la clé
 ```
 
