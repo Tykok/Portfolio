@@ -24,6 +24,7 @@ import { LangProvider } from 'context/LangContext';
 import { OSProvider, useOS } from 'context/OSContext';
 import { ProjectsProvider } from 'context/ProjectsContext';
 import { readInitialRoute, RouteProvider, useRoute } from 'context/RouteContext';
+import { SoundProvider, useSound } from 'context/SoundContext';
 import { useWindowContext, WindowProvider } from 'context/WindowContext';
 import type { AppKey } from 'types/app';
 
@@ -55,6 +56,7 @@ function OS() {
   const { windows, activeId, openApp, focusWindow, closeWindow, minimizeWindow } = useWindowContext();
   const { bsod, konamiRain, triggerRain, aboutOpen, closeAbout, tipsOpen, openTips, closeTips, theme, startOpen, toggleStart } = useOS();
   const { route, setRouteApp, setRouteConsole } = useRoute();
+  const { play, playWhenAudible } = useSound();
   /* A shared link names a window or the console profile, so it lands there.
      Making someone sit through the boot sequence and click a login tile to
      reach the page they were sent is friction the link was meant to remove. */
@@ -70,6 +72,37 @@ function OS() {
   useEffect(() => {
     windowsRef.current = windows;
   }, [windows]);
+
+  /* The startup chime. On a cold visit the browser has not been clicked yet
+     and holds all audio back, so this asks to be played *when it can be heard*:
+     right away on a restart, and otherwise on the visitor's first click — which
+     on this OS is the boot screen or a login tile.
+
+     The ref is what keeps it to one chime: StrictMode runs this effect twice in
+     development, and a second pass would lay the four notes over themselves.
+     Leaving the boot phase re-arms it, so a restart still sings. */
+  const chimed = useRef(false);
+  useEffect(() => {
+    if (phase !== 'boot') {
+      chimed.current = false;
+      return;
+    }
+    if (chimed.current) return;
+    chimed.current = true;
+    playWhenAudible('boot');
+  }, [phase, playWhenAudible]);
+
+  /* A crash deserves a noise — once, for the same reason. */
+  const crashed = useRef(false);
+  useEffect(() => {
+    if (!bsod) {
+      crashed.current = false;
+      return;
+    }
+    if (crashed.current) return;
+    crashed.current = true;
+    play('error');
+  }, [bsod, play]);
 
   /* Auto-transition boot → login */
   useEffect(() => {
@@ -267,15 +300,19 @@ function Main() {
   return (
     <LangProvider>
       <RouteProvider>
-        <WindowProvider>
-          <OSProvider>
-            <ProjectsProvider>
-              <ArticlesProvider>
-                <OS />
-              </ArticlesProvider>
-            </ProjectsProvider>
-          </OSProvider>
-        </WindowProvider>
+        {/* Above WindowProvider: opening and closing a window is itself a
+            sound, so the window store needs the player. */}
+        <SoundProvider>
+          <WindowProvider>
+            <OSProvider>
+              <ProjectsProvider>
+                <ArticlesProvider>
+                  <OS />
+                </ArticlesProvider>
+              </ProjectsProvider>
+            </OSProvider>
+          </WindowProvider>
+        </SoundProvider>
       </RouteProvider>
     </LangProvider>
   );

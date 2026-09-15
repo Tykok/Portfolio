@@ -17,6 +17,8 @@ const fr: Translations = {
   w_max: 'Agrandir',
   w_close: 'Fermer',
   lang_switch: 'Changer la langue',
+  sound_on: 'Son activé',
+  sound_off: 'Son coupé',
   ctx_arrange: 'Réorganiser les icônes par',
   ctx_refresh: 'Actualiser',
   ctx_lineup: 'Aligner les icônes',

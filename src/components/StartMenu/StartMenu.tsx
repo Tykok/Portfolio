@@ -48,7 +48,9 @@ export function StartMenu({ onClose, onShutdown, onLogoff }: Props) {
   const pinnedApps = PINNED.map((k) => appsMeta.find((a) => a.key === k)).filter(Boolean) as typeof appsMeta;
 
   return (
-    <div className="os-startmenu">
+    /* One attribute for the whole menu: every item inside it clicks with the
+       menu tick rather than the generic one. */
+    <div className="os-startmenu" data-sound="menu">
       <div className="os-start-head">
         <div className="os-avatar sm">T</div>
         <div className="os-start-user">{identity.name}</div>

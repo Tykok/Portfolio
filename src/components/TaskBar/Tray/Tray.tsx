@@ -5,6 +5,7 @@ import { useClock } from 'hooks/useClock';
 import type { Lang } from 'types/lang';
 
 import { CalPopup } from './CalPopup';
+import { SoundToggle } from './SoundToggle';
 
 export function Tray() {
   const { lang, setLang, t } = useLang();
@@ -52,6 +53,7 @@ export function Tray() {
             EN
           </button>
         </div>
+        <SoundToggle />
         <span
           ref={clockRef}
           className="tq-clock"
