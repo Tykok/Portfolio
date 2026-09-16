@@ -1250,3 +1250,15 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-f
   .cv2-xp, .cv2-edu, .cv2-side > div { break-inside: avoid; page-break-inside: avoid; }
   .cv2-sec h2 { break-after: avoid; page-break-after: avoid; }
 }
+
+/* ---------- Tray speaker ---------- */
+.os-soundsw {
+  cursor: pointer; border: none; background: transparent;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 20px; height: 17px; padding: 0; margin-right: 2px;
+  font-size: 11px; line-height: 1;
+  filter: grayscale(1) brightness(1.6); opacity: .62;
+  transition: opacity .08s, filter .08s;
+}
+.os-soundsw:hover { opacity: 1; }
+.os-soundsw.on { filter: none; opacity: .92; }

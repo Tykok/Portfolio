@@ -16,6 +16,8 @@ export interface Translations {
   w_max: string;
   w_close: string;
   lang_switch: string;
+  sound_on: string;
+  sound_off: string;
   // Desktop context menu
   ctx_arrange: string;
   ctx_refresh: string;

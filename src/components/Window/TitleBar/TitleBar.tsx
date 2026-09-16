@@ -26,11 +26,14 @@ export function TitleBar({ icon, title, isMax, onMouseDown, onDblClick, onMin, o
         <AppIcon kind={icon} size={14} />
       </span>
       <span className="tq-tb-title">{title}</span>
+      {/* min and close carry data-sound="none": WindowContext already sounds
+          those two, and the generic click tick would double up on them. */}
       {/* The glyphs are decorative: `_`, `▢` and `✕` read as nothing useful to a
           screen reader, so each button carries its label explicitly. */}
       <span className="tq-tb-btns">
         <button
           className="tq-tb-btn os-tb-btn-real"
+          data-sound="none"
           title={t('w_min')}
           aria-label={`${t('w_min')} — ${title}`}
           onMouseDown={(e) => e.stopPropagation()}
@@ -51,6 +54,7 @@ export function TitleBar({ icon, title, isMax, onMouseDown, onDblClick, onMin, o
         </button>
         <button
           className="tq-tb-btn is-close os-tb-btn-real"
+          data-sound="none"
           title={t('w_close')}
           aria-label={`${t('w_close')} — ${title}`}
           onMouseDown={(e) => e.stopPropagation()}

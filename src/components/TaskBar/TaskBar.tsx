@@ -72,6 +72,7 @@ export function TaskBar({ onShutdown, onLogoff }: Props) {
           )}
           <button
             className={`tq-start${startOpen ? ' open' : ''}`}
+            data-sound="menu"
             onClick={toggleStart}
             title={t('tip_start')}
             aria-haspopup="menu"

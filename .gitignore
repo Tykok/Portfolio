@@ -28,3 +28,6 @@ yarn-error.log*
 
 # python (scripts/images' generators, run by hand — see scripts/images/README.md)
 __pycache__/
+
+# system sounds supplied by hand (Microsoft's files — never in this repository)
+/public/sounds/*.wav

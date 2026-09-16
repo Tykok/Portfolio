@@ -1,5 +1,6 @@
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useReducer } from 'react';
 
+import { useSound } from 'context/SoundContext';
 import { getAppMeta } from 'data/apps';
 import type { AppKey } from 'types/app';
 import type { WindowAction, WindowState } from 'types/window';
@@ -85,28 +86,44 @@ const WindowContext = createContext<WindowContextValue>({
 
 export function WindowProvider({ children }: { children: ReactNode }) {
   const [windows, dispatch] = useReducer(windowReducer, []);
+  /* Window lifecycle sounds live here rather than on the buttons: a window
+     opens from an icon, the Start menu, a shared link and the terminal alike,
+     and all four should sound the same. */
+  const { play } = useSound();
 
   // Derived from windows — always in sync, no separate state
   const activeId = useMemo(() => windows.find((w) => w.active)?.id ?? null, [windows]);
 
-  const openApp = useCallback((key: AppKey) => {
-    const meta = getAppMeta(key);
-    if (!meta) return;
-    dispatch({ type: 'OPEN', key, meta: { defaultWidth: meta.defaultWidth, defaultHeight: meta.defaultHeight } });
-  }, []);
+  const openApp = useCallback(
+    (key: AppKey) => {
+      const meta = getAppMeta(key);
+      if (!meta) return;
+      play('open');
+      dispatch({ type: 'OPEN', key, meta: { defaultWidth: meta.defaultWidth, defaultHeight: meta.defaultHeight } });
+    },
+    [play],
+  );
 
-  const closeWindow = useCallback((id: string) => {
-    dispatch({ type: 'START_CLOSE', id });
-    setTimeout(() => dispatch({ type: 'CLOSE', id }), 150);
-  }, []);
+  const closeWindow = useCallback(
+    (id: string) => {
+      play('close');
+      dispatch({ type: 'START_CLOSE', id });
+      setTimeout(() => dispatch({ type: 'CLOSE', id }), 150);
+    },
+    [play],
+  );
 
   const focusWindow = useCallback((id: string) => {
     dispatch({ type: 'FOCUS', id });
   }, []);
 
-  const minimizeWindow = useCallback((id: string, moX?: number, moY?: number) => {
-    dispatch({ type: 'MINIMIZE', id, moX, moY });
-  }, []);
+  const minimizeWindow = useCallback(
+    (id: string, moX?: number, moY?: number) => {
+      play('minimize');
+      dispatch({ type: 'MINIMIZE', id, moX, moY });
+    },
+    [play],
+  );
 
   const maximizeWindow = useCallback((id: string) => {
     dispatch({ type: 'MAXIMIZE', id });
