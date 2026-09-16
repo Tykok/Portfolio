@@ -1,0 +1,50 @@
+name: Dependabot auto-merge
+
+# Dependabot ouvre une douzaine de PR par semaine (npm, actions, docker) et
+# aucune ne mérite une relecture humaine tant que la CI passe. Ce job arme le
+# merge automatique : GitHub garde la PR en attente et ne la fusionne que
+# lorsque la protection de develop est satisfaite — check CI verte incluse.
+#
+# pull_request_target, et pas pull_request : sur une PR ouverte par Dependabot,
+# le GITHUB_TOKEN d'un run pull_request est en lecture seule quoi qu'en dise le
+# bloc permissions. Ce workflow ne fait aucun checkout, donc il n'exécute jamais
+# le code de la PR — la contrepartie habituelle de pull_request_target.
+on: pull_request_target
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    name: Armer le merge automatique
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+
+    steps:
+      # Épinglée par SHA : ce job dispose de contents:write sur le dépôt.
+      - id: meta
+        uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3.1.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Les majeures passent à la main : la CI attrape les ruptures de build et
+      # de types, pas un changement de comportement à l'exécution (vite 6 → 8,
+      # une action GitHub qui change de runtime). Tout le reste part seul.
+      - name: Armer le merge
+        if: steps.meta.outputs.update-type != 'version-update:semver-major'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: gh pr merge --auto --squash "$PR_URL"
+
+      - name: Signaler une majeure
+        if: steps.meta.outputs.update-type == 'version-update:semver-major'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          DEPS: ${{ steps.meta.outputs.dependency-names }}
+        run: |
+          gh pr edit "$PR_URL" --add-label 'major'
+          echo "::notice::Montée majeure ($DEPS) : relecture manuelle."
