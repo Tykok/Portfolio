@@ -3,21 +3,15 @@ name: Image
 # La configuration nginx a une vraie logique et n'est couverte par aucun test
 # de l'application. Deux bugs y ont déjà été trouvés en l'exécutant plutôt
 # qu'en la lisant.
+#
+# Le trigger pull_request n'est volontairement pas filtré par `paths`, alors que
+# celui de push l'est. Ces deux jobs sont des checks requis sur develop : un
+# workflow que `paths` empêche de démarrer ne rapporte jamais son statut, et la
+# PR reste bloquée pour toujours sur « Expected ». Le coût est un build Docker
+# par PR ; le prix de la version filtrée serait un merge automatique qui passe
+# sans que ces deux checks aient jamais tourné.
 on:
   pull_request:
-    paths:
-      - 'Dockerfile'
-      - 'docker/**'
-      - '.github/workflows/image.yml'
-      - '.nvmrc'
-      - '.dockerignore'
-      - 'package.json'
-      - 'package-lock.json'
-      - 'src/**'
-      - 'public/**'
-      - 'index.html'
-      - 'vite.config.ts'
-      - 'tsconfig.json'
   push:
     branches: [main, develop]
     paths:
