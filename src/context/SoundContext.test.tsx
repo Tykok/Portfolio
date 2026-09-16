@@ -7,7 +7,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { SoundProvider, useSound } from 'context/SoundContext';
 
 function fakeEngine(): Engine {
-  return { play: vi.fn(() => true), resume: vi.fn(async () => true) };
+  return { play: vi.fn(() => true), resume: vi.fn(async () => true), preload: vi.fn() };
 }
 
 function Probe() {
@@ -38,6 +38,13 @@ function renderTree(engine: Engine) {
 describe('SoundProvider', () => {
   beforeEach(() => {
     localStorage.clear();
+  });
+
+  it('asks for every sample file up front, so a gesture finds them ready', () => {
+    const engine = fakeEngine();
+    renderTree(engine);
+
+    expect(engine.preload).toHaveBeenCalledWith(expect.arrayContaining(['/sounds/boot.wav', '/sounds/click.wav']));
   });
 
   it('ticks on a click on any ordinary control', () => {
@@ -118,6 +125,7 @@ describe('SoundProvider', () => {
 function blockedEngine(): Engine {
   let audible = false;
   return {
+    preload: vi.fn(),
     play: vi.fn(() => audible),
     resume: vi.fn(async () => {
       audible = true;

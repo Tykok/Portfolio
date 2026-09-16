@@ -25,11 +25,14 @@ class FakeAudioContext {
   static instances: FakeAudioContext[] = [];
   /** What the browser hands back on construction: Chrome suspends until a gesture. */
   static bornSuspended = false;
+  /** A decode that never settles, standing in for a slow one. */
+  static decodeHangs = false;
   currentTime = 10;
   state: 'running' | 'suspended' = 'running';
   destination = {};
   oscillators: FakeOscillator[] = [];
   gains: FakeGain[] = [];
+  sources: Array<{ buffer: unknown; connect: ReturnType<typeof vi.fn>; start: ReturnType<typeof vi.fn> }> = [];
   resume = vi.fn(() => {
     this.state = 'running';
     return Promise.resolve();
@@ -51,6 +54,25 @@ class FakeAudioContext {
     this.gains.push(gain);
     return gain;
   }
+
+  createBufferSource() {
+    const source = { buffer: null as unknown, connect: vi.fn(), start: vi.fn(), stop: vi.fn() };
+    this.sources.push(source);
+    return source;
+  }
+
+  decodeAudioData(bytes: ArrayBuffer) {
+    if (FakeAudioContext.decodeHangs) return new Promise<unknown>(() => {});
+    return Promise.resolve({ duration: 1, bytes });
+  }
+}
+
+/** A server that has the file, or does not. */
+function serveSamples(present: boolean): void {
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(async () => ({ ok: present, arrayBuffer: async () => new ArrayBuffer(8) })),
+  );
 }
 
 function installFakeAudio(): void {
@@ -61,10 +83,12 @@ describe('createEngine', () => {
   beforeEach(() => {
     FakeAudioContext.instances = [];
     FakeAudioContext.bornSuspended = false;
+    FakeAudioContext.decodeHangs = false;
   });
 
   afterEach(() => {
     delete (window as unknown as { AudioContext?: unknown }).AudioContext;
+    vi.unstubAllGlobals();
   });
 
   it('builds no AudioContext before the first sound is played', () => {
@@ -79,8 +103,8 @@ describe('createEngine', () => {
     installFakeAudio();
     const engine = createEngine();
 
-    engine.play([{ freq: 440, at: 0, dur: 0.1 }]);
-    engine.play([{ freq: 880, at: 0, dur: 0.1 }]);
+    engine.play({ tones: [{ freq: 440, at: 0, dur: 0.1 }] });
+    engine.play({ tones: [{ freq: 880, at: 0, dur: 0.1 }] });
 
     expect(FakeAudioContext.instances).toHaveLength(1);
   });
@@ -89,10 +113,12 @@ describe('createEngine', () => {
     installFakeAudio();
     const engine = createEngine();
 
-    engine.play([
-      { freq: 440, at: 0, dur: 0.2 },
-      { freq: 660, at: 0.25, dur: 0.3, type: 'square' },
-    ]);
+    engine.play({
+      tones: [
+        { freq: 440, at: 0, dur: 0.2 },
+        { freq: 660, at: 0.25, dur: 0.3, type: 'square' },
+      ],
+    });
 
     const ctx = FakeAudioContext.instances[0];
     expect(ctx.oscillators).toHaveLength(2);
@@ -107,7 +133,7 @@ describe('createEngine', () => {
     installFakeAudio();
     const engine = createEngine();
 
-    engine.play([{ freq: 400, to: 900, at: 0, dur: 0.09 }]);
+    engine.play({ tones: [{ freq: 400, to: 900, at: 0, dur: 0.09 }] });
 
     const osc = FakeAudioContext.instances[0].oscillators[0];
     expect(osc.frequency.exponentialRampToValueAtTime).toHaveBeenCalledWith(900, 10.09);
@@ -116,7 +142,7 @@ describe('createEngine', () => {
   it('resumes a context the browser left suspended', async () => {
     installFakeAudio();
     const engine = createEngine();
-    engine.play([{ freq: 440, at: 0, dur: 0.1 }]);
+    engine.play({ tones: [{ freq: 440, at: 0, dur: 0.1 }] });
     const ctx = FakeAudioContext.instances[0];
     ctx.state = 'suspended';
 
@@ -129,7 +155,7 @@ describe('createEngine', () => {
     installFakeAudio();
     const engine = createEngine();
 
-    expect(engine.play([{ freq: 440, at: 0, dur: 0.1 }])).toBe(true);
+    expect(engine.play({ tones: [{ freq: 440, at: 0, dur: 0.1 }] })).toBe(true);
   });
 
   it('refuses to schedule into a context the autoplay policy suspended', () => {
@@ -140,7 +166,7 @@ describe('createEngine', () => {
     installFakeAudio();
     const engine = createEngine();
 
-    const heard = engine.play([{ freq: 440, at: 0, dur: 0.1 }]);
+    const heard = engine.play({ tones: [{ freq: 440, at: 0, dur: 0.1 }] });
 
     expect(heard).toBe(false);
     expect(FakeAudioContext.instances[0].oscillators).toHaveLength(0);
@@ -150,10 +176,10 @@ describe('createEngine', () => {
     FakeAudioContext.bornSuspended = true;
     installFakeAudio();
     const engine = createEngine();
-    engine.play([{ freq: 440, at: 0, dur: 0.1 }]);
+    engine.play({ tones: [{ freq: 440, at: 0, dur: 0.1 }] });
 
     await expect(engine.resume()).resolves.toBe(true);
-    expect(engine.play([{ freq: 440, at: 0, dur: 0.1 }])).toBe(true);
+    expect(engine.play({ tones: [{ freq: 440, at: 0, dur: 0.1 }] })).toBe(true);
   });
 
   it('resolves resume with nothing to lift before the first sound', async () => {
@@ -166,13 +192,13 @@ describe('createEngine', () => {
   it('reports no play at all when the browser exposes no AudioContext', () => {
     const engine = createEngine();
 
-    expect(engine.play([{ freq: 440, at: 0, dur: 0.1 }])).toBe(false);
+    expect(engine.play({ tones: [{ freq: 440, at: 0, dur: 0.1 }] })).toBe(false);
   });
 
   it('stays silent when the browser exposes no AudioContext', () => {
     const engine = createEngine();
 
-    expect(() => engine.play([{ freq: 440, at: 0, dur: 0.1 }])).not.toThrow();
+    expect(() => engine.play({ tones: [{ freq: 440, at: 0, dur: 0.1 }] })).not.toThrow();
   });
 
   it('stays silent when the browser refuses to build a context', () => {
@@ -181,6 +207,76 @@ describe('createEngine', () => {
     };
     const engine = createEngine();
 
-    expect(() => engine.play([{ freq: 440, at: 0, dur: 0.1 }])).not.toThrow();
+    expect(() => engine.play({ tones: [{ freq: 440, at: 0, dur: 0.1 }] })).not.toThrow();
+  });
+});
+
+describe('sample playback', () => {
+  beforeEach(() => {
+    FakeAudioContext.instances = [];
+    FakeAudioContext.bornSuspended = false;
+    FakeAudioContext.decodeHangs = false;
+    installFakeAudio();
+  });
+
+  afterEach(() => {
+    delete (window as unknown as { AudioContext?: unknown }).AudioContext;
+    vi.unstubAllGlobals();
+  });
+
+  const bell = { file: '/sounds/boot.wav', tones: [{ freq: 440, at: 0, dur: 0.1 }] };
+
+  it('plays the supplied sample in place of the synthesised stand-in', async () => {
+    serveSamples(true);
+    const engine = createEngine();
+    engine.preload([bell.file]);
+    await engine.resume();
+
+    expect(engine.play(bell)).toBe(true);
+
+    const ctx = FakeAudioContext.instances[0];
+    expect(ctx.sources).toHaveLength(1);
+    expect(ctx.sources[0].start).toHaveBeenCalled();
+    expect(ctx.oscillators).toHaveLength(0);
+  });
+
+  it('falls back to the tones when the visitor supplied no file', async () => {
+    serveSamples(false);
+    const engine = createEngine();
+    engine.preload([bell.file]);
+    await engine.resume();
+
+    expect(engine.play(bell)).toBe(true);
+
+    const ctx = FakeAudioContext.instances[0];
+    expect(ctx.sources).toHaveLength(0);
+    expect(ctx.oscillators).toHaveLength(1);
+  });
+
+  it('falls back to the tones rather than wait on a slow decode', async () => {
+    serveSamples(true);
+    FakeAudioContext.decodeHangs = true;
+    const engine = createEngine();
+    engine.preload([bell.file]);
+    await engine.resume();
+
+    engine.play(bell);
+
+    expect(FakeAudioContext.instances[0].oscillators).toHaveLength(1);
+  });
+
+  it('survives a network that refuses the file outright', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => {
+        throw new Error('offline');
+      }),
+    );
+    const engine = createEngine();
+    engine.preload([bell.file]);
+    await engine.resume();
+
+    expect(() => engine.play(bell)).not.toThrow();
+    expect(FakeAudioContext.instances[0].oscillators).toHaveLength(1);
   });
 });

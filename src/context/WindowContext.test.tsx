@@ -27,7 +27,7 @@ function Probe() {
 }
 
 function renderTree() {
-  const engine: Engine = { play: vi.fn(() => true), resume: vi.fn(async () => true) };
+  const engine: Engine = { play: vi.fn(() => true), resume: vi.fn(async () => true), preload: vi.fn() };
   render(
     <SoundProvider engine={engine}>
       <WindowProvider>

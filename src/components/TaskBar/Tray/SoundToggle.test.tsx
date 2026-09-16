@@ -8,7 +8,7 @@ import { SoundProvider } from 'context/SoundContext';
 import fr from 'i18n/fr';
 
 function renderToggle() {
-  const engine: Engine = { play: vi.fn(() => true), resume: vi.fn(async () => true) };
+  const engine: Engine = { play: vi.fn(() => true), resume: vi.fn(async () => true), preload: vi.fn() };
   render(
     <LangProvider>
       <SoundProvider engine={engine}>

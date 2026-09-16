@@ -78,6 +78,13 @@ export function SoundProvider({ children, engine }: Props) {
      and rebuilt on every toggle, so it reads the switch through a ref. */
   const enabledRef = useRef(enabled);
 
+  /* Fetched once, up front: the files must be in hand by the time the first
+     gesture opens the audio hardware, or that first sound falls back to the
+     synthesised stand-in for no good reason. */
+  useEffect(() => {
+    player.preload(SOUND_NAMES.map((name) => SOUNDS[name].file));
+  }, [player]);
+
   useEffect(() => {
     enabledRef.current = enabled;
     localStorage.setItem(SOUND_KEY, enabled ? 'on' : 'off');
