@@ -85,7 +85,9 @@ describe('swiping', () => {
      component reads undefined coordinates, NaN sails through both guards, and
      the tests pass or fail for reasons that have nothing to do with swiping —
      hence defining all three on the event by hand. */
-  const pointer = (el: HTMLElement, type: 'pointerDown' | 'pointerUp', x: number, y: number, pointerType = 'touch') => {
+  const track = () => document.querySelector('.deck-track') as HTMLElement;
+
+  const pointer = (el: HTMLElement, type: 'pointerDown' | 'pointerMove' | 'pointerUp', x: number, y: number, pointerType = 'touch') => {
     const event = createEvent[type](el);
     Object.defineProperties(event, {
       clientX: { value: x },
@@ -136,4 +138,42 @@ describe('swiping', () => {
     pointer(stage(), 'pointerUp', 60, 100);
     expect(onSelect).not.toHaveBeenCalled();
   });
+  it('the slide follows the finger while it drags', () => {
+    renderStage(1);
+    pointer(stage(), 'pointerDown', 200, 100);
+    pointer(stage(), 'pointerMove', 140, 104);
+    expect(track().style.transform).toContain('-60px');
+  });
+
+  it('a mostly vertical drag leaves the track still, so the slide can scroll', () => {
+    const { onSelect } = renderStage(1);
+    pointer(stage(), 'pointerDown', 200, 300);
+    pointer(stage(), 'pointerMove', 180, 160);
+    expect(track().style.transform).toContain('0px');
+    pointer(stage(), 'pointerUp', 180, 160);
+    expect(onSelect).not.toHaveBeenCalled();
+  });
+
+  it('drags past the last slide meet resistance rather than empty space', () => {
+    renderStage(entries.length - 1);
+    pointer(stage(), 'pointerDown', 200, 100);
+    pointer(stage(), 'pointerMove', 110, 100);
+    const pulled = Number(/(-?[\d.]+)px/.exec(track().style.transform)?.[1]);
+    expect(pulled).toBeLessThan(0);
+    expect(pulled).toBeGreaterThan(-90);
+  });
+
+  it('releasing mid-drag snaps back without turning the page', () => {
+    const { onSelect } = renderStage(1);
+    pointer(stage(), 'pointerDown', 200, 100);
+    pointer(stage(), 'pointerMove', 180, 100);
+    pointer(stage(), 'pointerUp', 180, 100);
+    expect(onSelect).not.toHaveBeenCalled();
+    expect(track().style.transform).toContain('0px');
+  });
+});
+
+it('renders pagination dots, the rail stand-in on a phone', () => {
+  renderStage(1);
+  expect(screen.getByRole('navigation', { name: 'Slides' })).toBeInTheDocument();
 });
