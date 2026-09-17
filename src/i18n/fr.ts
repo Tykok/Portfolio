@@ -83,6 +83,7 @@ const fr: Translations = {
   m_tips: 'Astuces de TicoqOS',
   about_skills: 'Stack & compétences',
   p_count_l: 'Projets',
+  p_dots: 'Diapositives',
   p_rail: 'Parcours',
   p_repo: 'Voir le repo',
   p_demo: 'Démo',
