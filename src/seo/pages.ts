@@ -1,4 +1,7 @@
+import { createElement } from 'react';
+
 import { identity } from 'data/identity';
+import type { Lang } from 'types/lang';
 
 import { HomeBody } from './HomeBody';
 import { personJsonLd, profilePageJsonLd, webSiteJsonLd } from './jsonld';
@@ -21,19 +24,26 @@ const HOME_DESCRIPTION =
  * suivants ajoutent des entrées ici sans changer la forme.
  */
 export function buildPages(siteUrl: string): SeoPage[] {
+  const lang: Lang = 'fr';
+
   return [
     {
       path: '/',
       file: 'index.html',
-      lang: 'fr',
+      lang,
       title: `${identity.name} (${identity.alias}) — Développeur Backend Kotlin`,
       description: HOME_DESCRIPTION,
       canonical: `${siteUrl}/`,
       alternates: [],
-      jsonLd: [personJsonLd(siteUrl), webSiteJsonLd(siteUrl), profilePageJsonLd(siteUrl)],
+      jsonLd: [personJsonLd(siteUrl, lang), webSiteJsonLd(siteUrl, lang), profilePageJsonLd(siteUrl, lang)],
       noindex: false,
       priority: 1,
-      body: HomeBody({ lang: 'fr' }),
+      // Élément, pas résultat d'appel : HomeBody est sans hooks aujourd'hui,
+      // mais l'appeler comme une fonction ordinaire le rend eager et sourd à
+      // tout ce que React attend d'un composant. Le lot 2 porte ce registre à
+      // 31 entrées ; autant ne pas laisser ce piège pour la première qui en
+      // aura besoin.
+      body: createElement(HomeBody, { lang }),
     },
   ];
 }

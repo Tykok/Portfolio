@@ -1,9 +1,18 @@
 import { identity } from 'data/identity';
-import { socials } from 'data/socials';
+import { profileSocials } from 'data/socials';
+import type { Lang } from 'types/lang';
+import { localize } from 'types/lang';
 
 import type { JsonLdNode } from './types';
 
 const SCHEMA = 'https://schema.org';
+
+/**
+ * `inLanguage` attend du BCP47 (`xx-XX`), à la différence de `og:locale` en
+ * tête de document (`xx_XX`, voir render.ts) : deux standards, donc deux
+ * tables plutôt qu'une conversion approximative de l'une vers l'autre.
+ */
+const SCHEMA_LOCALE: Record<Lang, string> = { fr: 'fr-FR', en: 'en-US' };
 
 /**
  * Identifiant stable de la personne.
@@ -17,14 +26,15 @@ export function personId(siteUrl: string): string {
 }
 
 /**
- * Les profils externes, dérivés de `socials` pour qu'ils ne puissent pas
- * diverger de ce que la fenêtre Contact affiche.
+ * Les profils externes, dérivés de `profileSocials` (data/socials.ts) pour
+ * qu'ils ne puissent pas diverger de ce que la fenêtre Contact — et, depuis
+ * ce lot, la section Contact du document SEO — affichent.
  *
- * L'email est écarté : `sameAs` attend des pages de profil, et un `mailto:`
- * y est rejeté.
+ * L'email est écarté en amont, dans `profileSocials` : `sameAs` attend des
+ * pages de profil, et un `mailto:` y est rejeté.
  */
 export function profileUrls(): string[] {
-  return socials.filter((s) => s.href.startsWith('https://')).map((s) => s.href);
+  return profileSocials.map((s) => s.href);
 }
 
 /**
@@ -35,15 +45,15 @@ export function profileUrls(): string[] {
  * GitHub, le LinkedIn, le dev.to, le Medium et ce portfolio sont la même
  * personne ; sans lui, ce sont cinq entités faibles au lieu d'une forte.
  */
-export function personJsonLd(siteUrl: string): JsonLdNode {
+export function personJsonLd(siteUrl: string, lang: Lang): JsonLdNode {
   return {
     '@context': SCHEMA,
     '@type': 'Person',
     '@id': personId(siteUrl),
     name: identity.name,
     alternateName: identity.alias,
-    jobTitle: identity.role.fr,
-    description: identity.tagline.fr,
+    jobTitle: localize(identity.role, lang),
+    description: localize(identity.tagline, lang),
     // L'employeur est en littéral plutôt que dérivé de companies : deux places
     // doivent rester synchronisées (cette fonction et companies.ts), mais couplées
     // mécaniquement elles masquent les divergences silencieuses. Le test « garde le nom
@@ -61,25 +71,25 @@ export function personJsonLd(siteUrl: string): JsonLdNode {
   };
 }
 
-export function webSiteJsonLd(siteUrl: string): JsonLdNode {
+export function webSiteJsonLd(siteUrl: string, lang: Lang): JsonLdNode {
   return {
     '@context': SCHEMA,
     '@type': 'WebSite',
     '@id': `${siteUrl}/#website`,
     url: `${siteUrl}/`,
     name: `${identity.name} — Portfolio`,
-    inLanguage: 'fr-FR',
+    inLanguage: SCHEMA_LOCALE[lang],
     author: { '@id': personId(siteUrl) },
   };
 }
 
-export function profilePageJsonLd(siteUrl: string): JsonLdNode {
+export function profilePageJsonLd(siteUrl: string, lang: Lang): JsonLdNode {
   return {
     '@context': SCHEMA,
     '@type': 'ProfilePage',
     '@id': `${siteUrl}/#profilepage`,
     url: `${siteUrl}/`,
-    inLanguage: 'fr-FR',
+    inLanguage: SCHEMA_LOCALE[lang],
     mainEntity: { '@id': personId(siteUrl) },
   };
 }

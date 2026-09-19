@@ -27,7 +27,7 @@ describe('profileUrls', () => {
 });
 
 describe('personJsonLd', () => {
-  const person = personJsonLd(SITE);
+  const person = personJsonLd(SITE, 'fr');
 
   it("déclare l'alias en alternateName — c'est ce qui résout la requête « Tykok »", () => {
     expect(person.alternateName).toBe('Tykok');
@@ -60,6 +60,14 @@ describe('personJsonLd', () => {
     expect(person.worksFor).toMatchObject({ '@type': 'Organization', name: 'Pictarine' });
   });
 
+  it('dérive jobTitle et description de la langue passée, pas d\'un .fr figé en dur', () => {
+    const englishPerson = personJsonLd(SITE, 'en');
+    expect(englishPerson.jobTitle).toBe(identity.role.en);
+    expect(englishPerson.description).toBe(identity.tagline.en);
+    expect(person.jobTitle).toBe(identity.role.fr);
+    expect(person.description).toBe(identity.tagline.fr);
+  });
+
   it('garde le nom de l\'employeur synchronisé avec companies.ts — il ne peut pas dériver silencieusement', () => {
     const pictarine = companies.find((c) => c.id === 'pictarine');
     expect(pictarine).toBeDefined();
@@ -74,17 +82,25 @@ describe('personJsonLd', () => {
 
 describe('webSiteJsonLd', () => {
   it('attribue le site à la personne par référence, sans la redéclarer', () => {
-    const site = webSiteJsonLd(SITE);
+    const site = webSiteJsonLd(SITE, 'fr');
     expect(site['@type']).toBe('WebSite');
     expect(site.author).toEqual({ '@id': personId(SITE) });
     expect(site.inLanguage).toBe('fr-FR');
+  });
+
+  it('dérive inLanguage de la langue passée plutôt que de le figer en dur', () => {
+    expect(webSiteJsonLd(SITE, 'en').inLanguage).toBe('en-US');
   });
 });
 
 describe('profilePageJsonLd', () => {
   it('désigne la personne comme entité principale de la page d\'accueil', () => {
-    const page = profilePageJsonLd(SITE);
+    const page = profilePageJsonLd(SITE, 'fr');
     expect(page['@type']).toBe('ProfilePage');
     expect(page.mainEntity).toEqual({ '@id': personId(SITE) });
+  });
+
+  it('dérive inLanguage de la langue passée plutôt que de le figer en dur', () => {
+    expect(profilePageJsonLd(SITE, 'en').inLanguage).toBe('en-US');
   });
 });
