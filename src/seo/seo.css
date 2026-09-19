@@ -1,0 +1,24 @@
+/* Mise en forme du document servi avant l'exécution du JavaScript.
+   Volontairement minimale : sa raison d'être est d'être lisible sans JS et
+   correcte pour un crawler, pas de concurrencer l'OS. */
+#seo-content {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+  font: 16px/1.6 system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color: #16181d;
+  background: #fff;
+}
+#seo-content h1 { font-size: 2rem; margin: 0 0 .25rem; }
+#seo-content h2 { font-size: 1.35rem; margin: 2.5rem 0 .75rem; }
+#seo-content h3 { font-size: 1.1rem; margin: 1.75rem 0 .25rem; }
+#seo-content .seo-lead { font-size: 1.1rem; margin: 0 0 .5rem; }
+#seo-content .seo-meta { color: #5a6270; font-size: .9rem; }
+#seo-content a { color: #1a52d6; }
+#seo-content ul { padding-left: 1.2rem; }
+
+@media (prefers-color-scheme: dark) {
+  #seo-content { color: #e7e9ee; background: #14161a; }
+  #seo-content .seo-meta { color: #9aa3b2; }
+  #seo-content a { color: #8ab4ff; }
+}
