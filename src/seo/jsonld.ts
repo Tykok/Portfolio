@@ -44,6 +44,10 @@ export function personJsonLd(siteUrl: string): JsonLdNode {
     alternateName: identity.alias,
     jobTitle: identity.role.fr,
     description: identity.tagline.fr,
+    // L'employeur est en littéral plutôt que dérivé de companies : deux places
+    // doivent rester synchronisées (cette fonction et companies.ts), mais couplées
+    // mécaniquement elles masquent les divergences silencieuses. Le test « garde le nom
+    // de l'employeur synchronisé avec companies.ts » vérifie qu'elles ne dérivent pas.
     worksFor: { '@type': 'Organization', name: 'Pictarine' },
     address: {
       '@type': 'PostalAddress',

@@ -1,3 +1,4 @@
+import { companies } from 'data/companies';
 import { identity } from 'data/identity';
 import { socials } from 'data/socials';
 
@@ -57,6 +58,12 @@ describe('personJsonLd', () => {
 
   it('nomme l\'employeur', () => {
     expect(person.worksFor).toMatchObject({ '@type': 'Organization', name: 'Pictarine' });
+  });
+
+  it('garde le nom de l\'employeur synchronisé avec companies.ts — il ne peut pas dériver silencieusement', () => {
+    const pictarine = companies.find((c) => c.id === 'pictarine');
+    expect(pictarine).toBeDefined();
+    expect(person.worksFor).toMatchObject({ '@type': 'Organization', name: pictarine!.name });
   });
 
   it('est sérialisable sans perte — le bloc est écrit tel quel dans le HTML', () => {
