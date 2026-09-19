@@ -6,6 +6,47 @@
 html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-family: Tahoma, Verdana, Geneva, sans-serif; font-size: 13px; color: #1c1c1c; }
 #root { height: 100vh; width: 100vw; position: relative; }
 
+/* ============================ DOCUMENT PRÉRENDU ============================
+   `#seo-content` est un frère de `#root`, écrit au build par
+   scripts/seo/build-pages.ts. Deux états se suivent ici, et chacun doit être
+   correct pris isolément :
+
+   1. AVANT LE MONTAGE (`body` sans `.os-mounted`) — pas de JavaScript exécuté,
+      donc pas d'OS : `#seo-content` EST la page, celle que reçoivent un
+      visiteur sans JavaScript et tout crawler qui n'en exécute pas. Il doit
+      posséder le viewport depuis le haut et défiler jusqu'à sa fin. Or
+      `html, body` ci-dessus imposent une hauteur bloquée à 100% et un
+      `overflow: hidden` pensés pour l'OS plein écran : sans JS ces règles ne
+      sont jamais neutralisées, et coupent le document au ras du premier
+      écran sur fond noir. On les défait ici pour cet état précis, avec une
+      sélectivité qui l'emporte sur les déclarations d'origine sans dépendre
+      de l'ordre des feuilles de style. `#root` est vide tant que React n'a
+      pas monté : lui laisser 100vh mentirait sur sa hauteur et pousserait le
+      document sous un vide. Les couleurs reprennent celles de seo.css, pour
+      qu'aucune bande noire ne dépasse de la colonne du document.
+
+   2. UNE FOIS L'OS MONTÉ — `hideSeoDocument` pose `.os-mounted` et l'OS
+      prend le dessus. Le document reste dans le DOM — Google indexe le DOM
+      rendu, donc le supprimer annulerait le prérendu — simplement recouvert
+      par un élément opaque placé au-dessus. Ni `display: none`, ni déport
+      hors écran : c'est de l'amélioration progressive, pas du texte caché.
+   ========================================================================== */
+html:has(body:not(.os-mounted)) { height: auto; overflow: visible; background: #fff; }
+body:not(.os-mounted) { height: auto; overflow: visible; background: #fff; }
+body:not(.os-mounted) #root { height: 0; width: auto; }
+
+@media (prefers-color-scheme: dark) {
+  html:has(body:not(.os-mounted)) { background: #14161a; }
+  body:not(.os-mounted) { background: #14161a; }
+}
+
+body.os-mounted { overflow: hidden; }
+body.os-mounted #root { position: relative; z-index: 1; }
+body.os-mounted #seo-content {
+  position: fixed; inset: 0; z-index: 0;
+  overflow: hidden;
+}
+
 .os-root {
   position: absolute; inset: 0; overflow: hidden;
   user-select: none; -webkit-user-select: none;
@@ -1228,6 +1269,9 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-f
      whole CV to nothing. It has no printable content of its own, so drop the
      positioning and clipping rather than track the height chain. */
   .os-root { position: static !important; inset: auto !important; overflow: visible !important; height: auto !important; }
+
+  /* L'impression sert à sortir le CV, pas à doubler la page prérendue. */
+  #seo-content { display: none !important; }
 
   /* Le chrome de l'OS ne s'imprime pas. */
   .os-desktop, .os-taskbar, .os-startmenu, .os-ctxmenu, .os-tooltip,

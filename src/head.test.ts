@@ -2,8 +2,13 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 /**
- * index.html has no other coverage, and a missing sharing tag fails silently —
- * the link just renders bare on LinkedIn. These assertions are the guard.
+ * index.html has no other coverage beyond these assertions, which guard the
+ * template — what `npm run dev` serves, unprerendered. They do NOT guard what
+ * ships in production: the build's `renderDocument` slices the whole marked
+ * block out and substitutes `headFor`'s own output (src/seo/render.ts), so a
+ * green run here says nothing about the served artifact. That guard lives in
+ * src/seo/render.test.ts, against renderDocument's output directly — read it
+ * first if a sharing tag looks wrong on a real deploy.
  */
 const html = readFileSync(resolve(__dirname, '..', 'index.html'), 'utf8');
 
@@ -43,5 +48,33 @@ describe('index.html', () => {
 
   it("avoids Vite's own %VITE_% mechanism, which leaves the literal when unset", () => {
     expect(html).not.toContain('%VITE_');
+  });
+
+  it('porte les marqueurs que le prérendu remplace', () => {
+    // Sans eux, build-pages.ts s'arrête net plutôt que de produire des pages
+    // silencieusement vides de toute balise de tête.
+    expect(html).toContain('<!--seo:head:start-->');
+    expect(html).toContain('<!--seo:head:end-->');
+    expect(html).toContain('<!--seo:body-->');
+  });
+
+  it('place le marqueur de corps après #root, et non dedans', () => {
+    // React remplace les enfants de #root au montage : un document prérendu
+    // à l'intérieur disparaîtrait avant que Google ne rende la page.
+    expect(html).toMatch(/<div id="root"><\/div>\s*<!--seo:body-->/);
+  });
+
+  it('garde le bloc de tête dans le bon ordre', () => {
+    expect(html.indexOf('<!--seo:head:start-->')).toBeLessThan(html.indexOf('<!--seo:head:end-->'));
+  });
+
+  it('ferme le marqueur de tête avant les balises d\'icône, que Vite complète après lui', () => {
+    // Vite ajoute le <script> du bundle et le <link rel="stylesheet"> à la fin
+    // de <head>, après <!--seo:head:end-->. Si ce marqueur descendait sous
+    // <link rel="icon"> (par exemple déplacé sous <meta name="theme-color">),
+    // renderDocument couperait le bundle et la CSS avec le reste du bloc de
+    // tête : chaque page prérendue serait servie sans JavaScript ni style,
+    // avec une suite de tests par ailleurs entièrement verte.
+    expect(html.indexOf('<!--seo:head:end-->')).toBeLessThan(html.indexOf('<link rel="icon"'));
   });
 });

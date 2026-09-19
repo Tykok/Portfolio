@@ -1,0 +1,198 @@
+import { createElement } from 'react';
+
+import { buildPages } from './pages';
+import { BODY_MARKER, escapeHtml, HEAD_END, HEAD_START, renderDocument, renderRobots, renderSitemap } from './render';
+
+const SITE = 'https://portfolio.test';
+const pages = buildPages(SITE);
+const CSS = '#seo-content { color: red; }';
+
+/*
+ * Un gabarit réaliste, avec les treize balises de partage que porte le vrai
+ * index.html — et non le simple `<title>remplacé</title>` d'origine. Un
+ * gabarit à balise unique ne peut pas trahir une régression de `headFor` qui
+ * se remettrait à n'en réémettre qu'un sous-ensemble : la sortie ne dépend
+ * que de `headFor`, jamais de ce qu'il y avait entre les marqueurs. Ce
+ * fixture sert donc surtout de garde-fou de lisibilité pour la prochaine
+ * personne qui touche ce fichier — les assertions ci-dessous, elles, portent
+ * sur la sortie de `renderDocument`, seule façon de vraiment détecter le
+ * problème.
+ */
+const TEMPLATE = [
+  '<!doctype html>',
+  '<html lang="fr">',
+  '  <head>',
+  '    <meta charset="utf-8" />',
+  `    ${HEAD_START}`,
+  '    <title>remplacé</title>',
+  '    <meta name="description" content="remplacé" />',
+  '    <meta name="author" content="remplacé" />',
+  '    <link rel="canonical" href="https://gabarit.test/" />',
+  '    <meta property="og:type" content="website" />',
+  '    <meta property="og:site_name" content="remplacé" />',
+  '    <meta property="og:locale" content="fr_FR" />',
+  '    <meta property="og:title" content="remplacé" />',
+  '    <meta property="og:description" content="remplacé" />',
+  '    <meta property="og:url" content="https://gabarit.test/" />',
+  '    <meta property="og:image" content="https://gabarit.test/og-image.png" />',
+  '    <meta property="og:image:width" content="1200" />',
+  '    <meta property="og:image:height" content="630" />',
+  '    <meta property="og:image:alt" content="remplacé" />',
+  '    <meta name="twitter:card" content="summary_large_image" />',
+  '    <meta name="twitter:title" content="remplacé" />',
+  '    <meta name="twitter:description" content="remplacé" />',
+  '    <meta name="twitter:image" content="https://gabarit.test/og-image.png" />',
+  `    ${HEAD_END}`,
+  '    <script type="module" src="/assets/index-abc.js"></script>',
+  '  </head>',
+  '  <body>',
+  '    <div id="root"></div>',
+  `    ${BODY_MARKER}`,
+  '  </body>',
+  '</html>',
+].join('\n');
+
+describe('escapeHtml', () => {
+  it('neutralise ce qui casserait une valeur d\'attribut', () => {
+    expect(escapeHtml('a & b')).toBe('a &amp; b');
+    expect(escapeHtml('dit "bonjour"')).toBe('dit &quot;bonjour&quot;');
+    expect(escapeHtml('<script>')).toBe('&lt;script&gt;');
+  });
+
+  it('laisse les accents et la ponctuation française intacts', () => {
+    expect(escapeHtml('Développeur — Élie')).toBe('Développeur — Élie');
+  });
+});
+
+describe('renderDocument', () => {
+  const html = renderDocument(TEMPLATE, pages[0], CSS);
+
+  it('remplace le bloc de tête du gabarit, sans laisser de marqueur', () => {
+    expect(html).not.toContain(HEAD_START);
+    expect(html).not.toContain(HEAD_END);
+    expect(html).not.toContain('<title>remplacé</title>');
+    expect(html).toContain(`<title>${escapeHtml(pages[0].title)}</title>`);
+  });
+
+  it('conserve les balises d\'assets du gabarit — un seul bundle pour tout le site', () => {
+    expect(html).toContain('<script type="module" src="/assets/index-abc.js"></script>');
+  });
+
+  it('injecte le document dans un frère de #root, que React ne remplacera pas', () => {
+    expect(html).not.toContain(BODY_MARKER);
+    expect(html).toContain('<div id="root"></div>');
+    expect(html).toMatch(/<div id="root"><\/div>\s*<main id="seo-content">/);
+  });
+
+  it('sert le nom, l\'alias et la biographie en clair, sans exécuter de JavaScript', () => {
+    expect(html).toContain('<h1>Elie Treport</h1>');
+    expect(html).toMatch(/Tykok/);
+    expect(html).toMatch(/Pictarine/);
+  });
+
+  it('déclare un canonical absolu', () => {
+    expect(html).toContain(`<link rel="canonical" href="${pages[0].canonical}" />`);
+  });
+
+  /*
+   * Garde-fou déplacé depuis head.test.ts : celui-ci lisait index.html, le
+   * gabarit source, qui n'est plus ce que sert le site une fois prérendu.
+   * Il restait vert alors que le document réellement servi n'avait plus que
+   * trois de ces treize balises — carte de partage nue sur LinkedIn, Slack,
+   * Discord et X. Ces assertions portent sur la sortie de `renderDocument`,
+   * l'artefact réel.
+   */
+  it('porte les treize balises de partage, pas seulement og:title/description/url', () => {
+    expect(html).toContain('<meta property="og:type" content="website" />');
+    expect(html).toContain('<meta property="og:site_name" content="TicoqOS" />');
+    expect(html).toContain('<meta property="og:locale" content="fr_FR" />');
+    expect(html).toContain(`<meta property="og:title" content="${escapeHtml(pages[0].title)}" />`);
+    expect(html).toContain(`<meta property="og:description" content="${escapeHtml(pages[0].description)}" />`);
+    expect(html).toContain(`<meta property="og:url" content="${escapeHtml(pages[0].canonical)}" />`);
+    expect(html).toMatch(/<meta property="og:image" content="https:\/\/portfolio\.test\/og-image\.png" \/>/);
+    expect(html).toContain('<meta property="og:image:width" content="1200" />');
+    expect(html).toContain('<meta property="og:image:height" content="630" />');
+    expect(html).toContain('<meta property="og:image:alt" content="Fenêtre rétro affichant Elie Treport, développeur backend Kotlin, à côté d&#39;un coq." />');
+
+    expect(html).toContain('<meta name="twitter:card" content="summary_large_image" />');
+    expect(html).toContain(`<meta name="twitter:title" content="${escapeHtml(pages[0].title)}" />`);
+    expect(html).toContain(`<meta name="twitter:description" content="${escapeHtml(pages[0].description)}" />`);
+    expect(html).toMatch(/<meta name="twitter:image" content="https:\/\/portfolio\.test\/og-image\.png" \/>/);
+
+    expect(html).toContain(`<meta name="author" content="Elie Treport" />`);
+  });
+
+  it('dérive og:locale de la langue de la page plutôt que de le figer en dur', () => {
+    const page = { ...pages[0], lang: 'en' as const };
+    const out = renderDocument(TEMPLATE, page, CSS);
+    expect(out).toContain('<meta property="og:locale" content="en_US" />');
+  });
+
+  it('dérive l\'URL de l\'image de partage du canonical, jamais d\'une origine figée en dur', () => {
+    const page = { ...pages[0], canonical: 'https://preview.example/' };
+    const out = renderDocument(TEMPLATE, page, CSS);
+    expect(out).toContain('<meta property="og:image" content="https://preview.example/og-image.png" />');
+    expect(out).toContain('<meta name="twitter:image" content="https://preview.example/og-image.png" />');
+  });
+
+  it('écrit un bloc JSON-LD par nœud, chacun reparsable', () => {
+    const blocks = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
+    expect(blocks).toHaveLength(pages[0].jsonLd.length);
+    blocks.forEach((block) => expect(() => JSON.parse(block[1]) as unknown).not.toThrow());
+  });
+
+  it('protège le JSON-LD d\'une fermeture de balise prématurée', () => {
+    const page = { ...pages[0], jsonLd: [{ '@type': 'Person', name: 'a</script><script>alert(1)' }] };
+    const out = renderDocument(TEMPLATE, page, CSS);
+    expect(out).not.toContain('</script><script>alert(1)');
+    expect(out).toContain('<\\/script>');
+  });
+
+  it('injecte la feuille de style en ligne, donc sans requête bloquante', () => {
+    expect(html).toContain(`<style>${CSS}</style>`);
+  });
+
+  it('n\'ajoute pas de meta robots quand la page est indexable', () => {
+    expect(html).not.toContain('name="robots"');
+  });
+
+  it('ajoute noindex quand la page le demande', () => {
+    const out = renderDocument(TEMPLATE, { ...pages[0], noindex: true }, CSS);
+    expect(out).toContain('<meta name="robots" content="noindex, follow" />');
+  });
+
+  it('échoue bruyamment si le gabarit a perdu ses marqueurs', () => {
+    expect(() => renderDocument('<html><head></head><body></body></html>', pages[0], CSS)).toThrow(/marqueur/i);
+  });
+
+  it('ne laisse pas $& ou $$ dans le corps rendu être interprétés comme un motif de substitution', () => {
+    const page = { ...pages[0], body: createElement('p', null, 'Coûte $$5, restant $&') };
+    const out = renderDocument(TEMPLATE, page, CSS);
+    expect(out).toContain('Coûte $$5, restant $&');
+    expect(out).not.toContain(BODY_MARKER);
+  });
+});
+
+describe('renderSitemap', () => {
+  it('liste les pages indexables avec leur URL absolue', () => {
+    const xml = renderSitemap(pages, '2026-09-19');
+    expect(xml).toContain('<?xml version="1.0" encoding="UTF-8"?>');
+    expect(xml).toContain(`<loc>${pages[0].canonical}</loc>`);
+    expect(xml).toContain('<lastmod>2026-09-19</lastmod>');
+  });
+
+  it('exclut les pages noindex — les y laisser serait une instruction contradictoire', () => {
+    const xml = renderSitemap([{ ...pages[0], noindex: true }], '2026-09-19');
+    expect(xml).not.toContain('<loc>');
+  });
+});
+
+describe('renderRobots', () => {
+  it('déclare le sitemap en URL absolue, seule forme acceptée', () => {
+    expect(renderRobots(SITE)).toContain(`Sitemap: ${SITE}/sitemap.xml`);
+  });
+
+  it('n\'interdit rien', () => {
+    expect(renderRobots(SITE)).toMatch(/^Disallow:\s*$/m);
+  });
+});

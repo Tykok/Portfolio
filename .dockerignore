@@ -5,7 +5,12 @@ coverage
 .github
 .idea
 docs
+# Le build de production execute scripts/seo/build-pages.ts via vite-node
+# (npm run build -> seo:pages) : sans cette exception, docker build echoue.
+# Le reste de scripts/ (cv, images) est de l'outillage shell/Python sans part
+# dans l'image, donc il reste exclu.
 scripts
+!scripts/seo
 .claude
 .superpowers
 *.log
