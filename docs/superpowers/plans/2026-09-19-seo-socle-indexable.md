@@ -1705,7 +1705,7 @@ Plan : `docs/superpowers/plans/2026-09-19-seo-socle-indexable.md`.
 
 - `curl` sur le build servi renvoie le nom, l'alias et la biographie, sans JavaScript
 - test de résultats enrichis : `Person` détecté sans erreur
-- bundle navigateur inchangé — rien sous `src/seo/` n'est importé par l'application
+- bundle navigateur inchangé — rien sous `src/seo/` qui participe au rendu du document n'entre dans le bundle navigateur ; `mount.ts` y entre, et tient en quelques lignes
 - `docker/test/image.test.sh` passe, JSON-LD non bloqué par la CSP
 - impression du CV inchangée
 
