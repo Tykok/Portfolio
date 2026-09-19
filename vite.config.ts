@@ -5,8 +5,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 // from vitest/config, not vite — plain defineConfig has no `test` field
 import { defineConfig } from 'vitest/config';
 
-/** Used when VITE_SITE_URL is unset, which is the normal case in dev and CI. */
-const SITE_URL_FALLBACK = 'http://localhost:3000';
+import { normalizeSiteUrl, SITE_URL_FALLBACK } from './src/seo/siteUrl';
 
 /**
  * Substitutes __SITE_URL__ in index.html with VITE_SITE_URL.
@@ -27,9 +26,9 @@ function siteUrl(mode: string): Plugin {
     enforce: 'pre',
     transformIndexHtml(html) {
       const configured = loadEnv(mode, process.cwd(), 'VITE_').VITE_SITE_URL ?? '';
-      const resolved = configured.trim().replace(/\/+$/, '');
+      const resolved = normalizeSiteUrl(configured);
 
-      if (!resolved && mode === 'production') {
+      if (resolved === SITE_URL_FALLBACK && mode === 'production') {
         console.warn(
           '\n[portfolio] VITE_SITE_URL is unset — canonical, og:url and og:image ' +
             `will point at ${SITE_URL_FALLBACK}. Fine for a verification build, ` +
@@ -37,7 +36,7 @@ function siteUrl(mode: string): Plugin {
         );
       }
 
-      return html.replace(/__SITE_URL__/g, resolved || SITE_URL_FALLBACK);
+      return html.replace(/__SITE_URL__/g, resolved);
     },
   };
 }
