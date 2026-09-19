@@ -11,6 +11,16 @@ import { normalizeSiteUrl } from 'seo/siteUrl';
  *
  * Exécuté par vite-node après `vite build`, afin que le gabarit porte déjà les
  * balises d'assets empreintées.
+ *
+ * `vite-node` est volontairement plafonné à ^3.2.4 dans package.json : ce
+ * fichier en est l'unique consommateur, donc l'endroit par lequel quiconque
+ * touche cette dépendance passera forcément. .nvmrc fixe Node à 20.14.0 ; à
+ * partir de vite-node 4.x, la dépendance exige une version majeure de vite
+ * dont les `engines` demandent Node >= 20.19.0, incompatible avec la nôtre —
+ * npm installerait alors un second vite imbriqué à côté de celui du projet
+ * plutôt que de dédupliquer (vérifié avec `npm ls vite`). Le plafond ^3.2.4
+ * n'est donc pas un oubli de mise à jour : le lever suppose de faire monter
+ * Node en premier.
  */
 
 /* Les scripts npm s'exécutent depuis la racine du dépôt. `import.meta.dirname`
