@@ -1,3 +1,5 @@
+import { identity } from 'data/identity';
+
 import { buildPages } from './pages';
 
 const SITE = 'https://tykok.fr';
@@ -24,6 +26,10 @@ describe('buildPages', () => {
 
   it('porte l\'alias dans le titre de l\'accueil', () => {
     expect(pages[0].title).toMatch(/Tykok/);
+  });
+
+  it('garde le titre synchronisé avec identity.role.fr — comme jsonld.test.ts le fait pour worksFor et companies.ts', () => {
+    expect(pages[0].title).toContain(identity.role.fr);
   });
 
   it('tient les titres sous la limite que Google tronque', () => {
