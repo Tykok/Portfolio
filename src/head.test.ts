@@ -44,4 +44,22 @@ describe('index.html', () => {
   it("avoids Vite's own %VITE_% mechanism, which leaves the literal when unset", () => {
     expect(html).not.toContain('%VITE_');
   });
+
+  it('porte les marqueurs que le prérendu remplace', () => {
+    // Sans eux, build-pages.ts s'arrête net plutôt que de produire des pages
+    // silencieusement vides de toute balise de tête.
+    expect(html).toContain('<!--seo:head:start-->');
+    expect(html).toContain('<!--seo:head:end-->');
+    expect(html).toContain('<!--seo:body-->');
+  });
+
+  it('place le marqueur de corps après #root, et non dedans', () => {
+    // React remplace les enfants de #root au montage : un document prérendu
+    // à l'intérieur disparaîtrait avant que Google ne rende la page.
+    expect(html).toMatch(/<div id="root"><\/div>\s*<!--seo:body-->/);
+  });
+
+  it('garde le bloc de tête dans le bon ordre', () => {
+    expect(html.indexOf('<!--seo:head:start-->')).toBeLessThan(html.indexOf('<!--seo:head:end-->'));
+  });
 });

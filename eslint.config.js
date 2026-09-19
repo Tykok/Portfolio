@@ -75,6 +75,14 @@ export default tseslint.config(
     },
   },
 
+  // Les scripts de build tournent dans Node, hors du navigateur.
+  {
+    files: ['scripts/**/*.ts'],
+    languageOptions: {
+      globals: globals.node,
+    },
+  },
+
   // Last: turns off every rule Prettier already governs.
   prettierConfig,
 );
