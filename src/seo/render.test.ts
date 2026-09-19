@@ -1,3 +1,5 @@
+import { createElement } from 'react';
+
 import { buildPages } from './pages';
 import { BODY_MARKER, escapeHtml, HEAD_END, HEAD_START, renderDocument, renderRobots, renderSitemap } from './render';
 
@@ -92,6 +94,13 @@ describe('renderDocument', () => {
 
   it('échoue bruyamment si le gabarit a perdu ses marqueurs', () => {
     expect(() => renderDocument('<html><head></head><body></body></html>', pages[0], CSS)).toThrow(/marqueur/i);
+  });
+
+  it('ne laisse pas $& ou $$ dans le corps rendu être interprétés comme un motif de substitution', () => {
+    const page = { ...pages[0], body: createElement('p', null, 'Coûte $$5, restant $&') };
+    const out = renderDocument(TEMPLATE, page, CSS);
+    expect(out).toContain('Coûte $$5, restant $&');
+    expect(out).not.toContain(BODY_MARKER);
   });
 });
 

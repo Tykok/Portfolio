@@ -91,7 +91,11 @@ export function renderDocument(template: string, page: SeoPage, css: string): st
      disparaîtrait au montage sans laisser de trace. */
   const body = `<main id="seo-content">${renderToStaticMarkup(page.body)}</main>`;
 
-  return withHead.replace(BODY_MARKER, body);
+  /* Remplacement sous forme de fonction : une chaîne de remplacement littérale
+     est passée par GetSubstitution, qui interprète $&, $$, $` et $' — et le
+     corps rendu peut légitimement contenir un $ (extrait shell, prix, LaTeX).
+     Une fonction renvoie `body` telle quelle, sans y chercher ces motifs. */
+  return withHead.replace(BODY_MARKER, () => body);
 }
 
 export function renderSitemap(pages: SeoPage[], lastmod: string): string {
