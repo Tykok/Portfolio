@@ -6,6 +6,25 @@
 html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-family: Tahoma, Verdana, Geneva, sans-serif; font-size: 13px; color: #1c1c1c; }
 #root { height: 100vh; width: 100vw; position: relative; }
 
+/* ============================ DOCUMENT PRÉRENDU ============================
+   `#seo-content` est un frère de `#root`, écrit au build par
+   scripts/seo/build-pages.ts. Avant que React ne monte, c'est la page : un
+   visiteur sans JavaScript, et tout crawler qui n'en exécute pas, y trouvent
+   le nom, la biographie, le parcours et les projets.
+
+   Une fois l'OS monté, `hideSeoDocument` pose `.os-mounted` et l'OS prend le
+   dessus. Le document reste dans le DOM — Google indexe le DOM rendu, donc le
+   supprimer annulerait le prérendu — simplement recouvert par un élément
+   opaque placé au-dessus. Ni `display: none`, ni déport hors écran : c'est de
+   l'amélioration progressive, pas du texte caché.
+   ========================================================================== */
+body.os-mounted { overflow: hidden; }
+body.os-mounted #root { position: relative; z-index: 1; }
+body.os-mounted #seo-content {
+  position: fixed; inset: 0; z-index: 0;
+  overflow: hidden;
+}
+
 .os-root {
   position: absolute; inset: 0; overflow: hidden;
   user-select: none; -webkit-user-select: none;
@@ -1228,6 +1247,9 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-f
      whole CV to nothing. It has no printable content of its own, so drop the
      positioning and clipping rather than track the height chain. */
   .os-root { position: static !important; inset: auto !important; overflow: visible !important; height: auto !important; }
+
+  /* L'impression sert à sortir le CV, pas à doubler la page prérendue. */
+  #seo-content { display: none !important; }
 
   /* Le chrome de l'OS ne s'imprime pas. */
   .os-desktop, .os-taskbar, .os-startmenu, .os-ctxmenu, .os-tooltip,
