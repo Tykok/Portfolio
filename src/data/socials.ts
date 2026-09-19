@@ -75,3 +75,13 @@ export const socials: Social[] = [
 ];
 
 export const primarySocials = socials.filter((s) => s.primary);
+
+/**
+ * Les profils publics, à l'exclusion de l'email : un `mailto:` n'est pas une
+ * page de profil, et Google le rejette dans le `sameAs` d'un Person JSON-LD
+ * (voir seo/jsonld.ts). Utilisé aussi par la section Contact du document SEO
+ * (seo/HomeBody.tsx), pour que cette liste et `sameAs` ne puissent pas
+ * diverger l'une de l'autre — deux consommateurs d'un seul filtre, plutôt que
+ * deux listes tenues à la main.
+ */
+export const profileSocials = socials.filter((s) => s.href.startsWith('https://'));

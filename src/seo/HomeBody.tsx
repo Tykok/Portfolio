@@ -3,7 +3,7 @@ import { mockProjects } from 'api/mock/projects.mock';
 
 import { companies } from 'data/companies';
 import { identity } from 'data/identity';
-import { socials } from 'data/socials';
+import { profileSocials } from 'data/socials';
 import type { Lang } from 'types/lang';
 import { localize, localizeArray } from 'types/lang';
 
@@ -103,8 +103,21 @@ export function HomeBody({ lang }: { lang: Lang }): ReactElement {
 
       <section aria-labelledby="seo-contact">
         <h2 id="seo-contact">Contact</h2>
+        {/*
+          L'email n'est volontairement pas dans cette liste : avant ce lot, il
+          n'atteignait le DOM qu'après l'animation de démarrage et un clic —
+          un moissonneur qui se contente d'un curl ne le voyait jamais. Le
+          document SEO, lui, arrive dans le tout premier octet de chaque
+          réponse : y laisser l'email l'aurait publié en clair sur `/` et sur
+          toute URL de repli SPA. `profileSocials` (data/socials.ts) exclut déjà
+          l'email pour `sameAs`, qui n'accepte pas les `mailto:` ; on réutilise
+          le même filtre ici plutôt que d'en tenir un second à la main, pour
+          que la liste de contact et `sameAs` ne puissent pas diverger. La
+          fenêtre Contact de l'OS continue de montrer l'email aux vrais
+          visiteurs — rien n'est perdu, seul le premier octet change.
+        */}
         <ul>
-          {socials.map((social) => (
+          {profileSocials.map((social) => (
             <li key={social.key}>
               {/* rel="me" confirme dans l'autre sens ce que Person.sameAs déclare. */}
               <a href={social.href} rel={social.href.startsWith('https://') ? 'me noopener' : undefined}>

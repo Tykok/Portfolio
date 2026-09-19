@@ -52,8 +52,16 @@ describe('HomeBody', () => {
   });
 
   it('rend aussi en anglais, pour que le lot 3 n\'ait rien à réécrire', () => {
-    screen.getByRole('heading', { level: 1 });
     render(<HomeBody lang="en" />);
     expect(screen.getAllByText(identity.bio.en.split('\n\n')[0].trim()).length).toBeGreaterThan(0);
+  });
+
+  it('ne publie pas l\'email en clair — il atteint désormais le tout premier octet de chaque réponse', () => {
+    // Avant ce lot, l'email n'apparaissait dans le DOM qu'après l'animation de
+    // démarrage et un clic ; un moissonneur qui se contente d'un curl ne le
+    // voyait jamais. Le document SEO, lui, part avec la première réponse.
+    const { container } = render(<HomeBody lang="fr" />);
+    expect(container.innerHTML).not.toContain('mailto:');
+    expect(container.innerHTML).not.toContain(identity.email);
   });
 });
