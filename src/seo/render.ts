@@ -1,5 +1,8 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 
+import { identity } from 'data/identity';
+import type { Lang } from 'types/lang';
+
 import type { JsonLdNode, SeoPage } from './types';
 
 /**
@@ -29,6 +32,35 @@ export function escapeHtml(value: string): string {
 }
 
 /**
+ * Valeurs de partage qui ne dépendent pas de la page : la marque de
+ * l'interface, l'image générique et son texte alternatif. Elles viennent de
+ * index.html, seul endroit qui les portait jusqu'ici.
+ */
+const OG_SITE_NAME = 'TicoqOS';
+const OG_IMAGE_PATH = '/og-image.png';
+const OG_IMAGE_WIDTH = '1200';
+const OG_IMAGE_HEIGHT = '630';
+const OG_IMAGE_ALT = 'Fenêtre rétro affichant Elie Treport, développeur backend Kotlin, à côté d\'un coq.';
+const TWITTER_CARD = 'summary_large_image';
+
+/**
+ * `og:locale` attend `xx_XX`, pas le BCP47 `xx-XX` qu'utilise `inLanguage` en
+ * JSON-LD (voir jsonld.ts) : deux standards différents pour la même langue,
+ * donc deux tables plutôt qu'une conversion approximative de l'une vers l'autre.
+ */
+const OG_LOCALE: Record<Lang, string> = { fr: 'fr_FR', en: 'en_US' };
+
+/**
+ * Origine absolue de la page, dérivée de son canonical plutôt que d'un
+ * `https://tykok.fr` en dur : un build de prévisualisation dont
+ * VITE_SITE_URL pointe ailleurs ne doit pas se mettre à annoncer une image de
+ * partage en production.
+ */
+function originOf(canonical: string): string {
+  return new URL(canonical).origin;
+}
+
+/**
  * `</script>` à l'intérieur d'une chaîne JSON fermerait le bloc pour l'analyseur
  * HTML, qui ne connaît pas les règles de JSON. Les données viennent du dépôt et
  * non d'un visiteur, mais un titre d'article rapatrié de dev.to au lot 4 en
@@ -39,9 +71,13 @@ function serializeJsonLd(node: JsonLdNode): string {
 }
 
 function headFor(page: SeoPage, css: string): string {
+  const origin = originOf(page.canonical);
+  const imageUrl = `${origin}${OG_IMAGE_PATH}`;
+
   const lines = [
     `<title>${escapeHtml(page.title)}</title>`,
     `<meta name="description" content="${escapeHtml(page.description)}" />`,
+    `<meta name="author" content="${escapeHtml(identity.name)}" />`,
     `<link rel="canonical" href="${escapeHtml(page.canonical)}" />`,
   ];
 
@@ -50,12 +86,33 @@ function headFor(page: SeoPage, css: string): string {
   }
 
   page.alternates.forEach((alt) => {
-    lines.push(`<link rel="alternate" hreflang="${alt.hreflang}" href="${escapeHtml(alt.href)}" />`);
+    lines.push(`<link rel="alternate" hreflang="${escapeHtml(alt.hreflang)}" href="${escapeHtml(alt.href)}" />`);
   });
 
+  /*
+   * Les dix balises de partage : le bloc délimité par HEAD_START/HEAD_END
+   * dans index.html en portait treize (og:*, twitter:*, author) et headFor
+   * n'en réémettait que trois — og:title, og:description, og:url. Le lien
+   * partagé rendait alors sans image ni carte sur LinkedIn, Slack, Discord ou
+   * X. La liste ci-dessous doit rester le miroir exact de ce que index.html
+   * déclarait ; render.test.ts en garde le compte sur la sortie réellement
+   * servie, et non plus seulement sur le gabarit source.
+   */
+  lines.push('<meta property="og:type" content="website" />');
+  lines.push(`<meta property="og:site_name" content="${escapeHtml(OG_SITE_NAME)}" />`);
+  lines.push(`<meta property="og:locale" content="${OG_LOCALE[page.lang]}" />`);
   lines.push(`<meta property="og:title" content="${escapeHtml(page.title)}" />`);
   lines.push(`<meta property="og:description" content="${escapeHtml(page.description)}" />`);
   lines.push(`<meta property="og:url" content="${escapeHtml(page.canonical)}" />`);
+  lines.push(`<meta property="og:image" content="${escapeHtml(imageUrl)}" />`);
+  lines.push(`<meta property="og:image:width" content="${OG_IMAGE_WIDTH}" />`);
+  lines.push(`<meta property="og:image:height" content="${OG_IMAGE_HEIGHT}" />`);
+  lines.push(`<meta property="og:image:alt" content="${escapeHtml(OG_IMAGE_ALT)}" />`);
+
+  lines.push(`<meta name="twitter:card" content="${TWITTER_CARD}" />`);
+  lines.push(`<meta name="twitter:title" content="${escapeHtml(page.title)}" />`);
+  lines.push(`<meta name="twitter:description" content="${escapeHtml(page.description)}" />`);
+  lines.push(`<meta name="twitter:image" content="${escapeHtml(imageUrl)}" />`);
 
   page.jsonLd.forEach((node) => {
     lines.push(`<script type="application/ld+json">${serializeJsonLd(node)}</script>`);

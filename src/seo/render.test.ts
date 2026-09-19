@@ -7,6 +7,17 @@ const SITE = 'https://portfolio.test';
 const pages = buildPages(SITE);
 const CSS = '#seo-content { color: red; }';
 
+/*
+ * Un gabarit réaliste, avec les treize balises de partage que porte le vrai
+ * index.html — et non le simple `<title>remplacé</title>` d'origine. Un
+ * gabarit à balise unique ne peut pas trahir une régression de `headFor` qui
+ * se remettrait à n'en réémettre qu'un sous-ensemble : la sortie ne dépend
+ * que de `headFor`, jamais de ce qu'il y avait entre les marqueurs. Ce
+ * fixture sert donc surtout de garde-fou de lisibilité pour la prochaine
+ * personne qui touche ce fichier — les assertions ci-dessous, elles, portent
+ * sur la sortie de `renderDocument`, seule façon de vraiment détecter le
+ * problème.
+ */
 const TEMPLATE = [
   '<!doctype html>',
   '<html lang="fr">',
@@ -14,6 +25,23 @@ const TEMPLATE = [
   '    <meta charset="utf-8" />',
   `    ${HEAD_START}`,
   '    <title>remplacé</title>',
+  '    <meta name="description" content="remplacé" />',
+  '    <meta name="author" content="remplacé" />',
+  '    <link rel="canonical" href="https://gabarit.test/" />',
+  '    <meta property="og:type" content="website" />',
+  '    <meta property="og:site_name" content="remplacé" />',
+  '    <meta property="og:locale" content="fr_FR" />',
+  '    <meta property="og:title" content="remplacé" />',
+  '    <meta property="og:description" content="remplacé" />',
+  '    <meta property="og:url" content="https://gabarit.test/" />',
+  '    <meta property="og:image" content="https://gabarit.test/og-image.png" />',
+  '    <meta property="og:image:width" content="1200" />',
+  '    <meta property="og:image:height" content="630" />',
+  '    <meta property="og:image:alt" content="remplacé" />',
+  '    <meta name="twitter:card" content="summary_large_image" />',
+  '    <meta name="twitter:title" content="remplacé" />',
+  '    <meta name="twitter:description" content="remplacé" />',
+  '    <meta name="twitter:image" content="https://gabarit.test/og-image.png" />',
   `    ${HEAD_END}`,
   '    <script type="module" src="/assets/index-abc.js"></script>',
   '  </head>',
@@ -64,6 +92,47 @@ describe('renderDocument', () => {
 
   it('déclare un canonical absolu', () => {
     expect(html).toContain(`<link rel="canonical" href="${pages[0].canonical}" />`);
+  });
+
+  /*
+   * Garde-fou déplacé depuis head.test.ts : celui-ci lisait index.html, le
+   * gabarit source, qui n'est plus ce que sert le site une fois prérendu.
+   * Il restait vert alors que le document réellement servi n'avait plus que
+   * trois de ces treize balises — carte de partage nue sur LinkedIn, Slack,
+   * Discord et X. Ces assertions portent sur la sortie de `renderDocument`,
+   * l'artefact réel.
+   */
+  it('porte les treize balises de partage, pas seulement og:title/description/url', () => {
+    expect(html).toContain('<meta property="og:type" content="website" />');
+    expect(html).toContain('<meta property="og:site_name" content="TicoqOS" />');
+    expect(html).toContain('<meta property="og:locale" content="fr_FR" />');
+    expect(html).toContain(`<meta property="og:title" content="${escapeHtml(pages[0].title)}" />`);
+    expect(html).toContain(`<meta property="og:description" content="${escapeHtml(pages[0].description)}" />`);
+    expect(html).toContain(`<meta property="og:url" content="${escapeHtml(pages[0].canonical)}" />`);
+    expect(html).toMatch(/<meta property="og:image" content="https:\/\/portfolio\.test\/og-image\.png" \/>/);
+    expect(html).toContain('<meta property="og:image:width" content="1200" />');
+    expect(html).toContain('<meta property="og:image:height" content="630" />');
+    expect(html).toContain('<meta property="og:image:alt" content="Fenêtre rétro affichant Elie Treport, développeur backend Kotlin, à côté d&#39;un coq." />');
+
+    expect(html).toContain('<meta name="twitter:card" content="summary_large_image" />');
+    expect(html).toContain(`<meta name="twitter:title" content="${escapeHtml(pages[0].title)}" />`);
+    expect(html).toContain(`<meta name="twitter:description" content="${escapeHtml(pages[0].description)}" />`);
+    expect(html).toMatch(/<meta name="twitter:image" content="https:\/\/portfolio\.test\/og-image\.png" \/>/);
+
+    expect(html).toContain(`<meta name="author" content="Elie Treport" />`);
+  });
+
+  it('dérive og:locale de la langue de la page plutôt que de le figer en dur', () => {
+    const page = { ...pages[0], lang: 'en' as const };
+    const out = renderDocument(TEMPLATE, page, CSS);
+    expect(out).toContain('<meta property="og:locale" content="en_US" />');
+  });
+
+  it('dérive l\'URL de l\'image de partage du canonical, jamais d\'une origine figée en dur', () => {
+    const page = { ...pages[0], canonical: 'https://preview.example/' };
+    const out = renderDocument(TEMPLATE, page, CSS);
+    expect(out).toContain('<meta property="og:image" content="https://preview.example/og-image.png" />');
+    expect(out).toContain('<meta name="twitter:image" content="https://preview.example/og-image.png" />');
   });
 
   it('écrit un bloc JSON-LD par nœud, chacun reparsable', () => {

@@ -2,8 +2,13 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 /**
- * index.html has no other coverage, and a missing sharing tag fails silently —
- * the link just renders bare on LinkedIn. These assertions are the guard.
+ * index.html has no other coverage beyond these assertions, which guard the
+ * template — what `npm run dev` serves, unprerendered. They do NOT guard what
+ * ships in production: the build's `renderDocument` slices the whole marked
+ * block out and substitutes `headFor`'s own output (src/seo/render.ts), so a
+ * green run here says nothing about the served artifact. That guard lives in
+ * src/seo/render.test.ts, against renderDocument's output directly — read it
+ * first if a sharing tag looks wrong on a real deploy.
  */
 const html = readFileSync(resolve(__dirname, '..', 'index.html'), 'utf8');
 
@@ -61,5 +66,15 @@ describe('index.html', () => {
 
   it('garde le bloc de tête dans le bon ordre', () => {
     expect(html.indexOf('<!--seo:head:start-->')).toBeLessThan(html.indexOf('<!--seo:head:end-->'));
+  });
+
+  it('ferme le marqueur de tête avant les balises d\'icône, que Vite complète après lui', () => {
+    // Vite ajoute le <script> du bundle et le <link rel="stylesheet"> à la fin
+    // de <head>, après <!--seo:head:end-->. Si ce marqueur descendait sous
+    // <link rel="icon"> (par exemple déplacé sous <meta name="theme-color">),
+    // renderDocument couperait le bundle et la CSS avec le reste du bloc de
+    // tête : chaque page prérendue serait servie sans JavaScript ni style,
+    // avec une suite de tests par ailleurs entièrement verte.
+    expect(html.indexOf('<!--seo:head:end-->')).toBeLessThan(html.indexOf('<link rel="icon"'));
   });
 });
